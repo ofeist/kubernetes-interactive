@@ -208,6 +208,46 @@ kubectl exec -it multi-container -c nginx-container -- curl localhost
 
 01:40:56 Probes 
 ---
+kubectp create -f cp
+kubectl get pods
+kubectl get pods -owide
+kubectl describe pod nginx
+
+--
+	Warning  Unhealthy  0s (x3 over 20s)  kubelet            Liveness probe failed: HTTP probe failed with statuscode: 404
+  Normal   Killing    0s                kubelet            Container nginx failed liveness probe, will be restarted
+--
+
+
+controlplane $ kubectl get pods       
+NAME    READY   STATUS    RESTARTS      AGE
+nginx   1/1     Running   3 (10s ago)   101
+--
+
+
+-metrics server & resources
+---
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl get pods -A # get pods froma all namespaces
+# this doesn't run
+
+kubectl delete -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+curl -O https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+wget https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+# add- --kubelet-insecure-tls
+# vi rr
+kubectl top pods
+
+
+# kubectl top nodes
+controlplane $ kubectl top pods
+NAME         CPU(cores)   MEMORY(bytes)   
+limit-test   965m         0Mi      
+
+-> CPU limit is 1
+
 
 
 
