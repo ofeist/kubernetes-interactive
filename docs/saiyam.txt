@@ -1,0 +1,267 @@
+Kubernetes 101 workshop - complete hands-on
+https://www.youtube.com/watch?v=PN3VqbZqmD8
+
+
+kubernetes?
+- managment of deploymnets and orchestration of containerized apps on the large scale
+
+
+arch?
+15:50 Kubernetes Architecture
+---
+- control & worker node
+command -> API server
+- C:: API server (authentication(ID/key), authorization(permission for action), admission(policy))
+- C:: scheduler (resources?)
+- W:: kubelet (asks API server if anything to run)
+- W:: kubelet -> talks to CRI (containerd) (if API says yes)
+- W:: containerd = CRI, CNI, CSI
+	= Runtime (containerd = Container runtime interface)
+	= Network (IPV tables)
+		- Network (IPV tables) -> C :: kube proxy
+	= Storage Interface
+- C:: Controller manager = manages more replicas of the (above mentioned) application
+	- reconciliation loop
+
+
+33:42 YAML manifests in k8s 
+---
+- key: value pairs
+- object -> :
+- attributes of an object -> "  " (double space intendation)
+- list -> :
+- list items -> -
+- multi line string -> |
+- placeholders -> {{ }}
+- variables -> $
+- separation of objects -> ---
+
+
+40:00 imperative vs declerative commands
+---
+- "kubectl run nginx --image=nginx" -> imperative
+- YAML -> declerative
+- GVR = Group, Version, Resource
+
+
+44:17 killercoda demos
+---
+- killercoda.com/dashboard
+kubectl get nodes
+kubectl get pods -A
+kubectl get pods -A -o wide
+kubectl run nginx --image=nginx
+kubectl get pods
+kubectl run demo --image=nginx --dry-run=client -oyaml
+
+
+54:46 What are namespaces?
+---
+- isolation of environment
+- kubectl get ns
+- 4 namespaces
+	- default
+	- kube-node-lease
+	- kube-public
+	- kube-system
+		- local-path-storage ???
+- kubectl get pods -n kube-system
+- kubectl cluster-info
+- kubectl get lease -n kube-node-lease
+
+
+54:46 What are namespaces? 
+---
+- isolation of environments
+- kubectl get namespace
+- kubectl get ns
+- kubectl api-resources
+- kubectl api-resources --namespaced=false
+
+01:00:36 GitHub repo
+---
+https://github.com/kubesimplify/workshops-content/tree/main/kubernetes-101
+
+
+namespaces
+---
+kubectl create ns dev
+kubectl create deploy saiyam --image=nginx
+kubectl create deploy saiyam --image=nginx -n dev
+kubectl describe ns dev
+kubectl delete ns testing
+
+imperative way
+	kubectl create deploy saiyam --image=nginx
+declerative way
+	kubectl create ns demo --dry-run=client -oyaml
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: demo
+spec: {}
+status: {}
+
+- spec would then contain qouta limit etc.
+
+
+
+01:03:44 changing contexts in namespaces 
+---
+kubectl config set-context --curent --namespace=dev
+
+other cmnds:
+kubens
+kubectx
+?
+
+
+01:04:23 labels and selectors
+---
+kubectl get pods --show-labels
+kubectl label pod nginx live=demo
+
+- equiti based selector
+	- nodeSelector
+
+- set based labels
+	- in, notIn, exists
+
+kubectl run nginx --image=nginx
+kubectl create deploy nginx --image=nginx
+kubectl label pod nginx app=demo
+
+kubectl get pods -l run=nginx
+kubectl get pods -l 'app in (demo,nginx)'
+
+- init container section
+
+
+
+01:12:00 Pods in Kubernetes
+---
+i k8s anything that you run, run as pods
+
+kubectl run saiyam --image=nginx
+kubectl describe pod saiyam
+kubectl logs -f saiyam
+kubectl get pods
+kubectl delete pod nginx
+kubectl exec -it saiyam -- sh
+	exit
+kubectl delete pod saiyam --force
+
+
+
+01:20:00 Pod lifecycle
+---
+
+ 
+01:21:48 Init container & multi container
+---
+init container
+	-> precondition container, runs before any other container
+	-> more init containers possible
+	-> to prepare environment for the app (mount volumes etc.)
+
+
+vi init
+	-> copy {init container} into init file
+kubectl apply -f init
+kubectl get pods
+	kubectl get pods -n default
+kubectl logs -f init-demo1
+kubectl exec -it saiyam -- sh
+
+
+multiple init conatiner (1.30.25)
+--
+vi multi
+	- copy content into multi file
+kubectl apply -f multy
+kubectl describe pod init-demo2
+
+- first container started and waiting for services
+
+vi svc
+kubectl create -f svc	
+	- actually the lower one worked
+	- kubectl apply -f 
+
+
+multi container
+--
+e.g. sidecar proxy
+	- logs from the main app
+
+vi mc.yml
+kubectl apply -f mc.yml
+kubectl exec -it multi-container -- curl localhost
+kubectl describe pods
+kubectl describe pods multi-container
+kubectl logs -f multi-container -c nginx-container	# how to see the logs of cnginx-container
+kubectl exec -it multi-container -c nginx-container -- curl localhost
+
+
+
+01:40:56 Probes 
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+01:55:45 Request & limits 
+02:00:30 break 
+02:14:44 Recap 
+02:22:17 Deployments & replicasets
+02:35:40 Statefulsets
+02:49:00 k8s networking 
+03:06:35 Services in Kubernetes
+03:17:42 AAA (authn, authz, admission)
+03:19:36 RBAC 
+03:32:30 Configmaps & Secrets 
+03:45:46 Local k8s setup 
+03:53:03 Message from Saiyam
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

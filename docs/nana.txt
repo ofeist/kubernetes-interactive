@@ -1,0 +1,88 @@
+https://youtu.be/X48VuDVv0do
+22.39
+k8s arch
+
+1.02.00
+1.06.00
+yaml config file
+
+1.16.00
+complete app setup
+
+1.46.20
+namespaces explained
+
+2.01.00
+ingress explained
+
+2.20.08
+more ingress use cases
+
+2.24.16
+2.35.00
+helm package manager
+
+2.32.09
+
+volumes
+2.38.00
+
+statefulSet
+2.58.40
+is the combination of persistent and temporary storage for database (stateful app) possible
+e.g.
+-> master on persistent
+-> workers on temporary
+btw. "master" is a pod state attribute
+
+services
+3.13.40
+
+service types
+	- cluster*
+	- nodeport*
+		- not for external connection
+	- headless
+	- loadbalancer*
+		- extension of nodeport
+
+3.33.39
+
+
+
+---------------
+argoCD
+- other gitops tools, like argo:
+	- flux
+	- jenkinsX
+
+https://www.youtube.com/watch?v=MeU5_k9ssrs
+
+---------------
+
+TechWorld with Nana
+https://www.youtube.com/channel/UCdngmbVKX1Tgre699-XLlUA
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
