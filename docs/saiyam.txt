@@ -225,8 +225,11 @@ nginx   1/1     Running   3 (10s ago)   101
 --
 
 
--metrics server & resources
+01:55:45 Request & limits 
 ---
+-metrics server & resources
+(Resource request demo)
+
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 kubectl get pods -A # get pods froma all namespaces
 # this doesn't run
@@ -250,35 +253,72 @@ limit-test   965m         0Mi
 
 
 
+02:00:30 break
+---
 
 
 
+02:14:44 Recap
+---
+https://github.com/kubesimplify/workshops-content/tree/main/kubernetes-101
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
- 
-
-01:55:45 Request & limits 
-02:00:30 break 
-02:14:44 Recap 
 02:22:17 Deployments & replicasets
+---
+- deployment is a k8s object that creates a replica set
+- spec setion defines "replicas: x"
+- RollingUpdateStrategy-> 25% max unavailable, 25% max surge
+
+kubectl create deploy nginx --image=nginx
+kubectl get deploy
+kubectl get rs
+kubectl get pods
+kubectl scale deploy nginx --replicas 5
+
+kubectl edit deploy nginx	# change to replicas: 3
+
+kubectl set image deployment/nginx nginx=nginx:1.15.2 --record
+
+kubectl describe deploy
+
+kubectl set image deployment/nginx nginx=saiyam --record
+kubectl get pods
+kubectl rollout status
+
+kubectl rollout status deploy nginx
+
+kubectl rollout history deployment nginx
+kubectl rollout undo deployment nginx --to-revision 1
+kubectl rollout history deployment nginx
+
+kubectl delete deploy nginx --force
+kubectl get deploy
+kubectl get rs
+
+
+
 02:35:40 Statefulsets
+---
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
 02:49:00 k8s networking 
 03:06:35 Services in Kubernetes
 03:17:42 AAA (authn, authz, admission)
