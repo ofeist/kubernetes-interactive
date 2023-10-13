@@ -300,6 +300,26 @@ kubectl get rs
 
 02:35:40 Statefulsets
 ---
+kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.22/deploy/local-path-storage.yaml
+
+kubectl exec -it web-0
+curl web-0.nginx.default.svc.cluster.local
+cat /etc/resolv.conf
+curl web-0.nginx
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
