@@ -309,37 +309,90 @@ curl web-0.nginx
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
- 
-
-
-
-
-
 02:49:00 k8s networking 
+---
+- create a pod
+- ina a pod, there is always the "pause" container which holds the namespace
+ip netns list	# list the namespaces
+
+ssh node01
+ip netns list
+lsns
+lsns | grep nginx
+lsns -p 44400	# list of namespaces from process 44400
+
+4026532375 net         4 44279 65535 /pause
+4026532497 uts         4 44279 65535 /pause
+4026532498 ipc         4 44279 65535 /pause
+
+net, uts, ipc -> are held by the pause container
+
+ls -lt /var/run/net	# sort and get the most recent namespace
+- the lates namespace created is "cni-5eabcf9f-f323-59cd-e630-b4921b36c54d"
+- and this one cni-530bb3cb-ea81-4e17-a0c5-7a5e77ad4373
+
+ip netns exec cni-5eabcf9f-f323-59cd-e630-b4921b36c54d ip link
+
+kubectl exec -it -- bash	# on the control node (controlplane)
+kubectl exec -it shared-namespace -- sh
+- you have now e.g. " eth0@if13:"
+
+- there are "eth" pairs between ETH of pod & vETH node namespaces
+
+
+internode pod communication
+---
+ARP can be used (on the same node) as destination is on the same node
+
+
+node to node communication
+---
+ARP can not be used between more different nodes
+
+- to check if destionation is on the same network, bitwise or Adding operation is performed
+  |
+- find the default dateway from ARP
+  |
+- send to default gateway
+  |
+- default interface of other node
+
+
+- services use iptables and netfilter
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
 03:06:35 Services in Kubernetes
 03:17:42 AAA (authn, authz, admission)
 03:19:36 RBAC 
