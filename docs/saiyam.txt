@@ -406,28 +406,60 @@ kubectl edit svc nginx
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
- 
- 
-
-
-
-
-
-
 03:17:42 AAA (authn, authz, admission)
+---
+
+
+
 03:19:36 RBAC 
+---
+role-based access control
+
+- cluster resources
+	- cluster roles
+		- can be bound to a role
+	- cluster binding
+- namespaces resources
+	- role
+	- can only be bound to a role binding
+	- role binding
+
+- role is created
+	- definition
+		- the verbs: list, get
+		- the objects: pod, deployment
+	- in service acount you do the role binding
+		- SA + Role
+
+- authentication
+--
+kubectl config view
+export CLUSTER_NAME=kubernetes
+export APISERVER=$(kubectl config view -o jsonpath='{.clusters[0].cluster.server}')
+# https://jsonpath.com/
+# 3:22:06
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
 03:32:30 Configmaps & Secrets 
 03:45:46 Local k8s setup 
 03:53:03 Message from Saiyam
