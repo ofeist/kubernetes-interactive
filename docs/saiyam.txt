@@ -433,16 +433,56 @@ role-based access control
 
 - authentication
 --
+- 3 types:
+	1] cacert
+	2] user/client key
+	3] Service Account token
+
+1] cacert
+--
+
 kubectl config view
-export CLUSTER_NAME=kubernetes
+CLUSTER_NAME=$(kubectl config view -o jsonpath='{$.clusters[0].name}')		# export CLUSTER_NAME=kubernetes
 export APISERVER=$(kubectl config view -o jsonpath='{.clusters[0].cluster.server}')
 # https://jsonpath.com/
-# 3:22:06
+
+curl --cacert /etc/kubernetes/pki/ca.crt $APISERVER/version
 
 
+2] user/client key
+--
+
+curl --cacert /etc/kubernetes/pki/ca.crt $APISERVER/version/deployments		# forbidden / unauthorized
+
+# this will not work
+curl --cacert /etc/kubernetes/pki/ca.crt --cert client --key key $APISERVER/apis/apps/v1/deployments
+
+# the key needs to be created first
+
+# first get the key & client
+cat ~/.kube/config
+
+# echo base64 client & key
+echo "____client_key____" | base64 -d 
+echo "<client-key-data_from kubeconfig>" | base64 -d > key
+
+# this will NOW work!!
+curl --cacert /etc/kubernetes/pki/ca.crt --cert client --key key $APISERVER/apis/apps/v1/deployments
 
 
+3] SA token
+--
 
+TOKEN=$(kubectl create token default)
+curl --cacert /etc/kubernetes/pki/ca.crt $APISERVER/apis/apps/v1 --header "Authorization: Bearer $TOKEN"
+
+
+# an example for creating a cluster role, SA and binding
+# @ 03:26:07
+
+
+03:32:30 Configmaps & Secrets
+---
 
 
 
@@ -460,7 +500,6 @@ export APISERVER=$(kubectl config view -o jsonpath='{.clusters[0].cluster.server
 
 
 
-03:32:30 Configmaps & Secrets 
 03:45:46 Local k8s setup 
 03:53:03 Message from Saiyam
 
