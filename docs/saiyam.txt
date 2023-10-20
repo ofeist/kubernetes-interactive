@@ -479,11 +479,39 @@ curl --cacert /etc/kubernetes/pki/ca.crt $APISERVER/apis/apps/v1 --header "Autho
 
 # an example for creating a cluster role, SA and binding
 # @ 03:26:07
+1] create service account (SA)
+2] create cluster-role-binding
+
+
 
 
 
 03:32:30 Configmaps & Secrets
 ---
+cat << EOF | kubectl apply -f -
+#copy paste the content
+apiVersion: v1
+metadata:
+  name: demo-vol
+kind: ConfigMap
+data:
+  fileA: |-
+    hello: saiyam
+    learn: kubernete
+  fileB: test2
+EOF
+:)
+
+kubectl exec --it busybox2 -- sh
+
+# create secret
+kubectl create secret generic test --from-literal=live=demo
+kubectl get secret
+kubectl get secret -oyaml
+
+kubectl delete pods --all
+
+
 
 
 
