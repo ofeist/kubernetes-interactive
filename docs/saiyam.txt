@@ -482,7 +482,9 @@ curl --cacert /etc/kubernetes/pki/ca.crt $APISERVER/apis/apps/v1 --header "Autho
 1] create service account (SA)
 2] create cluster-role-binding
 
-
+# google:
+cluster role demo kubernetes
+https://kubernetes.io/docs/reference/access-authn-authz/rbac/
 
 
 
@@ -513,23 +515,25 @@ kubectl delete pods --all
 
 
 
-
-
-
-
-
-
-
-
- 
- 
-
-
-
-
-
-
 03:45:46 Local k8s setup 
+---
+- use docker desktop
+- OR
+- use rancher desktop
+- AND
+- minikube
+
+
+# 3:48:38
+- run ubuntu playground
+
+https://blog.kubesimplify.com/kubernetes-containerd-setup
+
+
+
+
+
+
 03:53:03 Message from Saiyam
 
 
