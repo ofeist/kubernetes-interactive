@@ -1,5 +1,38 @@
 https://www.youtube.com/watch?v=5rwIIusbUWM
 ---
 
+- discord
+- argocon
+- opengitops.dev
+- sealed secret kubernetes
+
+codefresh.io/argo/get-certified
+
+
+gitops principles
+---
+
+1] declarative
+- the garden should be wattered for 15 minutes
+- ass opposed to the imperative statement
+
+
+2] versioned and immutable
+- not "the latest version"
+
+3] pulled automatically
+- gitops agent sitting on the target
+- checking the source of truth (git)
+- comparing with live environment
+
+4] continuously reconciled
+
+
+1:07:00
+--
+
+
+1:39:00
+--
 
 
