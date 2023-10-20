@@ -529,12 +529,15 @@ kubectl delete pods --all
 
 https://blog.kubesimplify.com/kubernetes-containerd-setup
 
-
-
+raw.githubusercontent.com/saiyam1814/katacoda-scenarios/main/kube124/foreground.sh
 
 
 
 03:53:03 Message from Saiyam
+---
+
+- setup minikube for the next workshop!
+
 
 
 
