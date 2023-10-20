@@ -257,6 +257,21 @@ limit-test   965m         0Mi
 ---
 
 
+ 2061  git commit -m"Configmaps & Secrets"
+ 2062  git push
+ 2063  alias git='g'
+ 2064  g
+ 2065  git
+ 2066  alias
+ 2067  man alias
+ 2068  ls ~splinter/
+ 2069  ls -la ~splinter/
+ 2070  cat ~/.bashrc 
+ 2071  vi ~/.bashrc 
+ 2072  git
+ 2073  unalias git
+ 2074  man alias
+ 2075  history
 
 02:14:44 Recap
 ---
@@ -296,6 +311,21 @@ kubectl delete deploy nginx --force
 kubectl get deploy
 kubectl get rs
 
+ 2061  git commit -m"Configmaps & Secrets"
+ 2062  git push
+ 2063  alias git='g'
+ 2064  g
+ 2065  git
+ 2066  alias
+ 2067  man alias
+ 2068  ls ~splinter/
+ 2069  ls -la ~splinter/
+ 2070  cat ~/.bashrc 
+ 2071  vi ~/.bashrc 
+ 2072  git
+ 2073  unalias git
+ 2074  man alias
+ 2075  history
 
 
 02:35:40 Statefulsets
@@ -347,7 +377,22 @@ ARP can be used (on the same node) as destination is on the same node
 
 node to node communication
 ---
-ARP can not be used between more different nodes
+ARP can not be used between more different nodes 2061  git commit -m"Configmaps & Secrets"
+ 2062  git push
+ 2063  alias git='g'
+ 2064  g
+ 2065  git
+ 2066  alias
+ 2067  man alias
+ 2068  ls ~splinter/
+ 2069  ls -la ~splinter/
+ 2070  cat ~/.bashrc 
+ 2071  vi ~/.bashrc 
+ 2072  git
+ 2073  unalias git
+ 2074  man alias
+ 2075  history
+
 
 - to check if destionation is on the same network, bitwise or Adding operation is performed
   |
@@ -418,7 +463,22 @@ role-based access control
 - cluster resources
 	- cluster roles
 		- can be bound to a role
-	- cluster binding
+	- cluster binding 2061  git commit -m"Configmaps & Secrets"
+ 2062  git push
+ 2063  alias git='g'
+ 2064  g
+ 2065  git
+ 2066  alias
+ 2067  man alias
+ 2068  ls ~splinter/
+ 2069  ls -la ~splinter/
+ 2070  cat ~/.bashrc 
+ 2071  vi ~/.bashrc 
+ 2072  git
+ 2073  unalias git
+ 2074  man alias
+ 2075  history
+
 - namespaces resources
 	- role
 	- can only be bound to a role binding
@@ -480,7 +540,22 @@ curl --cacert /etc/kubernetes/pki/ca.crt $APISERVER/apis/apps/v1 --header "Autho
 # an example for creating a cluster role, SA and binding
 # @ 03:26:07
 1] create service account (SA)
-2] create cluster-role-binding
+2] create cluster-role-binding 2061  git commit -m"Configmaps & Secrets"
+ 2062  git push
+ 2063  alias git='g'
+ 2064  g
+ 2065  git
+ 2066  alias
+ 2067  man alias
+ 2068  ls ~splinter/
+ 2069  ls -la ~splinter/
+ 2070  cat ~/.bashrc 
+ 2071  vi ~/.bashrc 
+ 2072  git
+ 2073  unalias git
+ 2074  man alias
+ 2075  history
+
 
 # google:
 cluster role demo kubernetes
