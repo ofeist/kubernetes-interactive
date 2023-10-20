@@ -481,6 +481,7 @@ curl --cacert /etc/kubernetes/pki/ca.crt $APISERVER/apis/apps/v1 --header "Autho
 # @ 03:26:07
 
 
+
 03:32:30 Configmaps & Secrets
 ---
 
