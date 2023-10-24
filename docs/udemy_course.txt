@@ -82,14 +82,15 @@ in HA environment
 - kube-apiserver then authentizates and validates request
 
 
-an example: create a pod (not using kubectl, but per APIs)
+workflow example: create a pod (not using kubectl, but per APIs)
 ---
 1] apiserver then creates a pod object without assigning it to a node
 # curl -X POST /api/v1/namespaces/default/pods ...[other]
 - the request is authenticated
 - the request is validated
+- the data is retrieved
 - etcd is updated
-- the user gets back the info
+- the user gets back the data
 
 
 2] scheduler
@@ -97,8 +98,56 @@ an example: create a pod (not using kubectl, but per APIs)
 - updates kube-apiserver where to put the pod
 
 3] kubeapi-server
-- updates etcd-= cluster
-- places the pod onto a worker node
+- updates etcd-cluster
+- passes the info to kubelet on the appropriate worker node
+
+4] kubelet
+- creates the pod on the worker node
+- instructs the CRE (container runtime engine) to deploy app image
+- updates status to kube-apiserver
+
+5] kube-apiserver
+updates data back into etcd cluster
+
+
+kube-apiserver responsibilities are to:
+--
+1] authentcate user
+2] validate request
+3] retrieve data
+4] update etcd (only component that talks to etcd is kube-apiserver)
+5] scheduler
+6] kubelet
+
+
+kube-apiserver options
+--
+- eg. internesting are
+  - certificates :: connectivity between different components (eg. ca.pem, kubernetes.pem, ..)
+    - --etcd-catfile=..; --etcd-certfile=..; --etcd-keyfile=..;
+  - location of etcd-servers
+    - etcd-servers=..
+
+
+how to view the kube-apiserver options?
+--
+- depends on how you set up your cluster
+  - if kubeadmin tool
+    - then kube-apiserver-master deployed as a pod in -namespace kube-system @ master
+    - the options could be seen in manifest file
+      - /etc/kubernetes/manifests/kube-apiserver.yml
+  - if no-kubeadmin setup
+    - /etc/systemd/system/kube-apiserver.service
+  - or list the process
+    - on the master node
+      - ps -aux | grep kube-apiserver
+
+
+
+6. kube controller manager
+---
+
+
 
 
 
