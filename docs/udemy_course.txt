@@ -1,1 +1,117 @@
+course name:
+tutor:
+
+
+would be good to do before:
 kubernetes for absolute beginners
+
+
+cluster architecture
+---
+cargo and control ships analogy
+
+
+master node
+--
+- manage
+- plan
+- scheduler
+- monitor nodes
+
+worker nodes
+--
+host applications as containers
+
+
+master node consists of
+--
+- etcd :: key-value format db
+- kube-apiserver :: orchestrator
+- kube-scheduler :: how to deploy containers
+- kube controller manager
+	- node controller
+	- replication controller
+
+
+worker nodes consist of
+--
+- kubelet :: "the capetan"
+- kube-proxy :: communication between services & containers inside of the cluster
+
+container runtime service ( e.g. docker or rkt (rocket) )
+
+
+
+etcd
+---
+- port: 2379
+- stores / has the data about the cluster
+(nodes, pods, configs, secrets, accounts, roles, bindings, others)
+
+
+2 types of k8s cluster
+--
+- scratch
+	- you have to install etcd-server by yourself
+- kubeadm tool
+	- deploys etcd-server as a pod in kube-system namespace
+$ kubectl get pods -n kube-system
+
+
+$ kubectl exec etcs-master -n kube-system
+$ etcdctl get / --prefix -keys-only
+
+- data is in the root directory
+/registry/
+- an then constructs such as
+	- minions, pods, replicasets, deployments, roles, secrets
+
+
+in HA environment
+--
+- there will be multiple master nodes in the cluster
+- there will be multiple etcd instances spread across the master nodes
+- etcd instancs shall know about each other
+	- "--initial-cluster" option shall be specified
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
