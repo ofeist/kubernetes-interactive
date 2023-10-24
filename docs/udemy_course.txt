@@ -1,12 +1,12 @@
-course name:
-tutor:
+course name:certified kubernetes admin course
+tutor: mumshad mannambeth
 
 
 would be good to do before:
 kubernetes for absolute beginners
 
 
-cluster architecture
+2. cluster architecture
 ---
 cargo and control ships analogy
 
@@ -42,7 +42,7 @@ container runtime service ( e.g. docker or rkt (rocket) )
 
 
 
-etcd
+3. & 4. etcd
 ---
 - port: 2379
 - stores / has the data about the cluster
@@ -76,11 +76,29 @@ in HA environment
 
 
 
+5. kube-apiserver
+---
+- kubectl <-reaches-the-> kube-apiserver (authorization/validation) <-retreaves-data-from-> etcd cluster
+- kube-apiserver then authentizates and validates request
 
 
+an example: create a pod (not using kubectl, but per APIs)
+---
+1] apiserver then creates a pod object without assigning it to a node
+# curl -X POST /api/v1/namespaces/default/pods ...[other]
+- the request is authenticated
+- the request is validated
+- etcd is updated
+- the user gets back the info
 
 
+2] scheduler
+- cont. monitors apiserver and realizes there is a new pod without a new node assigned
+- updates kube-apiserver where to put the pod
 
+3] kubeapi-server
+- updates etcd-= cluster
+- places the pod onto a worker node
 
 
 
