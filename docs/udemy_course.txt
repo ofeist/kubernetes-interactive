@@ -129,7 +129,7 @@ kube-apiserver options
     - etcd-servers=..
 
 
-how to view the kube-apiserver options?
+- viewing kube-apiserver options
 --
 - depends on how you set up your cluster
   - if kubeadmin tool
@@ -173,7 +173,7 @@ how to view the kube-apiserver options?
   - replicaset
 
 
-- installing how to install kube-controll-manager
+- installing kube-controll-manager
 --
 $ wget https://storage.googleapis.com/kubernetes-release/v1.13.0/bin/linux/amd64/kube-controller-manager
 # run it as a service
@@ -199,6 +199,41 @@ $ cat /etc/kubernetes/manifest/kube-controller-manager.yml
 $ cat /etc/systemd/system/kube-controller-manager.service
 - or
 $ ps aux | grep kube-controller-manager
+
+
+
+7. kube-scheduler
+---
+- (only) decides which pod goes on which node
+- kubelet :: actually places the pod on the node
+
+- how it's done
+--
+1] filter nodes (e.g. that do not have enough CPUs)
+2] rank nodes (ammount of resources after the pod is placed)
+3] more requirements come later ..
+
+
+- installing kube-scheduler
+--
+wget http://storage.googleapics.com/kubernetes-release/release/v1.13.0/bin/linux/amd64/kube-scheduler
+# extract it and run it as a service
+
+
+- viewing kube-scheduler options
+--
+$ cat /etc/kubernetes/manifests/kube-scheduler.yaml	# pod definition file
+# kubeadm :: pod in kube-system namespace on the master node
+
+$ ps -aux | grep kube-scheduler
+
+
+
+
+
+
+
+
 
 
 
