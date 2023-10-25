@@ -29,8 +29,8 @@ master node consists of
 - kube-apiserver :: orchestrator
 - kube-scheduler :: how to deploy containers
 - kube controller manager
-	- node controller
-	- replication controller
+  - node controller
+  - replication controller
 
 
 worker nodes consist of
@@ -52,9 +52,9 @@ container runtime service ( e.g. docker or rkt (rocket) )
 2 types of k8s cluster
 --
 - scratch
-	- you have to install etcd-server by yourself
+  - you have to install etcd-server by yourself
 - kubeadm tool
-	- deploys etcd-server as a pod in kube-system namespace
+  - deploys etcd-server as a pod in kube-system namespace
 $ kubectl get pods -n kube-system
 
 
@@ -72,7 +72,7 @@ in HA environment
 - there will be multiple master nodes in the cluster
 - there will be multiple etcd instances spread across the master nodes
 - etcd instancs shall know about each other
-	- "--initial-cluster" option shall be specified
+  - "--initial-cluster" option shall be specified
 
 
 
@@ -144,11 +144,61 @@ how to view the kube-apiserver options?
 
 
 
-6. kube controller manager
+6. kube-controller-manager
 ---
+- the role of controller process is to:
+  - watch the status
+  - remediate (correct, repair) situation
+
+- controllers examples:
+  - node-controller
+    - node monitor period = 5 s
+      - takes the state every 5 seconds)
+    - node monitor grace period - 40 s
+      - after heartbeat from node notreached, node marked as unreachable
+    - pod eviction timeout = 5 min
+      - if node deosn't come up, it is removed, another one is provisioned
+  - replication-controller
+    - monitors the state of replicaSets
+    - ensuring the desired nr of pods available all the times within the set
+  - deployment-controller
+  - namespace-controller
+  - endpoint-controller
+  - job-controller
+  - pv-protection-controller
+  - pv-binder-controller
+  - replication-controller
+  - cronjob
+  - stateful-set
+  - replicaset
 
 
+- installing how to install kube-controll-manager
+--
+$ wget https://storage.googleapis.com/kubernetes-release/v1.13.0/bin/linux/amd64/kube-controller-manager
+# run it as a service
 
+
+- options are @ kube-controller-manager.service
+  - abovementioned options are here
+    - --node-monitor-period=5s
+    - --node-monitor-grace-period=40s
+    - --pod-eviction-timeout=5m0s
+  - by default all controllers are enabled
+  - if some of them are not, here is a good starting point to look at
+    - -- controllers stringSlice
+
+- view kube-controller-manager server options
+--
+1] kubeadmin setup:
+- kubeadmin deploys kube controller manager
+$ kubectl get pods -n kube-system
+$ cat /etc/kubernetes/manifest/kube-controller-manager.yml
+
+2] no-kubeadmin setup
+$ cat /etc/systemd/system/kube-controller-manager.service
+- or
+$ ps aux | grep kube-controller-manager
 
 
 
