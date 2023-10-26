@@ -250,6 +250,29 @@ ps -aux | grep kubelet
 
 
 
+9. kube-proxy
+---
+- POD Network exists across all nodes
+
+- kube-proxy
+  - process that runs on each node
+  - looks for new services
+    - when service created
+      - using iptables
+      - creates rules on each node
+      - to forward traffic from services to the backend pods
+
+
+- installing kube-proxy
+--
+# download, extract it and run it as a service
+$ wget https://storage.googleapis.com/kubernetes-release/release/v1.13.0/bin/linux/amd64/kube-proxy
+
+# kubeadm deploys kube-proxy as pod on each node
+# it is deployd as a deamonset
+$ kubectl get demonseat -n kube-system
+
+
 
 
 
