@@ -274,11 +274,29 @@ $ kubectl get demonseat -n kube-system
 
 
 
+10. pods
+---
+- the smallest k8s'object
+- a single instance of an application
+- pod encapsulates the deployed container
+
+- scaling application happens via single container pods
+
+- multi-container pods
+--
+- having hepler containers (supporting task for e.g. web app)
+- all of them share
+  - same network space (@ localhost)
+  - same storage space
 
 
+- installing (deploying) pods
+--
+$ kubectl run nginx --image nginx
+# the command deploys a docker container by creating a pod
 
-
-
+$ kubectl get pods
+# list of pods in our cluster
 
 
 
