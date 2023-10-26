@@ -229,11 +229,24 @@ $ ps -aux | grep kube-scheduler
 
 
 
+8. kubelet
+---
+- is like captain of the worker node
+1] registers the node with the k8s cluster
+2] creates the pod (requests the CRE to pull the image and run an instance)
+3] monitors node & pods
 
 
+- installing kubelet
+--
+# kubeadm does not deploy kubelets
+# kubelet has to be always manually installed on worker nodes
+wget https://storage.googleapis.com/kubernetes-release/release/v1.13.0/bin/linux/amd64/kubelet
 
-
-
+- viewing kubelet options
+--
+# listing the process on the worker node
+ps -aux | grep kubelet
 
 
 
