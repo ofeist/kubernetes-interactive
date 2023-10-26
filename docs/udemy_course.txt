@@ -1,6 +1,6 @@
 course name:certified kubernetes admin course
 tutor: mumshad mannambeth
-
+location: Documents/2_EDU/kubernetes
 
 would be good to do before:
 kubernetes for absolute beginners
