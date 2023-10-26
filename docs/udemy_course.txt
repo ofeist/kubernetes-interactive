@@ -11,7 +11,7 @@ kubernetes for absolute beginners
 cargo and control ships analogy
 
 
-master node
+master nodelogin
 --
 - manage
 - plan
@@ -51,7 +51,7 @@ container runtime service ( e.g. docker or rkt (rocket) )
 
 2 types of k8s cluster
 --
-- scratch
+- installed from scratch
   - you have to install etcd-server by yourself
 - kubeadm tool
   - deploys etcd-server as a pod in kube-system namespace
@@ -67,7 +67,7 @@ $ etcdctl get / --prefix -keys-only
 	- minions, pods, replicasets, deployments, roles, secrets
 
 
-in HA environment
+- in HA environment
 --
 - there will be multiple master nodes in the cluster
 - there will be multiple etcd instances spread across the master nodes
@@ -300,6 +300,8 @@ $ kubectl get pods
 
 
 
+11. pods with yaml
+---
 
 
 
