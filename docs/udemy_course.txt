@@ -337,7 +337,7 @@ $ kubectl edit pod redis
 
 
 
-16. recap - replicaSets
+16. & 17. recap - replicaSets
 ---
 - reasons for replication:
   - HA
@@ -431,5 +431,9 @@ $ kubectl get pods
 $ kubectl delete replicaset myapp-replicaset    # deletes all underlying pods
 $ kubectl replace -f replicaset-definition.yml
 $ kubectl scale --replicas=6 -f rs-definition.yml
-$ kubectl scale --replicas replicaset myapp-replicaset
+$ kubectl scale replicaset --replicas=5 myapp-replicaset
+
+- replicaset ensures that the desired number of pods always run
+
+
 
