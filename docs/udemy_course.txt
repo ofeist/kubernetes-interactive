@@ -300,8 +300,32 @@ $ kubectl get pods
 
 
 
-11. pods with yaml
+11. & 12. pods with yaml
 ---
+- 4 toplevel properties:
+  - apiVersion, kind, metadata, spec
+
+- pod-definition.yml
+--
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+  labels:
+    app: myapp
+    type: front-end
+spec:
+  containers
+    - name: nginx-container
+      image: nginx
+
+$ kubectl create -f pod-definition.yml
+$ kubectl get pods
+$ kubectl describe pod myapp-pod
+$ kubectl delete deployment myapp-pod
+
+
+
 
 
 
