@@ -329,21 +329,11 @@ $ kubectl delete deployment myapp-pod
 ---
 - kodekloud
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+$ sudo apt install yamllint -y
+$ kubectl run redis --image=redis --dry-run=client -o yaml > redis-pod.yaml
+$ kubectl apply -f redis-pod.yaml
+# now fix the pod definition (the upper definition is correct, nothing to fix there ...)
+$ kubectl edit pod redis
 
 
 
