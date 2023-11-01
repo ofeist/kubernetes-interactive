@@ -325,6 +325,13 @@ $ kubectl describe pod myapp-pod
 $ kubectl delete deployment myapp-pod
 
 
+13. practice test introduction
+---
+- kodekloud
+
+
+
+
 
 
 
