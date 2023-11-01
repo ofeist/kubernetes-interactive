@@ -315,7 +315,7 @@ metadata:
     app: myapp
     type: front-end
 spec:
-  containers
+  containers:
     - name: nginx-container
       image: nginx
 
