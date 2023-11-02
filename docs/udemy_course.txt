@@ -292,11 +292,12 @@ $ kubectl get demonseat -n kube-system
 
 - installing (deploying) pods
 --
-$ kubectl run nginx --image nginx
+$ kubectl run nginx --image nginx   # create pod
 # the command deploys a docker container by creating a pod
 
 $ kubectl get pods
 # list of pods in our cluster
+
 
 
 
@@ -436,7 +437,7 @@ $ kubectl scale replicaset --replicas=5 myapp-replicaset
 - replicaset ensures that the desired number of pods always run
 
 
-18. deployments
+18. & 19. deployments
 ---
 - purposes:
   - many instances of server (tech stack)
@@ -465,13 +466,13 @@ spec:
         type: front-end
     spec:
       containers:
-      - name: nginx-controller
+      - name: nginx-container
         image: nginx
-
   replicas: 3
   selector:
     matchLabels:
       type: front-end
+
 
 $ kubectl create -f deployment-definition.yml
 $ kubectl get replicaset
@@ -501,6 +502,114 @@ spec:
     spec:
   replicas:
   selector:
+
+
+- to create deployment imperative way:
+$ kubectl create deployment httpd-frontend --replicas=3 --image=httpd:2.4-alpine
+$ kubectl create deployment httpd-frontend --replicas=3 --image=httpd:2.4-alpine --dry-run=client -o yaml
+# --dry-run=client -o yaml
+
+
+
+20. namespaces
+---
+- isolation
+
+- existing:
+  - default
+  - kube-system :: services, k8s resources ...
+  - kube-public :: 
+
+- to a namespace the following could be assigned:
+  - policy
+  - resources
+
+- DNS is created
+  - e.g. to reach the service:
+    -inside of the namespace
+      - db-service
+    - in another namespace
+      - db-service.dev.svc.cluster.local
+  - cluster.local = domain
+  - svc = subdomain (for a service)
+  - dev = namespace
+  - db-service = service name
+        
+$ kubectl get pods --namespace=kube-system
+
+$ kubectl create -f pod-definition.yml
+$ kubectl create -f pod-definition.yml --namespace=dev
+
+- defined under "metadata" section
+
+- pod-definition.yml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+  namespace: dev
+  labels:
+    app: myapp
+    type: front-end
+spec:
+  containers:
+  - name: nginx-controller
+    image: nginx
+
+- how to create a new namespace:
+
+1]
+- namespace-dev.yml
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+
+$ kubectl create -f namespace-dev.yml
+
+2]
+$ kubectl create namespace dev
+
+- switch the working namespace
+$ kubectl config set-context $(kubectl config current-context) --namespace=dev
+
+$ kubectl get pods --all-namespaces   # across all namespaces
+
+
+- to limit resources in a namespace create a resource quota:
+compute-quota.yml
+---
+apiVersion: v1
+kind: ReqourceQuota
+metadata:
+  name: compute-quota
+  namespace: dev
+spec:
+  hard:
+    pods: "10"
+    requests.cpu: "4"
+    requests.memory: 5Gi
+    limits.cpu: "10"
+    limits.memory: 10Gi
+
+  $ kubectl create -f compute-quota.yml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
