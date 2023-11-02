@@ -436,4 +436,72 @@ $ kubectl scale replicaset --replicas=5 myapp-replicaset
 - replicaset ensures that the desired number of pods always run
 
 
+18. deployments
+---
+- purposes:
+  - many instances of server (tech stack)
+  - upgrades
+  - rolling updates
+  - rollback
+  - pause & resume changes
+
+- pod < replicaSet < deployment
+
+- deployment-definition.yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-deployment
+  labels:
+    app: myapp
+    type: front-end
+spec:
+  template:
+    metadata:
+      name: myapp-pod
+      labels:
+        app: myapp
+        type: front-end
+    spec:
+      containers:
+      - name: nginx-controller
+        image: nginx
+
+  replicas: 3
+  selector:
+    matchLabels:
+      type: front-end
+
+$ kubectl create -f deployment-definition.yml
+$ kubectl get replicaset
+$ kubectl get pods
+$ kubectl get all
+
+- to recap the file structure:
+--
+(aki mesec)
+apiVersion:
+kind:
+metadata:
+spec:
+
+--
+apiVersion:
+kind:
+(metanola)
+metadata:
+  name:
+  labels:
+(sxpek trese)
+spec:
+  (temple mesec)
+  template:
+    metadata:
+    spec:
+  replicas:
+  selector:
+
+
+
 
