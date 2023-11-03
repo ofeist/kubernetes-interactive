@@ -594,12 +594,56 @@ spec:
     limits.cpu: "10"
     limits.memory: 10Gi
 
-  $ kubectl create -f compute-quota.yml
+$ kubectl create -f compute-quota.yml
+
+$ kubectl get namespaces --no-headers | wc -l
+
+# reach db-service in the marketing namespace
+# db-service.marketing.svc.cluster.local
 
 
 
+22. services
+---
+- k8s object (like replicaSet, deployment, ..)
+- it listens to a port on the node and to forward request on that port to a port on the node running the web application
+- this is NodePort service
 
+- ServiceTypes
+--
+- NodePort
+  - forwards request node out <> in
+- ClusterIP
+  - creates virtual ip
+- LoadBalancer
+  - balances requests
 
+- NodePort service
+--
+1] targetPort
+  - the pod port
+  - it has the IP address
+2] port
+  - the service port
+  - it has the IP address (the ClusterIP of the service)
+3] nodePort
+  - range: 30000-327676
+
+- service-definition.yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-service
+
+spec:
+  type: NodePort
+  ports:
+  - targetPort: 80
+    port: 80
+    nodePort: 30008
+
+7:30
 
 
 
