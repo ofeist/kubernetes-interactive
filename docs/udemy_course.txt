@@ -603,7 +603,7 @@ $ kubectl get namespaces --no-headers | wc -l
 
 
 
-22. services
+22. services & NodePort
 ---
 - k8s object (like replicaSet, deployment, ..)
 - it listens to a port on the node and to forward request on that port to a port on the node running the web application
@@ -675,25 +675,48 @@ $ kubectl create -f pod-definition.yaml
 
 23. service clusterIP
 ---
-- this reminds me on the "facade" programming pattern
+- the clusterIP reminds me on the "facade" programming pattern
 - each service get the ip which is then used to access the services "accumulated" behind this ip
+- this is the default service type!
 
 service-definition.yaml
 ---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: back-end
+
+spec:
+  type: ClusterIP
+  ports:
+  - targetPort: 80
+    port: 80
+
+  selector:
+    app: myapp
+    type: back-end
 
 
 
+24. service LoadBalancer
+---
+- this works only with supported platforms (AWS, googleCloud, azure, ...)
 
+- service-definition.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-service
+spec:
+  type: LoadBalancer
+  ports:
+  - targetPort: 80
+    port: 80
+    nodePort: 30008
 
-
-
-
-
-
-
-
-
-
+- if the platform doesn't support the LoadBalancer type, the effect is same as setting the type to NodePort
 
 
 
