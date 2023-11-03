@@ -135,7 +135,7 @@ kube-apiserver options
   - if kubeadmin tool
     - then kube-apiserver-master deployed as a pod in -namespace kube-system @ master
     - the options could be seen in manifest file
-      - /etc/kubernetes/manifests/kube-apiserver.yml
+      - /etc/kubernetes/manifests/kube-apiserver.yaml
   - if no-kubeadmin setup
     - /etc/systemd/system/kube-apiserver.service
   - or list the process
@@ -193,7 +193,7 @@ $ wget https://storage.googleapis.com/kubernetes-release/v1.13.0/bin/linux/amd64
 1] kubeadmin setup:
 - kubeadmin deploys kube controller manager
 $ kubectl get pods -n kube-system
-$ cat /etc/kubernetes/manifest/kube-controller-manager.yml
+$ cat /etc/kubernetes/manifest/kube-controller-manager.yaml
 
 2] no-kubeadmin setup
 $ cat /etc/systemd/system/kube-controller-manager.service
@@ -306,7 +306,7 @@ $ kubectl get pods
 - 4 toplevel properties:
   - apiVersion, kind, metadata, spec
 
-- pod-definition.yml
+- pod-definition.yaml
 --
 apiVersion: v1
 kind: Pod
@@ -320,7 +320,7 @@ spec:
     - name: nginx-container
       image: nginx
 
-$ kubectl create -f pod-definition.yml
+$ kubectl create -f pod-definition.yaml
 $ kubectl get pods
 $ kubectl describe pod myapp-pod
 $ kubectl delete deployment myapp-pod
@@ -354,7 +354,7 @@ $ kubectl edit pod redis
 
 1] replication controller
 --
-rc-definition.yml
+rc-definition.yaml
 ---
 apiVersion: v1
 kind: ReplicationController
@@ -376,7 +376,7 @@ spec:
   
   replicas: 3
 
-$ kubectl create -f rs-definitionl.yml
+$ kubectl create -f rs-definitionl.yaml
 $ kubectl get replicationcontrollers
 $ kubectl get pods
 
@@ -421,7 +421,7 @@ $ kubectl replace -f rs-definition.yaml
 
 2]
 # either
-$ kubectl scale --replicas=6 -f rs-definition.yml
+$ kubectl scale --replicas=6 -f rs-definition.yaml
 # this doesn't change the yaml definition file
 # or
 $ kubectl scale --replicas replicaset myapp-replicaset
@@ -430,8 +430,8 @@ $ kubectl scale --replicas replicaset myapp-replicaset
 $ kubectl get replicaset
 $ kubectl get pods
 $ kubectl delete replicaset myapp-replicaset    # deletes all underlying pods
-$ kubectl replace -f replicaset-definition.yml
-$ kubectl scale --replicas=6 -f rs-definition.yml
+$ kubectl replace -f replicaset-definition.yaml
+$ kubectl scale --replicas=6 -f rs-definition.yaml
 $ kubectl scale replicaset --replicas=5 myapp-replicaset
 
 - replicaset ensures that the desired number of pods always run
@@ -448,7 +448,7 @@ $ kubectl scale replicaset --replicas=5 myapp-replicaset
 
 - pod < replicaSet < deployment
 
-- deployment-definition.yml
+- deployment-definition.yaml
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -474,7 +474,7 @@ spec:
       type: front-end
 
 
-$ kubectl create -f deployment-definition.yml
+$ kubectl create -f deployment-definition.yaml
 $ kubectl get replicaset
 $ kubectl get pods
 $ kubectl get all
@@ -537,12 +537,12 @@ $ kubectl create deployment httpd-frontend --replicas=3 --image=httpd:2.4-alpine
         
 $ kubectl get pods --namespace=kube-system
 
-$ kubectl create -f pod-definition.yml
-$ kubectl create -f pod-definition.yml --namespace=dev
+$ kubectl create -f pod-definition.yaml
+$ kubectl create -f pod-definition.yaml --namespace=dev
 
 - defined under "metadata" section
 
-- pod-definition.yml
+- pod-definition.yaml
 ---
 apiVersion: v1
 kind: Pod
@@ -560,14 +560,14 @@ spec:
 - how to create a new namespace:
 
 1]
-- namespace-dev.yml
+- namespace-dev.yaml
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
   name: dev
 
-$ kubectl create -f namespace-dev.yml
+$ kubectl create -f namespace-dev.yaml
 
 2]
 $ kubectl create namespace dev
@@ -579,7 +579,7 @@ $ kubectl get pods --all-namespaces   # across all namespaces
 
 
 - to limit resources in a namespace create a resource quota:
-compute-quota.yml
+compute-quota.yaml
 ---
 apiVersion: v1
 kind: ReqourceQuota
@@ -594,7 +594,7 @@ spec:
     limits.cpu: "10"
     limits.memory: 10Gi
 
-$ kubectl create -f compute-quota.yml
+$ kubectl create -f compute-quota.yaml
 
 $ kubectl get namespaces --no-headers | wc -l
 
@@ -629,7 +629,7 @@ $ kubectl get namespaces --no-headers | wc -l
 3] nodePort
   - range: 30000-327676
 
-- service-definition.yml
+- service-definition.yaml
 ---
 apiVersion: v1
 kind: Service
@@ -645,7 +645,7 @@ spec:
     app: myapp
     type: front-end
 
-- pod-definition.yml
+- pod-definition.yaml
 ---
 apiVersion: v1
 kind: Pod
@@ -659,8 +659,8 @@ spec:
   - image: nginx
     name: nginx-container
 
-$ kubectl create -f service-definition.yml
-$ kubectl create -f pod-definition.yml
+$ kubectl create -f service-definition.yaml
+$ kubectl create -f pod-definition.yaml
 
 - the service acts as a load balancer if more pods are targeted
   - random algorith
@@ -672,6 +672,14 @@ $ kubectl create -f pod-definition.yml
     - curl 192.168.1.3:30008
     - curl 192.168.1.4:30008
 
+
+23. service clusterIP
+---
+- this reminds me on the "facade" programming pattern
+- each service get the ip which is then used to access the services "accumulated" behind this ip
+
+service-definition.yaml
+---
 
 
 
