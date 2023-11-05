@@ -720,9 +720,8 @@ spec:
 
 
 
-
----
 25. solution - services 
+---
 ~2.40
 WHAT IS REPLICASET???
 
