@@ -722,8 +722,15 @@ spec:
 
 25. solution - services 
 ---
-~2.40
-WHAT IS REPLICASET???
+$ kubectl get svc                   # get the number, type of services
+$ kubectl describe svc kubernetes   # the target port, Labels, Endpoints for kuberneter service -> targetPort
+$ kubectl get deployments           # how many deployments
+$ kubectl describe deployment nginx | grep -i image         # the image for deployment
+$ kubectl create deployment web-app --dry-run=client -o yaml --image=nginx > webapp-deployment.yaml   # creates the deployment
+$ kubectl expose deployment webapp --name=webapp-service --target-port=8080 --type=NodePort --port=8080   # create a service out of the deployment
+$ kubectl expose deployment webapp --name=webapp-service --target-port=8080 --type=NodePort --port=8080 --dry-run=client -o yaml > webapp-service.yaml  # create a service out of the deployment
+  # edit the webapp-service.yaml and add "nodePort: 30080"
+
 
 
 
