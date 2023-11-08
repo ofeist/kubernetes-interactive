@@ -768,5 +768,30 @@ $ kubectl expose deployment webapp --name=webapp-service --target-port=8080 --ty
 
 
 
+27. imperative vs declarative - solutions
+---
+$ kubectl run nginx-pod --image=nginx:alpine
+
+$ kubectl run redis --image=redis:alpine --labels="tier=db"
+$ kubectl expose pod redis --port=6379 --target-port 6379 --cluster-ip='' --selector=tier=db --name=redis-svc
+  # or
+  $ kubectl expose pod redis --port=6379 --selector=tier=db --name=redis-svc
+    # --cluster-ip= is the default service
+$ kubectl create deployment webapp --image=kodekloud/webapp-color --replicas=3
+  # or
+  $ kubectl create deployment webapp --image=kodekloud/webapp-color
+  $ kubectl scale deployment webapp --replicas=3
+
+$ kubectl run custom-nginx --image=nginx --port=8080
+
+$ kubectl create ns dev-ns
+$ kubectl create deployment redis-deploy --namespace=dev-ns --image=redis --replicas=2
+
+$ kubectl run httpd --image=httpd:alpine
+$ kubectl expose pod httpd --name=httpd --cluster-ip='' --port=80 --target-port=80
+  # or
+  $ kubectl run httpd --image=httpd:alpine --port 80 expose (--dry-run=client -o yaml)
+
+
 
 
