@@ -733,6 +733,39 @@ $ kubectl expose deployment webapp --name=webapp-service --target-port=8080 --ty
 
 
 
+26. imperative vs declarative
+---
+- imperative
+  - create and update objects
+  - kubectl run/create/expose/edit/scale/set image/create -f/replace -f/ delete -f object
+  - use imperative approach for the exam, to save the time
+- declarative
+  - create a set of files
+  - "kubectl apply -f " command
+    - apply command takes a look at the existing configuration and figures out what needs to be changed
+  - if the exam requires more complicated objects/more containers, this approach is better
+
+
+- imperative approach
+--
+- create objects per object configuration files
+  $ kubectl create -f nginx.yaml
+- update objects:
+  $ kubectl edit deployment nginx.yaml
+    - this changes will be applied to the live object only, and not to the definition file
+  $ kubectl replace -f nginx.yaml
+    - better approach is to change the definition file and to track the changes
+  $ kubectl replace -f --force nginx.yaml
+    - if you want to delete and replace objects
+
+- declarative approach
+--
+- use the object configuration files to create and update objects
+  $ kubectl apply -f nginx.yaml
+  $ kubectl apply -f /path/to/config/files
+
+- check kubernetes documentation: "manage kubernetes objects"
+
 
 
 
