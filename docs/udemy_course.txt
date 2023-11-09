@@ -764,7 +764,8 @@ $ kubectl expose deployment webapp --name=webapp-service --target-port=8080 --ty
   $ kubectl apply -f nginx.yaml
   $ kubectl apply -f /path/to/config/files
 
-- check kubernetes documentation: "manage kubernetes objects"
+- check kubernetes documentation
+  - "manage kubernetes objects"   # documentation
 
 
 
@@ -792,6 +793,30 @@ $ kubectl expose pod httpd --name=httpd --cluster-ip='' --port=80 --target-port=
   # or
   $ kubectl run httpd --image=httpd:alpine --port 80 expose (--dry-run=client -o yaml)
 
+
+
+28. kubectl apply command
+---
+- kubectl compares
+  - local configuration file
+  - last applied configuration
+  - a live configuration of the object definition on k8s
+  
+- kubectl apply -f file
+  - yaml -> json
+  - json location: k8s cluster in live object configuration
+    - annotations:
+      - kubectl.kubernetes.io/last-applied-configuration
+  - kubectl create/replace commands do not store this configuration!
+    - that's why do not mix imperative and declerative ways when managing k8s cluster
+
+- last applied configuration
+  - contains fields that were removed from 
+    - local file 
+    - and from the live k8s configuration
+
+- check k8s documentation
+  - "merging changes to primitive fields"   # documentation
 
 
 
