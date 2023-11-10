@@ -861,4 +861,7 @@ $ kubectl -n kube-system get pods
 - find the part "We originally followed this tutorial: "
 
 
+3.4. labels and selectors
+---
+
 
