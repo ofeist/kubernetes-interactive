@@ -795,7 +795,7 @@ $ kubectl expose pod httpd --name=httpd --cluster-ip='' --port=80 --target-port=
 
 
 
-28. kubectl apply command
+2.28. kubectl apply command
 ---
 - kubectl compares
   - local configuration file
@@ -818,5 +818,9 @@ $ kubectl expose pod httpd --name=httpd --cluster-ip='' --port=80 --target-port=
 - check k8s documentation
   - "merging changes to primitive fields"   # documentation
 
+
+
+3. scheduling
+===
 
 
