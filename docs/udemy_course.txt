@@ -823,4 +823,35 @@ $ kubectl expose pod httpd --name=httpd --cluster-ip='' --port=80 --target-port=
 3. scheduling
 ===
 
+3.1. introduction
+---
+
+3.2. manual scheduling
+---
+- nodeName propery in the pod-definition.yaml
+  - if it is not there, then this is is candidate for scheduling
+
+- nodeName can be set per binding definition
+
+pod-bind-definition.yaml
+--
+apiVersion: v1
+kind: Binding
+metadata:
+  name:nginx
+target:
+  apiVersion: v1
+  kind: Node
+  name: node02
+
+- then the data in json format is sent to the api
+curl --header "Content-Type:application/json" \
+  --request POST \
+  --data '{"apiVersion":"v1", "kind": "Binding" ...}' \
+  http://$SERVER/api/v1/namespaces/default/pods/$PODNAME/binding/
+
+
+
+
+
 
