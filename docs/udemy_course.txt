@@ -852,10 +852,11 @@ curl --header "Content-Type:application/json" \
 
 
 
-3.3. manual scheduling
+3.3. solution - manual scheduling
 --
 $ kubectl apply -f nginx.yaml
 $ kubectl -n kube-system get pods
+
 
 
 
