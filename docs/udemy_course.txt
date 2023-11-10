@@ -857,7 +857,8 @@ curl --header "Content-Type:application/json" \
 $ kubectl apply -f nginx.yaml
 $ kubectl -n kube-system get pods
 
-
+- how to disable scheduler: https://github.com/kubernetes/website/issues/21128
+- find the part "We originally followed this tutorial: "
 
 
 
