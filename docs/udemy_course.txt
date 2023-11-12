@@ -1005,8 +1005,28 @@ $ kubectl label nodes node01 size=Large
 
 
 
-3.9. node affinity
+3.9. node affinity & solutions
 ---
+- required OR ignored
+  - during scheduling
+  - during execution
+  - eg:
+    - requiredDuringSchedulingIgnoredDuringExecution
+
+$ kubectl get nodes node01 --show-labels
+$ kubectl label nodes node01 color=blue
+$ kubectl create deployment blue --image=nginx --replicas=6
+$ kubectl get pods -o wide
+
+- check kubernetes documentation
+  - "Assign Pods to Nodes using Node Affinity"   # documentation
+    - "Schedule a Pod using required node affinity"   # documentation
+
+
+
+
+
+
 
 
 
