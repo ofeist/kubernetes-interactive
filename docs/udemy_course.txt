@@ -860,6 +860,22 @@ $ kubectl -n kube-system get pods
 - how to disable scheduler: https://github.com/kubernetes/website/issues/21128
 - find the part "We originally followed this tutorial: "
 
+- after the scheduler was disabled, the nodeName has to be specified
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  nodeName: node01
+  containers:
+  - image: nginx
+    name: nginx
+
+- by specifying the "nodeName", the need for scheduler has been circumvented
+
 
 3.4. labels and selectors
 ---
