@@ -900,6 +900,79 @@ $ k get pods -l env=prod,bu=finance,tier=frontend
 
 
 
+6.1. taints and tolerations
+---
+- node <-> taints
+- pod <->  tolerations
+
+- taints
+--
+$ kubectl taint nodes node-name color=blue:taint-effect
+- taint-effect
+  - noSchedule
+  - PreferNoSchedule
+  - NoExecute
+$ kubectl taint nodes node01 app=blue:noSchedule
+
+
+- tolerations
+--
+pod-definition.yaml
+---
+apiVersion: v1
+kind: Pod
+  name:myapp-pod
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx
+
+  toleartions:
+  - key:"app"
+    operator:"Equal"
+    value:"blue"
+    effect:"NoSchedule"
+
+$ kubectl describe node controlplane | grep Taint
+
+
+
+6.2. solution - taints and toleartions
+---
+$ kubectl explain pod --recursive | less
+$ kubectl explain pod --recursive | grep -A5 tolerations
+
+$ kubectl describe nodes node01 | grep -i taint
+$ kubectl taint node master app=blue:NoSchedule-  # the minus removes the taint
+
+
+controlplane $ k apply -f nginx.yaml 
+pod/nginx created
+controlplane $ k get pods
+NAME    READY   STATUS    RESTARTS   AGE
+nginx   1/1     Running   0          4s
+controlplane $ k get pods -o wide
+NAME    READY   STATUS    RESTARTS   AGE   IP            NODE           NOMINATED NODE   READINESS GATES
+nginx   1/1     Running   0          8s    192.168.0.8   controlplane   <none>           <none>
+controlplane $ k delete pod nginx 
+pod "nginx" deleted
+controlplane $ k taint node node01 app=blue:NoSchedule-
+node/node01 untainted
+controlplane $ k apply -f nginx.yaml 
+pod/nginx created
+controlplane $ k get pods -o wide
+NAME    READY   STATUS              RESTARTS   AGE   IP       NODE     NOMINATED NODE   READINESS GATES
+nginx   0/1     ContainerCreating   0          7s    <none>   node01   <none>           <none>
+
+
+
+
+
+
+
+
+
+
 
 
 
