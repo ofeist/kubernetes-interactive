@@ -900,7 +900,7 @@ $ k get pods -l env=prod,bu=finance,tier=frontend
 
 
 
-6.1. taints and tolerations
+3.6. taints and tolerations
 ---
 - node <-> taints
 - pod <->  tolerations
@@ -937,7 +937,7 @@ $ kubectl describe node controlplane | grep Taint
 
 
 
-6.2. solution - taints and tolerations
+3.7. solution - taints and tolerations
 ---
 $ kubectl explain pod --recursive | less
 $ kubectl explain pod --recursive | grep -A5 tolerations
@@ -993,10 +993,20 @@ $ taint node node01 app=blue:NoSchedule
 
 
 
+3.8. node selectors
+---
+- node selectors based on the labels assigned to the node
+
+$ kubectl label node node-name key=value  # to label the node
+$ kubectl label nodes node01 size=Large
+
+- selectors are exclusive (u can not say e.g. nodeSelector: "Large OR Medium" )
+  - for that the nodeAffinity was introduced
 
 
 
-
+3.9. node affinity
+---
 
 
 
