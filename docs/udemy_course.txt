@@ -879,5 +879,22 @@ spec:
 
 3.4. labels and selectors
 ---
+- grouping
+$ kubectl get pods --selector app=App1  # get pods with labels
+
+- when creating objects
+- selector/matchLabels must match template/metadata label
+
+- annotations:
+--
+- e.g. tool details like name, version ..
+
+
+
+3.5. labels and selectors - solution
+---
+
+
+
 
 
