@@ -937,7 +937,7 @@ $ kubectl describe node controlplane | grep Taint
 
 
 
-6.2. solution - taints and toleartions
+6.2. solution - taints and tolerations
 ---
 $ kubectl explain pod --recursive | less
 $ kubectl explain pod --recursive | grep -A5 tolerations
@@ -946,24 +946,48 @@ $ kubectl describe nodes node01 | grep -i taint
 $ kubectl taint node master app=blue:NoSchedule-  # the minus removes the taint
 
 
+controlplane $ k taint node node01 app=blue:NoSchedule
 controlplane $ k apply -f nginx.yaml 
-pod/nginx created
-controlplane $ k get pods
-NAME    READY   STATUS    RESTARTS   AGE
-nginx   1/1     Running   0          4s
 controlplane $ k get pods -o wide
 NAME    READY   STATUS    RESTARTS   AGE   IP            NODE           NOMINATED NODE   READINESS GATES
 nginx   1/1     Running   0          8s    192.168.0.8   controlplane   <none>           <none>
 controlplane $ k delete pod nginx 
-pod "nginx" deleted
 controlplane $ k taint node node01 app=blue:NoSchedule-
-node/node01 untainted
-controlplane $ k apply -f nginx.yaml 
-pod/nginx created
+controlplane $ k apply -f nginx.yaml
 controlplane $ k get pods -o wide
 NAME    READY   STATUS              RESTARTS   AGE   IP       NODE     NOMINATED NODE   READINESS GATES
 nginx   0/1     ContainerCreating   0          7s    <none>   node01   <none>           <none>
 
+- now set the toleration in the nginx.yaml definition
+nginx.yaml 
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+
+  tolerations: 
+  - effect: "NoSchedule"
+    key: "app"
+    operator: "Equal"
+    value: "blue"
+  restartPolicy: Always
+
+$ k delete pod nginx
+$ k apply -f nginx.yaml
+
+controlplane $ k get pods -o wide
+NAME    READY   STATUS    RESTARTS   AGE   IP            NODE     NOMINATED NODE   READINESS GATES
+nginx   1/1     Running   0          3s    192.168.1.4   node01   <none>           <none>
+
+# runs again on the node01
 
 
 
