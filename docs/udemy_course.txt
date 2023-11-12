@@ -893,6 +893,11 @@ $ kubectl get pods --selector app=App1  # get pods with labels
 
 3.5. labels and selectors - solution
 ---
+$ kubectl get pods --show-labels
+$ k get pods -l env=dev --no-headers
+$ k get all --show-labels --no-headers -l env=dev
+$ k get pods -l env=prod,bu=finance,tier=frontend
+
 
 
 
