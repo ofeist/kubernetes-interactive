@@ -1021,6 +1021,24 @@ $ kubectl get pods -o wide
 - check kubernetes documentation
   - "Assign Pods to Nodes using Node Affinity"   # documentation
     - "Schedule a Pod using required node affinity"   # documentation
+      https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes-using-node-affinity/   # link
+
+
+
+3.11. node affinity vs taints and tolerations
+---
+- how to place a combination of 
+  - red, green, blue and other pods
+  - onto the red, green, blue and other nodes
+
+1] taint RGB nodes
+2] tolerate RGB pods
+3] affinity of other pods for other nodes
+
+
+
+
+
 
 
 
