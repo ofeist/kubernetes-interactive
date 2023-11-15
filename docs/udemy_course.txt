@@ -1037,6 +1037,14 @@ $ kubectl get pods -o wide
 
 
 
+3.12. resource requirements and limits & solutions
+---
+- configure pods and containers   # documentation
+  - kubernetes.io
+  - https://kubernetes.io/docs/tasks/configure-pod-container/assign-memory-resource/
+  
+
+
 
 
 
