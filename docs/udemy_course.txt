@@ -1037,12 +1037,16 @@ $ kubectl get pods -o wide
 
 
 
-3.12. resource requirements and limits & solutions
+3.12. resource requirements and limits
 ---
 - configure pods and containers   # documentation
   - kubernetes.io
   - https://kubernetes.io/docs/tasks/configure-pod-container/assign-memory-resource/
 
+
+
+3.13. resource requirements and limits - solutions
+---
 $ kubectl create -f ns-mem-example.yaml
 $ kubectl apply -f pod-mem-example.yaml
 $ kubectl get pod memory-demo -n mem-example
@@ -1056,7 +1060,8 @@ $ kubectl apply -f pod-mem-example-2.yaml
 
 
 
-
+3.14. deamon sets
+---
 
 
 
