@@ -1042,10 +1042,17 @@ $ kubectl get pods -o wide
 - configure pods and containers   # documentation
   - kubernetes.io
   - https://kubernetes.io/docs/tasks/configure-pod-container/assign-memory-resource/
-  
 
-
-
+$ kubectl create -f ns-mem-example.yaml
+$ kubectl apply -f pod-mem-example.yaml
+$ kubectl get pod memory-demo -n mem-example
+$ kubectl get pod memory-demo --output=yaml --namespace=mem-example
+$ kubectl top pod memory-demo --namespace=mem-example
+$ kubectl top pod memory-demo --namespace=mem-example
+  # metrics API not available!!!
+$ kubectl delete pod mem-example -n mem-example
+$ kubectl config set-context $(kubectl config current-context) --namespace=mem-examle   # set (move to) default namespace
+$ kubectl apply -f pod-mem-example-2.yaml
 
 
 
