@@ -1137,8 +1137,18 @@ $ kubect create deployment elasticsearch --image=k8s.gcr.io/fluentd-elasticsearc
 
 
 
+3.17. static pods - solution
+---
+- where are the static pod definition files?
+  - $ ps -ef | grep kubelet
+  - check the "kubelet" setup for the 1.28! # todo
+
+$ kubectl run static-busybox --image=busybox --dry-run=client -oyaml --command -- sleep 1000 > static-busybox.yaml
 
 
+
+3.18. multiple schedulers
+---
 
 
 
