@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: memory-demo
-  namespace: ns-mem-example
+  namespace: mem-example
 spec:
   containers:
   - name: memory-demo-ctr
