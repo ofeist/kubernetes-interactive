@@ -1062,6 +1062,32 @@ $ kubectl apply -f pod-mem-example-2.yaml
 
 3.14. deamon sets
 ---
+- https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/  # documentation
+- deamonSets run one copy of a pod on each node in the cluster
+- use cases:
+  - install agents
+    - monitoring solutions
+    - logs viewer
+  - kube-proxy
+  - weave-net (networking agent)
+
+- similar to ReplicaSet, but with the kind of "DaemonSet"
+- to create it programatically
+  1] kubectl create deploy nginx --image=nginx --dry-run -o yaml > nginx-ds.yaml
+  2] edit the nginx-ds.yaml
+    - delete "replicas: 1" line
+    - set "kind: DaemonSet" instead of "Deployment" kind
+
+- how does this work?
+  - set the nodeName property on each node and bypass the scheduler
+    - this approach was used untill k8s v1.12
+  - use NodeAffinity and defaultscheduler
+    - since v1.12
+
+
+
+
+
 
 
 
