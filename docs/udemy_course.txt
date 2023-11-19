@@ -1051,7 +1051,7 @@ $ kubectl top pod memory-demo --namespace=mem-example
 $ kubectl top pod memory-demo --namespace=mem-example
   # metrics API not available!!!
 $ kubectl delete pod mem-example -n mem-example
-$ kubectl config set-context $(kubectl config current-context) --namespace=mem-examle   # set (move to) default namespace
+$ kubectl config set-context $(kubectl config current-context) --namespace=mem-example   # set (move to) default namespace
 $ kubectl apply -f pod-mem-example-2.yaml
 
 
