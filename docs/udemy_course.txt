@@ -1085,6 +1085,14 @@ $ kubectl apply -f pod-mem-example-2.yaml
     - since v1.12
 
 
+3.15. daemonset - solutions
+---
+$ kubect create deployment elasticsearch --image=k8s.gcr.io/fluentd-elasticsearch:1.20 --dry-run=client -oyaml > ds-es.yaml
+  # delete replicas, strategy
+  # add the namespace
+  # change kind Deployment -> DaemonSet
+
+
 
 
 
