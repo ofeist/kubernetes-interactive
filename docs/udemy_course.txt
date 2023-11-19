@@ -1062,6 +1062,8 @@ $ kubectl apply -f pod-mem-example-2.yaml
 
 3.14. deamon sets
 ---
+- created by kube-api server
+- ignored by kube-scheduler
 - https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/  # documentation
 - deamonSets run one copy of a pod on each node in the cluster
 - use cases:
@@ -1091,6 +1093,47 @@ $ kubect create deployment elasticsearch --image=k8s.gcr.io/fluentd-elasticsearc
   # delete replicas, strategy
   # add the namespace
   # change kind Deployment -> DaemonSet
+
+
+
+3.16. static pods
+---
+- created by kubelet
+- ignored by kube-scheduler
+- kubelet creates a static pod if a pod-definition yaml is placed under
+  - /etc/kubernetes/manifests
+
+- this way you cannot create replicasets, daemonsets, ...
+- kubelet works on the pod level, so this is possible
+
+- the pod definition path is defined either
+  1] as the option to the kubelet.service
+  - --pod-manifest-path=/etc/Kubernetes/manifests \\
+  - or
+  2] as the option of the config file to the kubelet.service
+  - --config=kubeconfig.yaml  \\
+    - kubeconfig.yaml
+    ---
+    staticPodPath: /etc/kubernetes/manifests
+  - clusters setup using kubeadmin tool use this approach
+
+- to check static pods use the command
+  $ docker ps
+
+- kube-apiserver is aware of both
+  - static pods and 
+  - pods created per kube-apiserver
+
+- kube-apiserver
+    - the command "kubectl get pods" returns static pods too
+    - but this is only the read property
+    - any change on static pods is done per static pod definition yaml file
+
+- the k8s cluster could be set by placing k8s komponent definition files 
+  to the manifests folders on the nodes
+  - this is how kubeadmin tool does the setup of the k8s cluster
+  - this is why you see pods when running
+    $ kubectl get pods -n kube-system
 
 
 
