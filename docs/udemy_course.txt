@@ -1142,6 +1142,7 @@ $ kubect create deployment elasticsearch --image=k8s.gcr.io/fluentd-elasticsearc
 - where are the static pod definition files?
   - $ ps -ef | grep kubelet
   - $ ps aux | grep kubelet   # this worked for me
+  - $ systemctl cat kubelet   # can this be used for checking the static pod manifests location?
   - check the "kubelet" setup for the 1.28! # todo
   - https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/  # documentation
   - https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/    # documentation
@@ -1152,6 +1153,46 @@ $ kubectl run static-busybox --image=busybox --dry-run=client -oyaml --command -
 
 3.18. multiple schedulers
 ---
+- how to deploy a kube-scheduler -> installing kube-scheduler
+
+1.a] wget
+$ wget http://storage.googleapics.com/kubernetes-release/release/v1.13.0/bin/linux/amd64/kube-scheduler
+# extract it and run it as a service
+- kube-scheduler.service
+  - --scheduler-name=default-scheduler  # if not specified, this is default name option
+  - when deploying additional scheduler, set the --scheduler-name e.g. to
+    - --scheduler-name=my-custom-scheduler
+
+1.b] kubeadm tool
+- make a copy (& rename) the file
+  - /etc/kubernetes/manifests/kube-scheduler.yaml
+- set the custom name as part of the command
+  - --scheduler-name=my-custom-scheduler
+
+2] create pod-definition.yaml
+- the next step is to set the scheduler in pod definition
+  - schedulerName: my-custom-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+
+  schedulerName: my-custom-scheduler
+
+- how to know which scheduler picked it up?
+$ kubectl get events  # check which scheduler picked up the pod
+
+- how to view the logs
+$ kubectl logs my-custom-scheduler --name-space=kube-system   # check logs of the custom scheduler
+
+
+
+
 
 
 
