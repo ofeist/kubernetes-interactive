@@ -1198,6 +1198,8 @@ $ kubectl logs my-custom-scheduler --name-space=kube-system   # check logs of th
 $ kubectl create -f my-kube-scheduler.yaml
 - Failed to pull image "gcr.io/my-gcp-project/my-kube-scheduler:1.0": failed to pull and unpack image "gcr.io/my-gcp-project/my-kube-scheduler:1.0": failed to resolve reference "gcr.io/my-gcp-project/my-kube-scheduler:1.0": failed to authorize: failed to fetch anonymous token: unexpected status: 400 Bad Request
 
+$ watch "kubectl get pods"
+
 
 
 
