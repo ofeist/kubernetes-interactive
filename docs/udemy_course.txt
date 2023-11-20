@@ -1235,9 +1235,22 @@ $ kubectl create -f deploy/1.8+/
 - probably up-to-date info:
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml   # install metrics server
 
-- to check performance
+- to check performance (cpu / memory)
 $ kubectl top node
 $ kubectl top pod
+
+
+
+4.4. managing application logs
+---
+$ docker run kodekloud/event-simulator    # event-simulator
+$ docker logs -f ecf  # ???
+
+$ k run event-simulator-pod --image=kodekloud/event-simulator --dry-run=client -oyaml > event-simulator.yaml
+$ k create -f event-simulator.yaml
+$ k logs -f event-simulator-pod
+
+
 
 
 
