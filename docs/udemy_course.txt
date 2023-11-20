@@ -1202,6 +1202,43 @@ $ watch "kubectl get pods"
 
 
 
+3.20. configuring scheduler
+---
+- manually (wget) vs. kubeadm tool (kubectl)
+- ~0.45 shows advanced scheduling options
+
+
+
+4.2. logging and monitoring
+---
+- heapster is deprecated
+
+- metrics server (heapster's slimmed down version)
+  - in-memory performance data
+    - no historical performance data
+
+- kubelet (agent) generates the metrics
+  - cAdvisor component (containers advisor)
+    - retrieve performance metrics from pods
+    - exposes them through the kubelet api
+      - makes it available to the metrics server
+
+- to deploy metrics-server
+---
+- minikube environment:
+$ minikube addons enable metrics-server   # if you use minikube
+
+- all other environments:
+$ git clone https://github.com/kubernetes-incubator/metrics-server.git
+$ kubectl create -f deploy/1.8+/
+
+- probably up-to-date info:
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml   # install metrics server
+
+- to check performance
+$ kubectl top node
+$ kubectl top pod
+
 
 
 
