@@ -1258,6 +1258,11 @@ $ k logs -f event-simulator-pod
 
 
 
+4.5. logging - solution
+---
+- if the pod has more containers, -c option shows containers
+  $ kubectl logs webapp-2 -c    # gives the list of containers running in pod
+  $ kubectl logs webapp-2 -c simple-webapp  # gives the logs of simple-webapp container in the pod
 
 
 
