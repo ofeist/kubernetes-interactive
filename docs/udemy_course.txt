@@ -1261,8 +1261,72 @@ $ k logs -f event-simulator-pod
 4.5. logging - solution
 ---
 - if the pod has more containers, -c option shows containers
-  $ kubectl logs webapp-2 -c    # gives the list of containers running in pod
   $ kubectl logs webapp-2 -c simple-webapp  # gives the logs of simple-webapp container in the pod
+
+
+
+5.1. application lifecycle management
+---
+- mentioned already in KCD (kubernetes certified developer course)
+
+
+
+5.2. rolling updates and rollbacks
+---
+- creating a deployment triggers a rolout = deployment revision (function of app/container version)
+- a next, new rolout creates new deployment revision (app version)
+
+- deployment status
+$ kubectl rollout status deployment/myapp-deployment    # deployment status
+
+- revision and rollout history 
+$ kubectl rollout history deployment/myapp-deployment   # revision and rollout history
+
+- deployment strategies
+  - recreate strategy
+    - destroy & create instances(versions)
+    - application downtime
+    - not a default strategy
+  - rolling update
+    - replace instance(version) by instance
+    - no downtime
+    - default deployment strategy
+
+- how to update deployment
+  - k apply command
+    $ kubectl apply -f deployment-definition.yaml
+      - creates new rollout + new revision
+  - k set image
+    $ kubectl set image deployment/myapp-depl nginx=nginx:1.9.1
+      - whis will result in different config of definition file and deployment
+
+$ kubectl describe
+  - gives deployment detailed infomation
+
+- upgrades could be followed watching replicasets
+  $ kubectl get replicasets
+
+- rollback of deployment
+  $ kubectl rollout undo deployment/myapp-deployment  # rollback deployment
+  $ kubectl get replicasets   # before and after deployment
+
+- to summarize deployment commands
+$ kubectl create -f deployment-definition.yaml  # create deployment
+$ kubectl get deployments
+$ kubectl apply -f deployment-definition.yaml   # update deployment
+$ kubectl set image deployment/myapp-deployment nginx=nginx:1.9.1
+$ kubectl rollout status deployment/myapp-deployment
+$ kubectl rollout history deployment/myapp-deployment
+$ kubectl rollout undo deployment/myapp
+
+
+
+
+
+
+
+
+
 
 
 
