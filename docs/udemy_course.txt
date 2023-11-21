@@ -1291,6 +1291,7 @@ $ kubectl rollout history deployment/myapp-deployment   # revision and rollout h
     - replace instance(version) by instance
     - no downtime
     - default deployment strategy
+strategy:    
 
 - how to update deployment
   - k apply command
@@ -1318,6 +1319,14 @@ $ kubectl set image deployment/myapp-deployment nginx=nginx:1.9.1
 $ kubectl rollout status deployment/myapp-deployment
 $ kubectl rollout history deployment/myapp-deployment
 $ kubectl rollout undo deployment/myapp
+
+- edit the deployment
+$ kubectl edit deployement web-app
+  - strategy: recreate  # for example
+
+- FYI - not default option is:
+  strategy:    
+    type: Recreate
 
 
 
