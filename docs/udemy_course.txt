@@ -1329,8 +1329,20 @@ $ kubectl edit deployement web-app
     type: Recreate
 
 
+5.4. application commands
+---
+- not part of exam
 
+- docker image like
+---
+FROM Ubuntu
 
+ENTRYPOINT ["sleep"]
+
+CMD ["5"]
+
+$ docker run ubuntu-sleeper 10
+$ docker run --entrypoint sleep2.0 ubuntu-sleeper 10
 
 
 
