@@ -1250,6 +1250,15 @@ $ k run event-simulator-pod --image=kodekloud/event-simulator --dry-run=client -
 $ k create -f event-simulator.yaml
 $ k logs -f event-simulator-pod
 
+- if more containers inside of pod, then the container from 
+  which i'd like to read the logs must be specified
+
+- e.g. i have event-simulator + nginx inside of the pod
+  $ kubectl logs -f event-simulator-pod event-simulator   # read the logs from event-simulator
+
+
+
+
 
 
 
