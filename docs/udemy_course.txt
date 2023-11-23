@@ -1206,6 +1206,12 @@ $ watch "kubectl get pods"
 ---
 - manually (wget) vs. kubeadm tool (kubectl)
 - ~0.45 shows advanced scheduling options
+- https://github.com/kubernetes/community/tree/master/contributors/devel
+            - the lower one didnt exist anymore
+                - https:github.com/kubernetes/community/blob/master/contributors/devel/scheduler.md
+- https://kubernetes.io.blog/2017/03/advanced-scheduling-in-kubernetes/
+- https://jvns.ca/blog/2017/07/27/how-does-the-kubernetes-scheduler-work/
+- https://stackoverflow.com/questions/28857993/how-does-kubernetes-scheduler-work
 
 
 
@@ -1416,5 +1422,31 @@ spec:
 
 gives:
 Error from server (BadRequest): error when creating "webapp-green.yaml": Pod in version "v1" cannot be handled as a Pod: json: cannot unmarshal object into Go struct field PodSpec.spec.containers of type []v1.Container
+
+
+
+5.7. configure environment variables in applications
+---
+- use the "env:" property
+- env is an array
+  -> every property in the array starts with the dash "-"
+
+- key value pair
+env:
+  - name:
+    value:
+
+- ConfigMap (use "valueFrom")
+env:
+  - name: APP_COLOR
+    valueFrom:
+      configMapKeyRef:
+
+- Secrets (use "valueFrom")
+env:
+  - name: APP_COLOR
+    valueFrom:
+      secretKeyRef:
+
 
 
