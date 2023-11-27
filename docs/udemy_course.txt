@@ -1517,6 +1517,7 @@ spec:
 
 5.8. environment variables - solution
 ---
+- https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/
 
 
 
