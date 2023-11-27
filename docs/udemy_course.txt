@@ -1519,6 +1519,8 @@ spec:
 ---
 - https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/
 
+- configure microservices using configMap and secrets
+  - https://kubernetes.io/docs/tutorials/configuration/configure-java-microservice/configure-java-microservice/
 
 
 
