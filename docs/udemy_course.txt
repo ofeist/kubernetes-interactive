@@ -1515,8 +1515,9 @@ spec:
 
 
 
-5.8. environment variables - solution
+5.9. environment variables - solution
 ---
+- overall, this part i need to repeat more thoroughly
 - https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/
 
 - configure microservices using configMap and secrets
@@ -1524,6 +1525,22 @@ spec:
 
 - katacoda shutter
   - https://kubernetes.io/blog/2023/02/14/kubernetes-katacoda-tutorials-stop-from-2023-03-31/
+
+
+
+5.10. configure secrets in applications
+---
+
+
+
+
+
+
+
+
+
+
+
 
 
 
