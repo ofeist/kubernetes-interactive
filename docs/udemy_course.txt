@@ -1600,10 +1600,48 @@ $ kubectl create -f pod-definition.yaml
 
 5.11. secrets - solutions
 ---
+$ kubectl create secret generic db-secret \
+--from-literal=DB_Host=sql01 \
+--from-literal=DB_User=root \
+--from-literal=DB_Password=password123 \
+--dry-run=client -oyaml
 
 
+db-secret.yaml
+---
+apiVersion: v1
+data:
+  DB_Host: c3FsMDE=
+  DB_Password: cGFzc3dvcmQxMjM=
+  DB_User: cm9vdA==
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: db-secret
 
 
+$ kubectl explain pods --recursive | grep envFrom -A5
+- input
+  envFrom:
+    - secretRef:
+          name: db-secret
+
+
+ webapp-pod.yaml
+ ---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: webapp-pod
+  name: webapp-pod
+spec:
+  containers:
+  - image: kodekloud/simplewebapp-mysql
+    name: webapp-pod
+    envFrom:
+    - secretRef:
+        name: db-secret
 
 
 
