@@ -1530,12 +1530,76 @@ spec:
 
 5.10. configure secrets in applications
 ---
+- create a secret
+  - kubectl create secret generic   # imperative
+  - kubectl create -f               # declarative
+
+- imperative
+  - options
+    --from-literal
+    --from-file
+
+- declerative
+  - secret-data.yaml
+  ---
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: app-secret [A]
+  data:
+    DB_Host: mysql
+    DB_User: root
+    DB_Password: passwrd
+
+- but, for the data values use
+$ echo -n 'mysql' | base64
+$ echo -n 'root' | base64
+$ echo -n 'passwrd' | base64
+
+$ kubectl create -f secret-data.yaml
+$ kubectl get secrets
+$ kubectl describe secrets
+$ kubectl get secret app-secret -o yaml
+
+- to decode the values
+$ echo -n 'bXlzcWw=' | base64 --decode
+
+
+- inject into pod
+
+pod-definition
+---
+apiVersion: v1
+kind: Pod
+...
+...
+spec:
+  containers:
+  - name: simple-webapp-color
+    image: simple-webapp-color
+    ports:
+      - containerPort: 8080
+    envFrom:
+      - secretRef:
+            name: app-secret [A]
+
+$ kubectl create -f pod-definition.yaml
+
+
+- more ways of injecting secrets into pods
+1] from secrets (ENV)
+2] SINGLE ENV
+3] VOLUME
+
+- volume
+  -name: app-secret-volume
+  - creates a file for each secret
+  $ ls opt/app-secret-volumes
 
 
 
-
-
-
+5.11. secrets - solutions
+---
 
 
 
