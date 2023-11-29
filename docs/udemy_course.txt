@@ -6,6 +6,18 @@ would be good to do before:
 kubernetes for absolute beginners
 
 
+few links
+---
+- https://killer.sh/    # the best simulator
+  - https://killer.sh/course/preview/e84d0e31-4fff-4c42-8afd-be1bdbc0d994
+  - alias k=kubectl
+  - export do="-o yaml --dry-run=client"
+- the guys experience: https://georgearisty.dev/posts/ckad/
+  - https://georgearisty.dev/posts/k8s-cluster-network/
+---
+
+
+
 2. cluster architecture
 ---
 cargo and control ships analogy
