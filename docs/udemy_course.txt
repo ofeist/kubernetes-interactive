@@ -1656,8 +1656,27 @@ spec:
         name: db-secret
 
 
+5.12. multi container pods
+---
+- multicontainer pods share
+  - lifecycle
+  - network
+  - storage
+
+spec:
+  containers:
+  - name: simple-webapp
+
+- the dash "-" marks that containers are an "array"
+
+- You can use following command to delete the POD forcefully
+  $ kubectl delete pod <PODNAME> --grace-period=0 --force
 
 
+5.13. multi container pods - solutions
+---
+- sidecar container 
+  -> sends logs to elasticsearch
 
 
 
