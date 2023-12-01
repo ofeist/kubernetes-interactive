@@ -1673,12 +1673,17 @@ spec:
   $ kubectl delete pod <PODNAME> --grace-period=0 --force
 
 
+
 5.13. multi container pods - solutions
 ---
 - sidecar container 
   -> sends logs to elasticsearch
 
 
+
+5.14. init containers - solutions
+---
+- what are init containers?
 
 
 
