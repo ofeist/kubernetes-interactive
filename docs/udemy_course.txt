@@ -1687,6 +1687,52 @@ spec:
 
 
 
+6.01 cluster maintenance
+---
+
+6.02 os updates
+---
+- if pods part of replicaset
+  - pods from a node down are deleted and recreated on another node 
+    after the eviction-timeout
+  - --pod-eviction-timeout=5m0s   # default
+
+- in theory, some update could be done by taking the node down for < 5min
+  - but, you can never tell if you're loose pods (not part of the replicaSet)
+
+- how this shall be done: drain the node
+  $ kubectl drain node-1      # "drain" moves pods to another nodes
+    - drained node is unschedulable
+  # do the maintenance (take down the node), and e.g. reboot
+  $ kubectl uncordon node-1   # uncordoned node is now schedulable
+
+- instead of drain you can mark the node unschedulable with "cordon"
+  $ kubectl cordon node-1   # marks as unschedulable; doesn't drain
+
+
+
+6.03 os updates - solution
+---
+- daemonSets can not be deleted (drained)
+  - --ignore-daemonsets
+
+- play around with taints, i suppose
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
