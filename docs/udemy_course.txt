@@ -1753,16 +1753,19 @@ $ kubectl get nodes   # shows the version
   - version of all other components not allowed to be higher of the kube-apiserver version
     - e.g. 1.10
 
-- controller-manager and kube-scheduler can be on one version lower
+- controller-manager and kube-scheduler 
+  - can be on one version lower
   - e.g. 1.9 or 1.10
 
-- kubelet and kube-proxy can be on two versions below
+- kubelet and kube-proxy 
+  - can be on two versions below
   - e.g. 1.8, 1.9 or 1.10
 
-- kubectl version can be higher of kube-apiserver
+- kubectl version 
+  - can be higher of kube-apiserver
   - e.g. 1.9, 1.10 or 1.11
 
-- the recommendedn approach is to upgrade one minor version at the time
+- the recommended approach is to upgrade one minor version at the time
 
 - upgrade stratiegies
   - cloud (managed upgrades - few clicks)
@@ -1795,19 +1798,7 @@ $ kubectl get nodes   # shows the version
     - controller managers do not function
       - a failed pod will not be recreated
 
-
-2] upgrade the worker nodes
---
-- strategies
-  - all nodes at the time
-  - node by node
-  - add new nodes to the cluster
-    - these nodes are already upgraded to a newer version
-    - move worload, node by node
-    - cloud convenient
-
-- the kubeadm way 
----
+2] upgrade the worker nodesrecommended
 1] master node upgrade
   $ kubeadm upgrade plan
   $ apt-get upgrade -y kubeadm=1.12.0-00
@@ -1840,6 +1831,7 @@ $ kubectl get nodes   # shows the version
   - node-N
     $ kubectl drain node-N
       - as per node-1
+
 
 
 
