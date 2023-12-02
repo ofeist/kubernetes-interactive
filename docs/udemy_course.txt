@@ -2010,6 +2010,7 @@ $ ETCDCTL_API=3 etcdctl --cert="/etc/kubernetes/pki/etcd/server.crt" --cacert="/
 7.5 TLS basics
 ---
 ~6.30 - most interesting
+- PKI = public key infrastructure
 
 
 
@@ -2051,14 +2052,138 @@ $ ETCDCTL_API=3 etcdctl --cert="/etc/kubernetes/pki/etcd/server.crt" --cacert="/
   - cfssl
 
 1] create CA key
+--
+- generate keys
   $ openssl genrsa -out ca.key 2048
     - ca.key
-2] certificate signing request
-  $ openssl req -new -key ca.key -subj "/CN=KUBERNETES-CA" -out ca.csr
-    - ca.csr
-    - CN=...  # Common Name 
-    the name of the component the certificate is for
-3] 
+- certificate signing request
+  $ openssl req -new -key ca.key -subj 
+    "/CN=KUBERNETES-CA" -out ca.csr
+      - ca.csr
+      - CN=...  # Common Name 
+      - the name of the component the certificate is for
+- sign certificates
+  $ openssl x509 -req -in ca.csr -signkey ca.key -out ca.crt
+    - ca.crt
+    - this ca.crt will be needed from all components in k8s!
+
+2] client-side certificates 
+(admin user)
+--
+- generate keys
+  $ openssl genrsa -out admin.key 2048
+    - admin.key
+- certificate signing request
+  $ openssl req -new -key admin.key -subj \
+    "/CN=kube-admin/O=system:masters" -out admin.csr
+      - admin.csr
+      - O=system:masters  # group:SYSTEM:MASTERS
+- sign certificate
+  $ openssl x509 -req -in admin.csr -CA ca.crt -CAkey ca.key -out admin.crt
+    - admin.crt
+
+- same procedure for all other components
+  - admin user
+  - kube-scheduler
+  - kube-controller-manager
+  - kube-proxy
+
+- kube scheduler and kube controller manager 
+  - they are in control plane
+  - their name must be prefixed with "SYSTEM:"
+    - "SYSTEM:KUBE-SCHEDULER"
+    - "SYSTEM:KUBE-CONTROLLER-MANAGER"
+
+- what you do with certificates?
+  - e.g. admin => use instead uname/pwd
+    - $ curl https://kube-apiserver:6443/api/v1/pods  \
+      --key admin.key --cert admin.crt  \
+      --cacert ca.crt
+    
+    - or put details in kube-config.yaml
+      apiVersion: v1
+      clusters:
+      - cluster
+          certificate-authority: ca.crt
+          server: https://kube-apiserver:6443
+        name: kubernetes
+      kind: Config
+      users:
+      - name: kubernetes-admin
+        user:
+          client-certificate: admin.crt
+          client-key: admin.key
+
+3] server-side certificates
+--
+
+- etcd servers
+  - the common name CN=ETCD_SERVER
+- in HA cluster more etcd servers possible
+  - etcdpeer1.crt & etcdpeer1.key
+  - CN=ETCD-PEER
+  - all have to be specified in etcd.yaml
+    - --peer-cert-file
+    - ca.crt has to be specified!
+
+- kube-apiserver
+  - the most popular component
+  - KUBE-API SERVER
+  - all different names have to be present
+    - kubernetes
+    - kubernetes.default
+    - kubernetes.default.svc
+    - kubernetes.default.svc.cluster.local
+    - 10.96.0.1
+    - 172.17.0.87
+  
+  - generate certificates
+    $ openssl genrsa -out apiserver.key 2048
+      - apiserver.key
+    $ openssl req -new -key apiserver.key -subj \
+    "/CN=kube-apiserver" -out apiserver.csr
+      - apiserver.csr
+      - create openssl.cnf for alternative DNS entries
+        [alt_names]
+        DNS.1 = kubernetes
+        DNS.2 = kubernetes.default
+        DNS.3 = kubernetes.default.svc
+        DNS.4 ...
+    $ openssl x509 -req -in apiserver.csr \
+    -CA ca.crt -CAkey ca.key -out apiserver.crt
+    # sign the certificate
+      - apiserver.crt
+
+- kubelet
+--
+- kubectl nodes (server cert)
+  - all nodes need key-cert pair
+  - CN names will be: node01, node02, node03
+  - use created certificates in the kubelet-config.yaml file
+      kind: KubeletConfiguration
+      ...
+      tlsCertFile: "/var/lib/kubelet/kubelet-node01.crt"
+      tlsPrivateKeyFile: "/var/lib/kubelet/kubelet-node01.key"
+  - do this for all certificates
+
+- kubectl (client cert)
+--
+- used for kubeapi-server authentication
+- names
+  - CN=system:node:node01
+  - CN=system:node:node02
+  - CN=system:node:node03
+- group: system:nodes
+
+
+
+
+
+
+
+
+
+
 
 
 
