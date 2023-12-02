@@ -1837,11 +1837,12 @@ $ kubectl get nodes   # shows the version
 6.06 k8s upgrade - solution
 ---
 - first i tried to do it by the book (after the theory lessons)
-- s wee little difference on killercoda
-  $ kubeadm upgrade node
-  $ apt upgrade kubelet
-  $ systemctl restart kubelet
-  $ kubectl get nodes
+  - s wee little difference on killercoda
+    $ kubeadm upgrade node
+    $ apt upgrade kubelet
+    $ systemctl restart kubelet
+    $ kubectl get nodes
+
 
 - check available versions
   $ apt-cache policy kubeadm
@@ -1854,7 +1855,40 @@ $ kubectl get nodes   # shows the version
 - check the latest version available for the upgrade
   $ kubeadm upgrade plan
 
-~3.21
+
+- THE UPGRADE
+---
+- upgrade master (controlplane)
+--
+- commands
+  $ kubectl drain controlplane
+    - status: Ready, SchedulingDisabled
+  $ apt-cache policy kubeadm | grep 1.28.
+  $ apt install kubeadm=1.28.2-00     # apt-get
+  $ kubeadm version
+  $ kubeadm upgrade apply v1.28.2     # this upgrades the cluster
+    # [upgrade/successful] SUCCESS! Your cluster was upgraded to "v1.28.2". Enjoy!
+  $ kubectl version     # server=1.28.1
+  $ kubectl get nodes   # server=1.28.1 
+    - kubelet needs the manual upgrade
+  $ apt install kubelet=1.28.2-00
+  $ kubect get nodes
+  $ kubectl uncordon controlplane
+    - status: Ready
+
+
+- upgrade worker (node01)
+--
+- commands
+  $ kubectl drain node01
+  $ ssh node01
+    # apt-cache policy kubeadm | grep 1.28.2
+  $ apt install kubeadm=1.28.2-00
+  $ kubeadm upgrade node
+  $ kubeadm install kubelet=1.28.2-00
+  $ logout  # to master
+    # kubectl get nodes
+  $ kubectl uncordon node01
 
 
 
