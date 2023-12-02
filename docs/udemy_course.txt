@@ -2007,6 +2007,61 @@ $ ETCDCTL_API=3 etcdctl --cert="/etc/kubernetes/pki/etcd/server.crt" --cacert="/
 
 
 
+7.5 TLS basics
+---
+~6.30 - most interesting
+
+
+
+7.6 tls in kubernetes
+---
+- server components
+  - kube-apiserver
+    - apiserver.crt + apiserver.key
+    - possible to create a service specific certificates/keys
+      - apiserver-etcd-client.crt + apiserver-etcd-client.key
+  - etcd server
+    - etcdserver.crt + etcdserver.key
+  - kubelet server
+    - kubelet.crt + kubelet.key
+
+- clients, from the perspective of k8s, are
+  - admin user
+    - admin.crt + admin.key
+  - scheduler
+    - scheduler.crt + scheduler.key
+  - controller-manager
+    -  controller-manager.crt +  controller-manager.key
+  - kube-proxy
+    - kube-proxy.crt + kube-proxy.key
+
+- k8s wants u to have CA (certificate authority) for the cluster
+  - possible to have more than one CA
+    - one for etcd specifically
+      -this would sign etcd (crt+key) & api-etcd (crt+key)
+    - one for all components in the cluster
+
+
+
+7.7 certificates creation
+---
+- diff tools available
+  - easyrsa
+  - openssl
+  - cfssl
+
+1] create CA key
+  $ openssl genrsa -out ca.key 2048
+    - ca.key
+2] certificate signing request
+  $ openssl req -new -key ca.key -subj "/CN=KUBERNETES-CA" -out ca.csr
+    - ca.csr
+    - CN=...  # Common Name 
+    the name of the component the certificate is for
+3] 
+
+
+
 
 
 
