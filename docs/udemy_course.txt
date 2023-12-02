@@ -1891,6 +1891,73 @@ $ kubectl get nodes   # shows the version
   $ kubectl uncordon node01
 
 
+6.08 backup and restore methods
+---
+- resources
+  - resource configuration
+  - etcd cluster
+  - persistent volumes
+
+1] resource configuration
+--
+- declerative way
+  - configs saved at source control
+
+- get all resource configs from the cluster
+  $ kubectl get all --all-namespaces -o yaml > all-deploy-services.yaml
+
+- for this (get all) you could use tools
+  - VELERO  # former ARK by HeptIO
+
+
+2] etcd
+--
+- state of the cluster
+- nodes and other resources
+
+- either:
+  - backup the data directory by a backup tool
+    - etcd.service
+    ---
+    ExecSTart=/usr/local/...
+      --name ${ETCD_NAME} \\
+      ..
+      ..
+      --data-dir=/var/lib/etcd
+
+  - or, use the builtin snapshot solution
+    - ETCDCTL_API=3 etcdctl \
+        snapshot save snapshot.db
+    $ etcdctl snapshot save snapshot.db
+    $ etcdctl snapshot status snapshot.db
+    
+    - to restore
+      $ service kube-apiserver stop
+      $ etccdctl snapshot restore snapshot.db
+        - this configures a new members to a new cluster
+        - to prevent a new member accidentaly to join an existing cluster
+        - new data-dir will be created
+          - --data-dir /var/lib/etcs-from-backup
+        - the new configuration for etcd.service id needed
+          etcd.service
+          --name ..
+          --data-dir=/var/lib/etcd-from-backup
+      $ systemctl daemon-reload
+      $ service etcd restart
+      $ service kube-apiserver start
+
+    - with all etcdctl commands, you must specify
+      --endpoints=https://127.0.0.1:2379  \
+      --cacert=/etc/etcd/ca.crt \
+      --cert=/etc/etcd/etcd-server.crt \
+      --key=/etc/etcd/etcd-server.key
+
+- if managed service, you probably do not have access to the etcd
+  - then resource config files option is probably a better way
+
+
+
+
 
 
 
