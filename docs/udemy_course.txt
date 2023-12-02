@@ -1720,7 +1720,8 @@ spec:
 
 
 
-
+6.04 kubernetes software versions (releases)
+---
 
 
 
