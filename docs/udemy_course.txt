@@ -1957,6 +1957,60 @@ $ kubectl get nodes   # shows the version
 
 
 
+6.10 backup and restore - solution
+---
+- check the etcd version
+  $ kubect describe -n kube-system pod etcd-controlplane | grep -i image
+
+- what ports to reach etcd cluster from master node
+  --listen-client-urls=https://127.0.0.1:2379,https://172.17.0.12:2379
+    - 2379
+
+- for other nodes to join the etcd cluster
+  --listen-peer-urls=https://172.17.0.12:2380
+    - 2380
+  
+- the location of the server cert file
+  --cert-file=/etc/kubernetes/pki/etcd/server.crt
+
+- the location of the etcd ca.cert
+  - --truested-ca-file=/etc/kubernetes/pki/etcd/ca.cert
+  - or is it the
+  - --peer-trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+    - same location
+
+- create the backup using snapshoot tool
+  - ETCDCTL_API=3 etcdctl version
+
+
+$ # ETCDCTL_API=3 etcdctl --cert="" --cacert="" snapshot save
+  $ kubectl describe -n kube-system pod etcd-controlplane | less
+    - --cert-file=/etc/kubernetes/pki/etcd/server.crt
+    - --key-file=/etc/kubernetes/pki/etcd/server.key
+    - --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+$ ETCDCTL_API=3 etcdctl --cert="/etc/kubernetes/pki/etcd/server.crt" --cacert="/etc/kubernetes/pki/etcd/ca.crt" --key="/etc/kubernetes/pki/etcd/server.key" snapshot save /opt/snapshot-pre-boot.db
+  - enpoint option not needed -> this is run on the same server where etcd is installed
+
+- snapshot status
+  $ ETCDCTL_API=3 etcdctl --cert="/etc/kubernetes/pki/etcd/server.crt" --cacert="/etc/kubernetes/pki/etcd/ca.crt" --key="/etc/kubernetes/pki/etcd/server.key" snapshot status /opt/snapshot-pre-boot.db
+  - or simply
+  $ ETCDCTL_API=3 etcdctl snapshot status /opt/snapshot-pre-boot.db
+
+- snapshot restore
+  - todo: this didnt work, possibly because of the version!
+  $ ETCDCTL_API=3 etcdctl snapshot restore /opt/snapshot-pre-boot.db --data-dir=/var/lib/etcd-from-backup
+  - then update etcd.yaml
+    - /etc/kubernetes/manifests/etcd.yaml
+    - mount the "volumes / hostPath"
+      - path: /var/lib/etc-from-backup
+    - save and exit
+
+
+
+
+
+
+
 
 
 
