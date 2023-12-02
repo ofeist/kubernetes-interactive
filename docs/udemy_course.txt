@@ -1744,6 +1744,113 @@ $ kubectl get nodes   # shows the version
 
 
 
+6.05  cluster upgrade process
+---
+- core control-plane components do not have to be on the same version
+
+- kube-apiserver 
+  - is the primary component in the control-plane
+  - version of all other components not allowed to be higher of the kube-apiserver version
+    - e.g. 1.10
+
+- controller-manager and kube-scheduler can be on one version lower
+  - e.g. 1.9 or 1.10
+
+- kubelet and kube-proxy can be on two versions below
+  - e.g. 1.8, 1.9 or 1.10
+
+- kubectl version can be higher of kube-apiserver
+  - e.g. 1.9, 1.10 or 1.11
+
+- the recommendedn approach is to upgrade one minor version at the time
+
+- upgrade stratiegies
+  - cloud (managed upgrades - few clicks)
+  - kubeadm
+    - kubectl upgrade plan
+    - kubectl upgrade apply
+  - the hard way (cluster deployed from scratch)
+    - manual deployment
+
+- the kubadm way
+---
+- steps 1.10 -> 1.11
+  1] upgrade the master nodes
+  2] upgrade the worker nodes
+
+1] upgrade master
+--
+- the master node upgraded first
+- components go down briefly
+  - apiserver
+  - scheduler
+  - controller-managers
+
+- when master down
+  - worker nodes and applications on worker nodes (and running apps) are not affected
+  - but all management functions are down, e.g.
+    - access via kubectl or api
+    - deploy new applications
+    - modify existing apps
+    - controller managers do not function
+      - a failed pod will not be recreated
+
+
+2] upgrade the worker nodes
+--
+- strategies
+  - all nodes at the time
+  - node by node
+  - add new nodes to the cluster
+    - these nodes are already upgraded to a newer version
+    - move worload, node by node
+    - cloud convenient
+
+- the kubeadm way 
+---
+1] master node upgrade
+  $ kubeadm upgrade plan
+  $ apt-get upgrade -y kubeadm=1.12.0-00
+  $ kubeadm upgrade apply v1.12.0
+  $ kubectl get nodes   # VERSION column shows kubelet ver
+    - gets registered version of kubelets
+    - kubeadm sets kubelets on the master node
+    - if installed from scratch, kubelets are placed on nodes
+      - the master node will not be shown as output of "k get nodes"
+  $ apt-get upgrade -y kubelet=1.12.0-00
+  $ systemctl restart kubelet
+  $ kubectl get nodes   # VERSION
+    - the version of master upgraded
+
+2] worker nodes upgrade
+  - node-1
+    $ kubectl drain node-1
+      - moves the workload from the node
+      - cordons the node (and marks unschedulable)
+    - then upgrade kubeadm and kubelet as done on the master
+      $ apt-get upgrade -y kubeadm=1.12.0-00
+      $ kubeadm upgrade apply v1.12.0
+      $ apt-get upgrade -y kubelet=1.12.0-00
+      $ kubeadm upgrade node config --kubelet-version v1.12.0   # different from the master???
+      $ systemctl restart kubelet
+      $ kubectl uncordon node-1
+  - node-2
+    $ kubectl drain node-2
+      - as per node-1
+  - node-N
+    $ kubectl drain node-N
+      - as per node-1
+
+
+
+
+
+
+
+
+
+
+
 
 
 
