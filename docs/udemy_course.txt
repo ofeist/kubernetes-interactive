@@ -1847,8 +1847,14 @@ $ kubectl get nodes   # shows the version
   $ apt-cache policy kubeadm
   $ apt-get install kubeadm=1.28.4
 
+- check the cluster version
+  $ kubectl get nodes
+  $ kubectl version
 
+- check the latest version available for the upgrade
+  $ kubeadm upgrade plan
 
+~3.21
 
 
 
