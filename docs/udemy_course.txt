@@ -1722,7 +1722,25 @@ spec:
 
 6.04 kubernetes software versions (releases)
 ---
+$ kubectl get nodes   # shows the version
+- all releases available at the releases page of the k8s github
+  - "kubernetes.tar.gz"
+  - all the control plane components are in the package
+    - all control plane components have same version
+      - kube-apiserver
+      - controller-manager
+      - kube-scheduler
+      - kubelet
+      - kube-proxy
+      - kubectl
+    - there are other components within the control-plane with different version numbers
+      - those are the separate projects:
+        - etcd cluster
+        - coreDNS
 
+- todo
+  - check swagger tutorial
+  - check the versioning references (per email)
 
 
 
