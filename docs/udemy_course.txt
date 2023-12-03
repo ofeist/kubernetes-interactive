@@ -2244,6 +2244,59 @@ kubeadm.certificates.csv
 
 
 
+7.9 manage certificates (certificate api)
+---
+- kubeadm creates and stores certificates on master node
+  - CA Server = master node
+
+- certificates api
+  - manages certificates
+  - sign requests
+  - rotate certificates
+
+- cert sign request is sent to kubernetes through api call
+- how this works
+  - the user creates a key
+  - an admin receives a sign request
+  - an admin creates CertificateSigningRequest object
+  - these requests can be reviewed and approved (kubectl commands)
+  - certificate can be shared with the user (after it is extracted)
+
+- step-by-step workflow
+  - the user creates a key
+    $ openssl genrsa -out jane.key 2048
+  - the user sends the request to the administrator
+    $ openssl req -new -key jane.key -subj "/CN=jane" -out jane.csr
+  - out of the key, the admin creates CertificateSigningRequest object
+    - cat jane.csr | base64
+    - jane-csr.yaml
+    ---
+    apiVersion: certificates.k8s.io/v1beta1
+    kind: CertificateSigningRequest
+    metadata:
+      name: jane
+    spec:
+      groups:
+      - system: authenticated
+      usages:
+      - digital signature
+      - key encipherment
+      - server auth
+      request:
+        LS0tLS1CRU ...
+        ...
+        ... base64 encoded jane.csr ... ...
+        ...
+        ... ... ... ... ... ... 41TXVxOTlOZbnJ
+  - all cert signing requests can be seen by administrators
+    $ kubectl get csr
+      - NAME
+      - CONDITION = Pending
+  - admin can approve the request
+    $ kubectl certificate approve jane
+  - k8s signs the certificates & generates a certificate for the user
+    - using ca key-pair
+
 
 
 
