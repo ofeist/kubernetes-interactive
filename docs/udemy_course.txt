@@ -2464,8 +2464,133 @@ $ curl https://my-kube:6443/api/v1/pods \
 
 - kube-proxy != kubectl proxy
   !!!
-  
 
+
+
+7.12 authorization
+---
+!= authentication
+  - authentication = access
+
+- authorization
+  - what can you do
+
+- authorization mechanisms
+  - node
+  - ABAC  # attribute based authorization
+  - RBAC  # role based authorization
+  - Webhook
+  - AlwaysAllow
+  - AlwaysDeny
+
+- node based autorization
+--
+- kubelet + kube API
+  - system:node:node01
+
+- node authorizer
+  - authorizaes any request comming from a user with 
+      - a name system:node
+      - and a part of the system:node group
+
+- ABAC
+--
+- external access
+- a user has the set of permissions
+  - can view pod
+  - can create pod
+  - can delete pod
+- this is done per a policy file with a set of policies
+  - this file is passed to the API server
+  - after change, the kubeAPI-server has to be restarted
+    - difficult to manage
+
+- RBAC
+--
+- role with a set of permissions
+  - a user is then asocciated to the role
+- (more) standard approach of maanging k8s
+
+- Webhook
+--
+- outsourcing of all authorization mechanisms
+- e.g. Open Policy Agent
+
+- where is this setup
+  - kube-apiserver.yaml
+    -- authorization-mode=AlwaysAllow   # per default
+  - multiple modes possible
+    -- authorization-mode=Node,RBAC,Webhook
+      - this is the order or authorization (1.Node, then 2.RBAC, then 3.Webhook)
+        - e.g. deny, deny, allow = allow
+
+
+
+7.13 RBAC
+---
+
+1] create the role
+  developer-role.yaml
+  ---
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      name: developer
+    rules:
+    - apiGroups: [""]
+      resources: ["pods"]
+      verbs: ["list","get","create","update","delete"]
+    - apiGroups: [""]
+      resources: ["ConfigMap"]
+      verbs: ["create]
+
+  - for the "core" group the "apiGroups: [""]" can stay empty
+  - multiple rules (upper example) could be given for single role
+
+  - $ kubectl create -f developer-role.yaml
+
+2] bind the user to the role 
+  devuser-developer-binding.yaml
+  ---
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: RoleBinding
+  metadata:
+    name: devuser-developer-binding
+  subjects:
+  - kind: user
+    name: dev-user
+    apiGroup: rbac.authorization.k8s.io
+  roleRef:
+    kind: Role
+    name: developer
+    apiGroup: rbac.authorization.k8s.io
+
+  $ kubectl create -f devuser-developer-binding.yaml
+
+- this role + role binding is inside of the default namespace
+
+- get the roles and bindings info
+  $ kubectl get roles
+  $ kubectl get rolebindings
+  $ kubectl describe role developer
+  $ kubectl describe rolebinding devuser-developer-binding
+
+- get the user rights
+  $ kubectl auth can-i create deployments
+    - yes 
+  $ kubectl auth can-i delete nodes
+- check for other users (as admin)
+  $ kubectl auth can-i create deployments --as dev-user
+  $ kubectl auth can-i create pods --as dev-user
+  $ kubectl auth can-i create pods --as dev-user --namespace test
+
+- resource names could also be restricted
+  - resourceNames: ["blue", "orange"]   # e.g. pods are resources
+
+
+
+7.14 cluster roles and roles bindings
+---
 
 
 
