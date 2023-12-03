@@ -2455,6 +2455,20 @@ $ curl https://my-kube:6443/api/v1/pods \
       --cert admin.crt  \
       --cacert /etc/kubernetes/pki/ca.crt
 
+- instead of authentication with keys
+  - curl https:://... --key ... 
+  - you can start
+    $ kubectl proxy
+      # Starting to serve on 127.0.0.1:8001
+    $ curl http://localhost:8001
+
+- kube-proxy != kubectl proxy
+  !!!
+  
+
+
+
+
 
 
 
