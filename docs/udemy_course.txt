@@ -2489,7 +2489,7 @@ $ curl https://my-kube:6443/api/v1/pods \
   - system:node:node01
 
 - node authorizer
-  - authorizaes any request comming from a user with 
+  - authorizes any request comming from a user with 
       - a name system:node
       - and a part of the system:node group
 
@@ -2655,13 +2655,56 @@ $ curl https://my-kube:6443/api/v1/pods \
   - e.g. authorize the user with ClusterRole to access all pods accross the whole cluster
 
 - k8s creates many cluster roles by default when it's set-up
-  
+
+# !!!
+$ kubectl api-resources -o wide # get the roles and verbs
 
 
 
+7.15 service accounts
+---
+$ kubectl create serviceaccount dashboard-sa
+$ kubectl get serviceaccount
+$ kubectl describe serviceaccount dashboard-sa
+  - Tokens: dashboard-sa-token-kbbdm
+    - Name (dashboard-sa) -> creates object ->token in secret -> connects to the service account
+$ kubectl describe secret dashboard-sa-token-kbbdm
+  - token:
+    eyJhb...iwia3
+- this can be used with curl to make a REST call
+  $ curl https://192.168.56.70:6443/api -insecure \
+    --header "Authorization: Bearer eyJhb...iwia"
+      # "eyJhb ... iwia" <--TOKEN
 
+- but what if the application is on the k8s itself?
+  - then mount the secret token as a volume inside the pod where the app runs
 
+- each namespace has the "default" service account already created and mounted
+  $ kubectl get serviceaccount
+    - default sa and its token are mounted as a volume to the pod
+  $ kubectl describe pod my-kubernetes-dashboard
+    Mounts: /var/run/secrets/kubernetes.io/serviceaccount from default-token-j4hkv
+    SecretName: default-token-j4hkv
+  $ kubectl exec -it my-kubernetes-dashboard ls /var/run/secrets/kubernetes.io/serviceaccount
+    # ca.crt namespace token
+  $ kubectl exec -it my-kubernetes-dashboard cat /var/run/secrets/kubernetes.io/serviceaccount
 
+- the default sa is very restricted
+  - todo: check permissions!
+
+- to use additional service account (dashboard-sa), specify in pod-definition.yaml
+    ...
+    spec:
+      containers:
+        - name: my-kubernetes-dashboard
+          image: my-kubernetes-dashboard
+      serviceAccount: dashboard-sa
+
+- pod has to be deleted and recreated (if you change the service account)
+- if deployment, a new rollout will be triggered
+
+- not to mount default service account automatically, specify:
+  automountServiceAccountToken: false
 
 
 
