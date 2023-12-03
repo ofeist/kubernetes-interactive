@@ -2371,7 +2371,7 @@ $ curl https://my-kube:6443/api/v1/pods \
 - play around jack
   - prepare needed certs
   $ cat ~/.kube/config
-  $ echo "LS0 ... LS0tCg==" | base64 --decode > admin.key
+  $ echo "LS0 ... LS0tCg==" | base64 --decode > admin.crt
   $ echo "LS0 ... LS0tCg==" | base64 --decode > admin.key
 
   $ kubectl get pods
@@ -2400,6 +2400,65 @@ $ curl https://my-kube:6443/api/v1/pods \
 
 7.11 API groups
 ---
+- existing
+  - api:
+    /metrics
+    /healthz
+    /version
+    /api
+    /apis
+    /logs
+
+- for the cluster functionality responsible are
+  - /api    # core
+  - /apis   # named
+    $ 
+
+- named
+  /apis
+    - API Groups:
+      /apps
+        /v1
+          - Resources:
+            /deployments
+              - Verbs:  # aka actions
+                /list
+                /get
+                /create
+                /delete
+            /replicasets
+            /statefulsets
+      /networking.k8s.io
+        /v1
+          /networkpolicies
+
+- named/API Groups/version/Resources/Verbs
+
+- documentation
+  - https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#pod-v1-core
+
+- infos could be got by exec curl localhost:6433
+  - prepare needed certs
+    $ cat ~/.kube/config
+    $ echo "LS0 ... LS0tCg==" | base64 --decode > admin.crt
+    $ echo "LS0 ... LS0tCg==" | base64 --decode > admin.key
+
+  $ curl https://controlplane:6443 \
+      --key admin.key \
+      --cert admin.crt  \
+      --cacert /etc/kubernetes/pki/ca.crt
+    #
+    - returns "paths"
+  
+  $ curl https://controlplane:6443/api \
+      --key admin.key \
+      --cert admin.crt  \
+      --cacert /etc/kubernetes/pki/ca.crt
+
+
+
+
+
 
 
 
