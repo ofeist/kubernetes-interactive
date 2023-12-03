@@ -2591,8 +2591,71 @@ $ curl https://my-kube:6443/api/v1/pods \
 
 7.14 cluster roles and roles bindings
 ---
+- nodes can not be grouped in the namespace
+  - nodes are cluster-wide resources
 
+- resources are either
+  - namespaced
+  - cluster scoped
 
+- namespaced resources
+  $ kubectl api-resources --namespaced=true 
+    - pods
+    - replicasets
+    - jobs
+    - deployments
+    - ...
+
+- cluster scoped
+  $ kubectl api-resources --namespaced=false
+    - nodes
+    - PV
+    - clusterroles
+    - clusterrolebindings
+    - certificatesigningrequests
+    - namespaces
+
+- cluster roles have to be created, e.g.
+  - cluster-admin (create, view, delete nodes)
+  - storage-admin (view PVs, create PVs, delete PVs)
+
+- to create a cluster role
+  - cluster-admin-role.yaml
+  ---
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: ClusterRole
+  matadata:
+    name: cluster-administrator
+  rules:
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["list", "get", "create", "delete"]
+
+  $ kubectl create -f cluster-admin-role.yaml
+
+  - cluster-admin-role-binding.yaml
+  ---
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: ClusterRoleBinding
+  metadata:
+    name: cluster-admin-role-binding
+  subjects:
+  - kind: user
+    name: cluster-admin
+    apiGroup: rbac.authorization.k8s.io
+  roleRef:
+    kind: ClusterRole
+    name: cluster-administrator
+    apiGroup: rbac.authorization.k8s.io
+  
+  $ kubectl create -f cluster-admin-role-binding.yaml
+
+- cluster role could be created for a namespaced resource
+  - the user in that case has the access across all namespaces
+  - e.g. authorize the user with ClusterRole to access all pods accross the whole cluster
+
+- k8s creates many cluster roles by default when it's set-up
+  
 
 
 
