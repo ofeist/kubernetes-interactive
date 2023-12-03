@@ -2419,7 +2419,7 @@ $ curl https://my-kube:6443/api/v1/pods \
     - API Groups:
       /apps
         /v1
-          - Resources:
+          - Resources:  # aka nouns
             /deployments
               - Verbs:  # aka actions
                 /list
@@ -2432,7 +2432,14 @@ $ curl https://my-kube:6443/api/v1/pods \
         /v1
           /networkpolicies
 
-- named/API Groups/version/Resources/Verbs
+- REST looks like
+  - named/API Groups/version/Resources/Verbs
+    - resources = nouns
+    - verbs = actions
+
+  - Resources are the nouns of the Web 
+    - they describe any object, document, or thing that 
+      you may need to store or send to other services
 
 - documentation
   - https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#pod-v1-core
@@ -2708,16 +2715,105 @@ $ kubectl describe secret dashboard-sa-token-kbbdm
 
 
 
+7.16 image security
+---
+- image:    docker.io/nginx/nginx
+          ( registry/user_account/image_repository )
+
+- popular registries:
+  - docker.io   # docker registry
+    gcr.io      # google registry
+      - gcr.io/kubernetes-e2e-test-images/dnsutils
+
+- private repository (the docker way)
+  $ docker login private-registry.io  # login first
+  $ docker run private-regitry.io/apps/internal-app   # then run
+
+- private repo (the k8s way)
+  - create a secret object )(of type "docker-registry")
+    $ kubectl create secret docker-registry regcred \
+      --docker-server= private-registry.io  \
+      --docker-username= registry-user  \
+      --docker-password=  registry-password \
+      --docker-eamil= user@org.com
+
+  - use the "regcred" secret inside of pod-definition.yaml
+    imagePullSecrets:
+    - name: regcred
+
+
+7.17 security contexts
+---
+- can be defined on pod or on container level
+- if defined on container level, this overrides the pod level
+
+- security-context-pod-level.yaml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-pod
+spec:
+  securityContext:
+    runAsUser: 1000
+
+  containers:
+    - name: ubuntu
+      image: ubuntu
+      command: ["sleep","3600"]
+
+
+- security-context-container-level.yaml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-pod
+spec:
+  containers:
+    - name: ubuntu
+      image: ubuntu
+      command: ["sleep","3600"]
+      securityContext:
+        runAsUser: 1000
+
+
+- to add capabilities (supported on container level only!)
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-pod
+spec:
+  containers:
+    - name: ubuntu
+      image: ubuntu
+      command: ["sleep","3600"]
+      securityContext:
+        runAsUser: 1000
+        capabilities:
+          add:  ["MAC_ADMIN"]
 
 
 
+7.18 network policy
+---
+- ingress vs. egress
+  - the direction of the traffic origin is relevant
+    - user -> web app -> backend app -> db
 
+- network security in k8s network
+  - per default all pods can comunicate with each other
 
+- network policy
+  - if i want to prevent communication for some pods
+  - network policy is applied to a pod
 
-
-
-
-
+- networkPolicy.yaml
+---
+apiVersion
+...
+~5.15
 
 
 
