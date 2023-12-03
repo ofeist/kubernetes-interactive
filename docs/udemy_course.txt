@@ -2296,7 +2296,28 @@ kubeadm.certificates.csv
     $ kubectl certificate approve jane
   - k8s signs the certificates & generates a certificate for the user
     - using ca key-pair
+  - certificate extracted and shared with user
+    $ kubectl get csr jane -o yaml
+      apiVersion: certificates.k8s.io/v1beta1
+      status:
+        certificate:
+      LS0tL ...
+      ..
+      .. ... ... LQo=
+    $ echo "LS0 ... LQo=" | base64 --decode
+      -----BEGIN CERTIFICATE -----
+      MIICWDCC
+      ...
+      -----END CERTIFICATE -----
+  - the decoded certificate can than be shared with the end user
 
+- this everything is cone by controller-manager
+  - csr-approving
+  - csr-signing
+
+- /etc/kubernetes/manifests/kube-controller-manager.yaml
+ - --cluster-signing-cert-file=/etc/kubernetes/pki/ca.crt
+ - --cluster-signing-key-file=/etc/kubernetes/pki/ca.key
 
 
 
