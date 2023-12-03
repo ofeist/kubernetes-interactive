@@ -2321,11 +2321,46 @@ kubeadm.certificates.csv
 
 
 
+7.10 KubeConfig
+---
+- kubectl config file location
+  - $HOME/.kube/config
 
+- sections
+    clusters:
+    - name: kubernetes
+    - name: development
+    - name: production
 
+    contexts:
+    - name: kubernetes-admin@kubernetes
+    - name: prod-user@production
 
+    users:
+    - name: kubernetes-admin
+    - name: prod-user
 
+- to change context is give the user right for the cluster
 
+- to change the context
+  $ kubectl config use-context prod-user@production
+    - changes the $HOME/.kube/config file
+    - "current-context: prod-user@production"
+    
+- $ kubectl config -h   # check
+
+- namespaces could be set for context
+  contexts:
+  - name: admin@production
+    context:
+      cluster: production
+      user: admin
+      namespace: finance
+
+- certificates in KubeConfig could be specified using
+  - certificate-authority: /etc/kubernetes/pki/ca.crt
+    # or
+  - certificate-authority-data: LS0t .. BASE64 encoded .. PbnJ
 
 
 
