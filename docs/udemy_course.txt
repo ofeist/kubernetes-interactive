@@ -735,7 +735,7 @@ spec:
 25. solution - services 
 ---
 $ kubectl get svc                   # get the number, type of services
-$ kubectl describe svc kubernetes   # the target port, Labels, Endpoints for kuberneter service -> targetPort
+$ kubectl describe svc kubernetes   # the target port, Labels, Endpoints for kubernetes service -> targetPort
 $ kubectl get deployments           # how many deployments
 $ kubectl describe deployment nginx | grep -i image         # the image for deployment
 $ kubectl create deployment web-app --dry-run=client -o yaml --image=nginx > webapp-deployment.yaml   # creates the deployment
@@ -2174,6 +2174,75 @@ $ ETCDCTL_API=3 etcdctl --cert="/etc/kubernetes/pki/etcd/server.crt" --cacert="/
   - CN=system:node:node02
   - CN=system:node:node03
 - group: system:nodes
+
+
+
+7.8 view certificates
+---
+- it depends on the setup of cluster 
+  - the hard way, or
+    - /etc/systems/system/kube-apiserver.service
+  - kubeadm
+    - /etc/kubernetes/manifests/kube-apiserver.yaml
+
+- create a spreadsheet for all certificates: kubeadm.certificates.csv
+
+kubeadm.certificates.csv
+---
+- first row:
+  - component, type, certificate path, cn name, alt names, organization, issuer, expiration
+
+- component column, type, ... (columns):
+  - kube-apiserver, server, ...
+    kube-apiserver, server, ...
+    kube-apiserver, server, ...
+    kube-apiserver, client (kubelet), ...
+    kube-apiserver, client (kubelet), ...
+    kube-apiserver, client (etcd), ...
+    kube-apiserver, client (etcd), ...
+    kube-apiserver, client (etcd), ...
+
+- kubeadm setup: look in the kube-apiserver definition file
+  - /etc/kubernetes/manifests/kube-apiserver.yaml
+   - --client-ca-file
+   - --etcd-cafile
+   - --etcd-certfile
+   - --etcd-keyfile
+   - --kubelet-client
+   - --kubelet-client-key
+   - --tls-cert-file
+   - --tls-private-key-file
+
+  - check inside of each certificate for the details
+    - --tls-cert-file=/etc/kubernetes/pki/apiserver.crt
+  
+  - decode the details
+    $ openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text -noout
+      - Subject: CN=kube-apiserver
+      - X509v3 Subject Alternative Name:
+      - validity: Not After : Feb 11 ... 2020
+      - Issuer: CN=kubernetes
+
+- certificate requirements listed in k8s docu
+  - https://kubernetes.io/docs/setup/best-practices/certificates/
+
+- if you run into issues, check logs
+  - if you setup the cluster yourself, with native services
+    - then use the OS logging functionality
+      $ journalctl -u etcd.service -l
+      # ClientTLS: cert
+      #
+  - if you setup the cluster using kubeadm
+    - then use k8s logging functionality
+      $ kubectl logs etcd-master
+      # ClientTLS: cert
+      #
+    - if the k8s functionality doesn't work (e.g. pod issues)
+      $ docker ps -a    # get the CONTAINER ID (e.g. 87fc6991)
+      $ docker logs 87fc
+      # ClientTLS: cert
+
+
 
 
 
