@@ -2858,6 +2858,23 @@ $ kubectl create -f network-policy.yaml
   - they won't work
   - no error message will be thrown
 
+- There is no imperative command to extract yaml instead of that you can copy template from official k8s docs.
+  - https://kubernetes.io/docs/concepts/services-networking/network-policies/#networkpolicy-resource  # docu
+  - https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/   # docu
+
+- Installing Romana with kubeadm 
+  - https://github.com/romana/romana/tree/master/containerize   # docu
+
+
+
+
+
+
+
+
+
+
+
 
 
 
