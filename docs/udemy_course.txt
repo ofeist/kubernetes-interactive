@@ -2814,15 +2814,49 @@ spec:
   - if i want to prevent communication for some pods
   - network policy is applied to a pod
 
-- networkPolicy.yaml
+- the rule:
+  allow
+  Ingress
+  traffic
+  from
+  API Pod
+  on
+  Port 3306
 ---
-apiVersion
-...
-~5.15
+- network-policy.yaml
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: db-policy
+spec:
+  podSelector:
+    matchLabels:
+      role: db
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          name: api-pod
+    ports:
+    - protocol: TCP
+      port: 3306
 
+$ kubectl create -f network-policy.yaml
 
+- Flannel doesn't support network policies!
 
+- solutions that support network policies:
+  - kube-router
+  - calico
+  - romana
+  - weave-net
 
+- if cluster doesn't support newtwork policy, they are still createable
+  - they won't work
+  - no error message will be thrown
 
 
 
