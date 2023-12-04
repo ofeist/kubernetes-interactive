@@ -1740,7 +1740,12 @@ $ kubectl get nodes   # shows the version
 
 - todo
   - check swagger tutorial
-  - check the versioning references (per email)
+  - check the versioning references
+      https://github.com/kubernetes/community/tree/master/contributors/design-proposals
+      https://github.com/kubernetes/design-proposals-archive/blob/main/release/versioning.md
+      https://github.com/kubernetes/design-proposals-archive/blob/main/api-machinery/api-group.md
+      https://blog.risingstack.com/the-history-of-kubernetes/
+      https://kubernetes.io/releases/version-skew-policy/
 
 
 
