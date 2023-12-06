@@ -2945,7 +2945,7 @@ $ kubectl describe netpol payroll-policy
 
 
 
-8.02. docker storage intro
+8.02 docker storage intro
 ---
 - 2 types
   - storage drivers
@@ -2953,10 +2953,148 @@ $ kubectl describe netpol payroll-policy
 
 
 
+8.03 container storage interface
+---
+- k8s was working on docker at the beginning
+- later on, important toopen doors for other container solutions like
+  - rkt
+  - cri-o 
+- so CRI (container runtime interface) was built
+
+- similarly CNI (container networking interface) introduced
+  - networking vendors like
+    - weaveworks
+    - flannel
+    - cilium
+
+- CSI = container storage interface
+  - CSI is not a k8s standard
+    - currently onboard are
+      - k8s
+      - cloud foundry
+      - mesos
+  - vendors like
+    - portworkx
+    - amazon ebs
+    - dell emc
+    - glusterFS
+
+
+- more on the subject
+  - https://github.com/container-storage-interface/spec???
 
 
 
+8.6 volumes
+---
+- different storage solutions
+  - should be used for multinode
+  - dir mounts will assume all nodes have the same mounted dir (with the same content)
+    - which is not true
 
--architecture/components?
+
+
+8.7 persistent volumes
+---
+
+- large portion of storage defined
+  - that is, persistent volume
+  - this defined by administrator
+
+- users then carve out and take what they need
+  - using persisten volumes
+
+
+pv-definition.yaml
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-vol1
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi 
+  hostPath:
+    path: /tmp/data
+
+$ kubectl create -f pv-definition.yaml
+$ kubectl get PersistentVolume
+
+- you can replace "hostPath" with a vendor/storage type
+
+
+pv-definition.yaml
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-vol1
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi 
+  awsElasticBlockStore:
+    volumeID: <volume-id>
+    fsType: ext4
+
+
+
+8.7 persistent volume claim
+---
+- this defined by users
+- it uses persistent volume
+- persistent volume and persistent volume claims are different k8s objects
+  - pv
+  - pvc
+
+- pvc are bounded to pv's based on
+  - properties
+    - sufficient capacity
+    - access modes
+    - volume modes
+    - storage class
+  - or labels & selectors
+    selector:
+      matchLabels:
+        name: my-pv
+
+- 1:1 relationship of claims & volumes
+  - if pvc < pv capacity, then no other claim can take the rest of pv's capa
+
+- pvc pending if no pv's are available
+
+
+pvc-definition
+---
+apiVersino: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: myclaim
+spec:
+  accessModes:
+    ReadWriteOnce
+
+  resources:
+    requests:
+      storage: 500Mi
+
+$ k create -f pvc-definition.yaml
+$ k get Persistentvolumeclaim
+$ k delete persistenvolumeclaim myclaim   # delete persistent volume claim
+  - after pvc delition, the pv stays per default
+    - persistentVolumeReclaimPolicy: Retain
+      - manual delition needed
+    - or
+      - persistentVolumeReclaimPolicy: Delete
+        - automatically deleted
+    - or
+      - persistentVolumeReclaimPolicy: Recycle
+        - the data in PV will be scrubbed after pvc delition
+
+
+
 
 
