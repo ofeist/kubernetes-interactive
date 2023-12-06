@@ -2867,11 +2867,69 @@ $ kubectl create -f network-policy.yaml
 
 
 
+7.19 developing network policies
+---
+- 3 availableselectors for (ingress) traffic
+  - from:
+    - podSelector (matchLabels)
+    - namespaceSelector (matchLabels)
+    - ipBlock (cidr: 192.168.5.10/32)
+
+- if allow ingress from API pod to DB pod
+  - then no need to specify egress on DB
+    - this will work automatically
+      - but, if DB Pod needs to make calls to API pod then egress needs to be defined
+
+- policy example AND / OR
+---
+policyTypes:
+- Ingress
+ingress:
+- from:
+  - podSelector:
+      matchLabels:
+        name: api-pod
+    namespaceSelector:  # AND !!!
+      matchLabels:
+        name: prod
+  - ipBlock:            # OR  !!!
+      cidr: 192.168.5.10/32
+
+- policy example OR / OR
+---
+ingress:
+- from:
+  - podSelector:        # OR !!!
+      matchLabels:
+        name: api-pod
+  - namespaceSelector:  # OR !!!
+      matchLabels:
+        name: prod
+  - ipBlock:            # OR  !!!
+      cidr: 192.168.5.10/32
 
 
+- egress:
+  - when DB wnats to reach outside service
+    - e.g. backup server
 
-
-
+- policy example:
+---
+policyTypes:
+- Ingress
+- Egress
+ingress:
+- from:
+  - podSelector:
+      matchLabels:
+        name: api-pod
+  ports:
+  - protoclo: TCP
+    port: 3306
+egress:
+- to
+  - ipBlock:
+      cidr: 192.168.5.10/32
 
 
 
