@@ -2933,7 +2933,30 @@ egress:
 
 
 
+7.20 network policies
+---
+$ kubectl get netpol    # get network policies
+$ kubectl get pods -l name=payroll
+$ kubectl describe netpol payroll-policy
 
 
+~5.45
+  - create network policy
+
+
+
+8.02. docker storage intro
+---
+- 2 types
+  - storage drivers
+  - volume drivers
+
+
+
+
+
+
+
+-architecture/components?
 
 
