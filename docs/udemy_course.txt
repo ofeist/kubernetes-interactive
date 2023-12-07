@@ -3004,6 +3004,17 @@ $ kubectl describe netpol payroll-policy
 - users then carve out and take what they need
   - using persisten volumes
 
+- https://kubernetes.io/docs/concepts/storage/persistent-volumes/#types-of-persistent-volumes
+- Types of Persistent Volumes
+  - PersistentVolume types are implemented as plugins. 
+    Kubernetes currently supports the following plugins:
+      - csi - Container Storage Interface (CSI)
+      - fc - Fibre Channel (FC) storage
+      - hostPath - HostPath volume (for single node testing only; WILL NOT WORK in a multi-node cluster; consider using local volume instead)
+      - iscsi - iSCSI (SCSI over IP) storage
+      - local - local storage devices mounted on nodes.
+      - nfs - Network File System (NFS) storage
+
 
 pv-definition.yaml
 ---
