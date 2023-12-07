@@ -3195,12 +3195,169 @@ kubectl get storageclasses.storage.k8s.io gp2 -o yaml > gp2.yaml
 
 
 
-5.10 storage classes
+8.10 storage classes
 ---
 - storage class creates automatically the pv
+  - dynamic provisioning
 
 - examples for pv, pvc and pod yaml files
   ~0.10
+
+- kind: storageClassName
+
+
+
+9.2 networking
+---
+- 2 nodes whic i want to connect
+- i do that via switch
+  - switch defines the network (meh)
+
+    - works on th elevel of one network
+- i need an interface on the host - eth0
+  $ ip link   # check the interface
+
+- then i assign the systems the addresses on the same network
+  - system A: $ ip addr add 192.168.1.10/24 dev eth0
+  - system 8: $ ip addr add 192.168.1.11/24 dev eth0
+   - comm works
+    $ ping 192.168.1.11   # !
+
+- to connect more networks, a router is needed
+- a router has addresses of both networks assigned
+  - 192.168.1.1 & 129.168.2.1
+
+- how does the system B knows the router's address (192.168.1.1)?
+  - through the system gateway  # gw = door to other networks
+  - gw = 192.168.1.1
+
+- to see the existing routing configuration on a system
+  $ route
+
+- to configure a system on 192.168.1.x nw to reach x.x.2.0 network
+  $ ip route add 192.168.2.0/24 via 192.168.1.1
+                  DESTINATION           GW
+
+- analogue configuration has to be done on all the systems
+
+- default gateway (= internet)
+$ ip route add default via 192.168.2.1
+  - default = 0.0.0.0   # both can be used
+  - it means "any ip destination"
+
+- 0.0.0.0 in the Gateway field ("route" command) means "no gateway needed"
+  - because the system is it's own network
+
+
+- linux host as a router
+--
+- how to setup a linux host as a router
+  - linux host = B 
+  - B has eth0 and eth1
+
+- per default a linux host doesn't route between eth0 <> eth1
+  - security reasons
+    $ cat /proc/sys/net/ipv4/ip_forward
+      0
+    - set to 1 to enable forwarding
+    $ echo 1 > /proc/sys/net/ipv4/ip_forward
+
+  - to have this setting saved across reboots
+    $ /etc/sysctl.conf
+      net.ipv4.ip_forward = 1
+
+- important commands
+$ ip link
+$ ip addr
+$ ip addr add
+$ etc/nw/interfaces to persist
+$ ip route
+$ ip route add
+$ cat /etc/sys/net/ipv4/ip_forward
+
+
+
+9.3 dns 
+---
+- linux host
+
+- cat /etc/hosts
+  192.168.1.11  db
+
+$ ping db # works
+
+- name resolution 
+  = translation of ip's into names
+
+- such maintenance of name resolution (host file) is possible on small systems
+- on k8s this /etc/hosts file is moved to DNS server
+  - let's say ours is on 192.168.1.100
+
+- we have to point all hosts to the DNS server
+  $ cat /etc/resolv.conf
+  nameserver  192.168.1.100
+
+- what of entries to a same hostname show different ip addresses in
+  - / etc/hosts   # local
+  - and DNS server
+    - in that case the server looks first in /etc/hosts
+      - this order can be changed
+        cat /etc/nsswitch.conf
+        # hosts:   files mdns4_minimal [NOTFOUND=return] dns myhostname
+          - "files" refers to /etc/hosts
+          - "dns" refers to the dns-server
+            - this order can be modified
+
+- ping hostname not in listens
+  # temporary failure in name resolution
+
+- subdomains are: www, maps, abc
+  www.google.com
+  maps.google.com
+  abc.google.com
+
+- inside of an organization, how are subdomains found?
+  - you add "search" in resolv.conf
+    $ cat /etc/resolv.conf
+      nameserver  192.168.1.100
+      search      mycompany.com   prod.mycompany.com
+
+  $ ping web    # searches:
+    - web.mycompany.com
+    - and web.prod.mycompany.com
+
+- record types
+--
+- A record  = storing ipv4 to hostnames
+- AAAA (quad A) record  = storing ipv6 to hostnames
+- CNAME = mapping one name to another name (food.web = eat.web)
+
+- tools to test dns resolution
+  - ping
+  - nslookup  # nslookup www.google.com
+    - nslookup does not consider entries in the local etc/hosts file!!!
+    - only considers dns
+  - dig     # dig www.google.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
