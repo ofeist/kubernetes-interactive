@@ -3106,6 +3106,90 @@ $ k delete persistenvolumeclaim myclaim   # delete persistent volume claim
         - the data in PV will be scrubbed after pvc delition
 
 
+8.9 persistent volumes and persistent volume claims solution
+---
+- check the logs in the pod "webapp"
+  $ kubectl exec webapp -- cat /log/app.log
+
+- get the pod definiton file
+  - delete all unnecessary lines 
+    - d100d in vim editor
+
+- nginx
+  - logs per default in /var/log/nginx directory
+
+- hostPath configuration example
+  - https://kubernetes.io/docs/concepts/storage/volumes/#hostpath-configuration-example
+  [
+  volumes:
+  - name: test-volume
+    hostPath:
+      # directory location on host
+      path: /data
+      # this field is optional
+      type: Directory
+  ]
+
+- container definition:
+spec:
+  containers:
+  - env: 
+    - name: LOG_HANDLERS
+      value: file
+    image: kodekloud/event-simulator
+    name: event-simulator
+    volumeMounts:
+    - mountPath: /log
+      name: log-volume
+  volumes:
+  - name: log-volume
+    hostPath:
+      path: /var/log/webapp
+
+$ kubectl explain persistentvolume --recursive
+  - /hostpath
 
 
+- cat pv.yaml 
+--
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv0003
+spec:
+  capacity:
+    storage: 10Mi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  storageClassName: slow
+  hostPath:
+    path: /pv/log
+
+
+- cat pvc.yaml
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: claim-log-1
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Mi
+
+$ k get pv,pvc
+$ k describe pvc
+  -> waiting for first consumer to be created before binding
+
+https://stackoverflow.com/questions/55044486/waitforfirstconsumer-persistentvolumeclaim-waiting-for-first-consumer-to-be-crea
+
+
+kubectl get storageclasses.storage.k8s.io
+kubectl get storageclasses.storage.k8s.io gp2 -o yaml > gp2.yaml
+
+- todo
+  - work more on the examples
 
