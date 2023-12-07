@@ -3193,3 +3193,14 @@ kubectl get storageclasses.storage.k8s.io gp2 -o yaml > gp2.yaml
 - todo
   - work more on the examples
 
+
+
+5.10 storage classes
+---
+- storage class creates automatically the pv
+
+- examples for pv, pvc and pod yaml files
+  ~0.10
+
+
+
