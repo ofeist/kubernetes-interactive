@@ -3564,9 +3564,47 @@ $ iptables -nvL -t nat
   - to see the rules which docker creates
 
 
+9.6 container networking interface (CNI)
+---
+- we've seen how network namespaces work
+  1] create network namespace
+  2] create bridge network/interface
+  3] create veth pairs (pipe, virtual cable)
+  4] attach veth to namespace
+  5] attach other veth to bridge
+  6] assign ip addresses
+  7] bring the interfaces up
+  8] enable NAT - IP masquerade
 
+- this networking stuff is solved similarly from diff vendors (CRI)
+  - docker
+  - rkt
+  - mesos
+  - kubernetes
 
+-> they use bridge program
+  $ bridge add 2e34dcf34 /var/run/netns/2e34dcf34
+  # bridge add <cid> <namespace>
 
+- CNI 
+  - = container network interface
+  - set of standards for networking challenges in cri (container runtime environments)
+  - programs (like bridge) are plugins for cni
+  - defines responsibilities of cri's and plugins
+  - comes with a set of supported plugins
+    - bridge, vlan, ipvlan, macvlan, windows
+    - IPAN plugins: dhcp, host-local
+    - other 3-rd partie: flannel, weave, cilicum
+    - docker is not on the list!
+
+- docker implements CNM (container network model)
+  - cnm is another standard
+
+- for docker there is a workaround needed
+  $ docker run --network=none nginx
+  $ bridgeadd 2e34dcf34 /var/run/netns/2e34dcf34
+
+- k8s solves this the same way when running docker containers
 
 
 
