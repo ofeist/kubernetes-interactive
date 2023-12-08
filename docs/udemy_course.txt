@@ -3385,7 +3385,7 @@ $ ping db # works
 
 - the same for routing table
   $ route                       # on host gives a list
-  $ ip netx ns exec red route   # inside the namespace no list
+  $ ip net ns exec red route   # inside the namespace no list
 
 - to have the connectivity between red and blue namespace, needed is
   1] virtual ethernet pair (aka cable or pipe)
@@ -3407,7 +3407,7 @@ $ ping db # works
     $ ip netns exec blue arp    # now identifies the red one
     $ arp   # arp on the host has no idea of the new namespaces
 
-- this worked netween 2 namespaces, but what if there are plenty
+- this worked between 2 namespaces, but what if there are plenty
   - a virtual network inside the host is needed
   - for that a virtual switch is needed
 
@@ -3431,7 +3431,7 @@ $ ping db # works
     $ ip link add veth-blue type veth peer name veth-blue-br
       - pipe from blue to the bridge nw
   3] attach namespace interfaces to the virtual mutual network
-    $ ip link set veth-red netns red    # attach veth-red to the red ns
+    $ ip link set veth-red netns red     # attach veth-red to the red namespace
     $ ip link set veth-red-br master v-net-0  # attach veth-red-br to the virtual network (master)
     $ ip link set veth-blue netns blue
     $ ip link set veth-blue-br master v-net-0
