@@ -3209,7 +3209,7 @@ kubectl get storageclasses.storage.k8s.io gp2 -o yaml > gp2.yaml
 
 9.2 networking
 ---
-- 2 nodes whic i want to connect
+- 2 nodes which i want to connect
 - i do that via switch
   - switch defines the network (meh)
 
