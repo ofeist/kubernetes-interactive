@@ -3341,22 +3341,148 @@ $ ping db # works
 
 
 
+9.4 network namespaces
+---
+- used for isolation
 
+- on the container
+  $ ps aux  # gives only the container process(es)
 
+- on the host
+  $ ps aux  # gives all processes: host + containers
 
+- ARP table
+  - ip to MAC addr link
 
+- networking part
+  - host has its own
+    - nw interfaces (eth0, ..)
+    - routing tables
+    - arp tables
+  - the created container has it's own namespace (isolation)
+    - container has it's own
+      - nw interface  (veth0 = virtual)
+      - routing table
+      - arp table
 
+- create a new network namespace on a linux host (red, blue)
+  $ ip netns add red    # create a new network namespace
+  $ ip netns add blue   # create a new network namespace
 
+- list the network namespaces
+  $ ip netns  # list the network namespaces
 
+- list the nw interfaces on my host
+  $ ip link     # list the nw interfaces
 
+- list the nw interfaces within the "red" namespace (the container)
+  $ ip net ns exec red ip link      # list the nw interfaces within the "red" namespace
+  $ ip -n red link  # same as above # list the nw interfaces within the "red" namespace
 
+- similar with arp tables
+  $ arp                       # inside host gives all arp entries
+  $ ip net ns exec red arp    # inside the namespace gives no entry!
 
+- the same for routing table
+  $ route                       # on host gives a list
+  $ ip netx ns exec red route   # inside the namespace no list
 
+- to have the connectivity between red and blue namespace, needed is
+  1] virtual ethernet pair (aka cable or pipe)
+    - this pipe connects veth red with blue
+      $ ip link add veth-red type veth peer name veth-blue
+  2] attach veth to a namespace
+    $ ip link set veth-red netns red
+    $ ip link set veth-blue netns blue
+  3] assign the ip addresses to each ns
+    $ ip -n red addr add 192.168.15.1 dev veth-red
+    $ ip -n blue addr add 192.168.15.2 dev veth-blue
+  4] bring up the interface
+    $ ip -n red link set veth-red up
+    $ ip -n blue link set veth-blue up
+  5] try a ping 
+    $ ip netns exec red ping 192.168.15.2
+  6] check arp
+    $ ip netns exec red arp     # now identifies the blue one
+    $ ip netns exec blue arp    # now identifies the red one
+    $ arp   # arp on the host has no idea of the new namespaces
 
+- this worked netween 2 namespaces, but what if there are plenty
+  - a virtual network inside the host is needed
+  - for that a virtual switch is needed
 
+- there are diferrent virtual switch solutions
+  - linux bridge  # the native solution
+  - open vSwitch ( OvS )
 
+- create virtual switch (virtual network) using linux bridge option
+  1] add virtual interface to the host
+    $ ip link add v-net-0 type bridge   # add virtual interface to the host
+    $ ip link                           # shows all interfaces, including the new one
+    $ ip link set dev v-net-0 up        # bring the interface up
+    - for the namespaces, this is like a switch to connect to
+    - to the host, it's like an interface
+  2] connect the namespaces to this virtual switch
+      (first, the old pipe needs to be deleted
+        $ ip -n red link del veth-red )
+    $ ip link add veth-red type veth peer name veth-red-br
+      - creates a cable/pipe from red to the bridge
+      - "-br" means it connects to the bridge connection
+    $ ip link add veth-blue type veth peer name veth-blue-br
+      - pipe from blue to the bridge nw
+  3] attach namespace interfaces to the virtual mutual network
+    $ ip link set veth-red netns red    # attach veth-red to the red ns
+    $ ip link set veth-red-br master v-net-0  # attach veth-red-br to the virtual network (master)
+    $ ip link set veth-blue netns blue
+    $ ip link set veth-blue-br master v-net-0
+  4] set the ip addresses
+    $ ip -n red addr add 192.168.15.1 dev veth-red
+    $ ip -n blue addr add 192.168.15.2 dev veth-blue
+  5] turn the devices up
+    $ ip -n red link set veth-red up
+    $ ip -n blue link set veth-blue up
+  - etc for all network namespaces
 
+- to ping from host the namespace doesn't work
+  $ ping 192.168.15.1   # Not Reachable!  # err
 
+- this to work, i need to assign the ip address to the interface
+  $ ip addr add 192.168.15.5/24 dev v-net-0
+  $ ping 192.168.15.1   # ping works now!
+
+- this entire network is private/restricted inside the host
+  - namespace -> to the outside world = doesn't work
+  - outside world -> to the namespace = doesn't work
+
+- e.g. if i ping some outside lan network/host from my blue namespace
+  $ ip netns exec blue ping 192.168.1.3   # x.x.x.3 is outside host
+    - the blue ns checks route
+      $ ip netns exec blue route  # no route found
+    - this gives error: "Connect: Netork is unreachable"
+  - i need to provide the GW to the outside world
+    $ ip netns exec blue ip route add 192.168.1.0/24 via 192.168.15.5
+      - gw = 192.168.15.5
+  - if i try to ping now no "unreachable", but still no response back
+    - we need a NAT here
+      $ iptables -t nat -A POSTROUTING -s 192.168.15.0/24 -j MASQUERADE
+      $ ip netns exec blue ping 192.168.1.3   # works now
+
+- e.g. if i want to ping ineternet from the blue namespace
+  $ ip netns exec blue ping 8.8.8.8
+    # Connect: Network is unreachable -> routing table fix needed
+  $ ip netns exec blue route
+    - our host can reach any network, so host shaould be the GW
+  $ ip netns exec blue ip route add default via 192.168.15.5
+  $ ip netns exec blue ping 8.8.8.8
+    - works now
+
+- what about reaching from outside LAN to the blue namespace web app @ port 80?
+  - ping 192.168.15.2   # from the outside host on LAN -> Connect: Network is unreachable
+  - two solutions to that
+    1] set the route on the x.x.x.3 host  # not wanted
+    2] set the port forwarding
+      $ iptables -t nat -A PREROUTING --dport 80 --to-destination 192.168.15.2.:80 -j DNAT
+      - any traffic to localhost:80 forwarded to 192.168.15.2:80
 
 
 
