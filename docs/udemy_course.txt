@@ -3484,6 +3484,90 @@ $ ping db # works
       $ iptables -t nat -A PREROUTING --dport 80 --to-destination 192.168.15.2.:80 -j DNAT
       - any traffic to localhost:80 forwarded to 192.168.15.2:80
 
+- todo: practice on the vm
+
+
+
+9.5 docker networking
+---
+- three types of docker networking
+  - none    # docker run --network none nginx (no connectivity to the host)
+  - host    # docker run --network host nginx (only one container can connect to :80)
+  - bridge  # cocker run nginx  (private network for all containers -> more nginx to :80, different ip for each container)
+    - bridge is what we need
+    - this bridge network is like a switch for the containers
+    - to check the nw address
+      $ ip addr
+
+$ docker network ls
+  - name=bridge
+
+$ ip link   # gives docker0
+  - on the host, this bridge is created with the name docker0
+  - docker uses this to add the bridge nw type
+    $ ip link add docker0 type bridge
+  - note that the iterface (network) is currently down
+    $ ip addr   # gives the nw address
+
+- docker creates a nw namespace   # 2e41deb9ef...3541b4
+  - whenever a container created
+  - container = nw namespace   # will be a synonym from now on
+
+$ ip netns  # list the namespace
+  - gives b3165c10a92b
+    - checkut the resource section for a hack here
+  $ docker inspect b3165c10a92b
+
+- docker attaches nw namespace (container) to the bridge via virtual cable (pipe)
+  $ ip link
+    - one part is attached to the local bridge   # vethb3165c10a92b
+      # vethb3165c10a92b: <BROADCAST ...> mtu .. master docker0
+  $ ip -n b3165c10a92b link
+    - the other is linked to the container interface  # eth0@if8:
+  - the interface inside container gets assigned ip
+    $ ip -n b3165c10a92b addr   # 172.17.0.3/16
+
+- so, every time a container is created, docker:
+  - creates a namespace
+  - creates a pair of interfaces
+  - attaches one end to the container   # eth0@if10
+  - attaches the other end to the bridge network
+
+- the interface pairs can be identified via numbers
+  - odd + even = pair
+  - eth0@if12 + veth6813421@if11  = pair
+  - if10 + if9  = pair
+
+- port mapping
+  - if $ docker run nginx
+    - nginx available only from the bridge network
+  - if $ docker -p 8080:80 run
+    - nginx available from the host
+    $ curl http://192.168.1.10:8080   # welcome to nginx!
+
+- port mapping is done via iptables
+  $ iptables \
+      - t nat \
+      -A PREROUTING \
+      -j DNAT \
+      --dport 8080 \
+      --to-destination 80
+  - docker does this the same way + includes ip
+  $ iptables \
+      - t nat \
+      -A DOCKER \
+      -j DNAT \
+      --dport 8080 \
+      --to-destination 172.17.0.3:80
+
+$ iptables -nvL -t nat
+  - to see the rules which docker creates
+
+
+
+
+
+
 
 
 
