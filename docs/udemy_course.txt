@@ -3610,7 +3610,7 @@ $ iptables -nvL -t nat
 
 9.7 cluster networking
 ---
-- check reuquired ports in k8s documentation
+- check the required ports in k8s documentation
 
 - important commands
 $ ip link
@@ -3618,11 +3618,47 @@ $ ip addr
 $ ip addr add 192.168.1.10/24 dev eth0
 $ ip route
 $ ip route add 192.168.1.0/24 via 192.168.2.1
+# ./proc/sys/net/ipv4/ip_forward    # ubuntu
 $ cat /etc/sys/net/ipv4/ip_forward
   1
 $ etc/nw/interfaces to persist
 $ arp
 $ netstat -plnt
 $ route
+
+
+
+9.8 explore networking solutions
+---
+
+- check interface, MAC, IP
+  $ ifconfig
+  $ ssh node01 ifconfig
+  $ cat /etc/network/interfaces
+  $ ip link
+
+- check links, state of interface
+  $ ip link
+
+- which route takes ping google.com
+  $ ip route
+  $ ip r
+    - check the default gw
+  $ trecaroute www.google.com
+
+- on which port does scheduler listen?
+  $ netstat -natulp | grep kube-sche
+    - 10259
+  - or check the configuration of the static pod kube-scheduler
+
+- on which port does etcd listen for the client connections?
+  $ netstat -natulp | grep etcd | grep LISTEN
+    - 2379  # used the most
+
+
+
+
+
+
 
 
