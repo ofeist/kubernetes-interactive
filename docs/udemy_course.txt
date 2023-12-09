@@ -3718,7 +3718,10 @@ $ ls /opt/cni/bin
 
 - list of networking addons supported by Kubernetes
   - https://kubernetes.io/docs/concepts/cluster-administration/addons/#networking-and-network-policy
-  - romana?
+
+- choices?
+  - cancal / calico / flannel
+  - romana
 
 
 
