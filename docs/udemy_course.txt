@@ -3665,6 +3665,23 @@ $ route
 
 
 
+9.10 CNI in kubernetes
+---
+-CNI plugin is configured in the kubelet-service
+
+kubelet.ervice
+---
+  --network-plugin=cni  \\
+  --cni-bin-dir=/opt/cni/bin  \\
+  --cni-conf-dir=/etc/cni/net.d \\
+
+$ ps aux | grep kubelet
+$ ls /opt/cni/bin
+  - all plugins: flanne, bridge, ...
+$ ls /etc/cni/net.d
+  - config files 
+  - e.g. bridge is used
+
 
 
 
