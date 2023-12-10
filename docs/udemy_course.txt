@@ -3930,6 +3930,75 @@ $ kubectl get svc
     # Controlled By:  DaemonSet/kube-proxy
 
 
+9.18 DNS in k8s
+---
+- prereq
+  - what's dns
+  - tools: host/ns lookup, dig
+  - recorded types: A, CNAME
+  - domain name hierarchy
+
+- how to setup own dns server (next lecture)
+  - coreDNS
+
+- objectives:
+  - what names are assigned to what objects
+  - service dns records
+  - pod dns records
+
+- nodenames and ip's are registered in organization of the company
+  - e.g.
+    192.168.1.11     node1.kubeclustr.org
+    192.168.1.12     node2.kubeclustr.org
+    192.168.1.13     node3.kubeclustr.org
+  -  this not a scope of the lessons!!
+
+- k8s has own dns per default
+  - if manual setup, then you do it by yourself
+
+- k8s' dns doesn't care about nodes
+  - pods and services are relevant!
+
+- e.g. service dns papping
+  web-service   10.107.37.188
+  - within cluster and within namespace, only the service name is sufficient
+    $ curl http://web-service
+
+- organization of k8s dns
+  - serviceName < namespace < type  < root
+  - web-service < apps      < svc   < cluster.local
+  - web-service.apps.svc.clucter.local
+
+- the apps namespace is a namespace for
+  - pods and
+  - services
+
+- records for services are created per default
+- records for pods are NOT created per default
+  - can be enabled
+  - the podName = ip of the pod (with dash instead of dot, eg 10-244-2-5)
+  - dns looks like
+    -  podName < namespace  < type  < root
+    - 10-244-2-5 < apps     < pod   < cluster.local
+    - 10-244-2-5.apps.pod.cluster.local
+
+- fqdn in the default namespace is
+  - 10-244-1-5.default.pod.cluster.local
+    - namespace = default
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
