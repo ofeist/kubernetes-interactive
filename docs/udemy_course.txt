@@ -4139,6 +4139,16 @@ $ k exec hr -- nslookup mysql.payroll > root/nslookup.out
 
 
 
+9.23  ingress networking 2 solution
+---
+todo:
+~8.20
+
+practice creating ingress
+add resources (rules)
+
+
+
 
 
 
