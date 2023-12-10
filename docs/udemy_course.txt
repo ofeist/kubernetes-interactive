@@ -4110,6 +4110,31 @@ $ k exec hr -- nslookup mysql.payroll > root/nslookup.out
 
 
 
+9.20 ingress
+---
+- a common question:
+  - the diff svc vs ingress?
+
+- ingress 
+  - takes over the load balancer configuration part
+  - ssl included
+  - layer 7 load balancer built-in into k8s
+
+- ingres consist of
+  - ingress controller
+  - ingress resources
+
+- ingress controller
+  - not part of k8s per default
+
+
+- ingress controller options
+  - GCE (google)  - currently supported bz k8s
+  - nginx   - currently supported bz k8s
+  - Contour
+  - HAProxy
+  - traefik
+  - istio
 
 
 
