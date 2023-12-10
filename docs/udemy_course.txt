@@ -3867,7 +3867,7 @@ $ ls /opt/cni/bin
 $ k get pods
 $ kubectl get svc
   - read the IP
-- the IP range is specified in
+- the service IP range is specified in
   $ kube-api-server --service-cluster-ip-range ipNet 
     # default: 10.0.0.0/24
   - check your cluster
@@ -3877,7 +3877,7 @@ $ kubectl get svc
     - the service range is
       - 10.96.0.0/12
         10.96.0.0 > 10.11.255.255.255
-    - pod nw range
+    - pod nw range was given before:
       10.244.0.0 > 10.244.255.255
 
 - kube-proxy creates the nat rules in iptables
@@ -3891,10 +3891,43 @@ $ kubectl get svc
 
 
 
+9.16 service networking solution
+---
+- what is the IP range for nodes?
+  $ kubectl get nodes -o wide
+  $ ip a
+    2: enp1s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1460 qdisc fq_codel state UP group default qlen 1000
+      link/ether f2:05:f6:3f:86:80 brd ff:ff:ff:ff:ff:ff
+      inet 172.30.1.2/24 brd 172.30.1.255 scope global dynamic enp1s0
+        valid_lft 86311006sec preferred_lft 86311006sec
+    the answer: inet 172.30.1.2/24
 
+- what is the IP range for pods?
+  - check the configuration of the NW plugin pod (weave)
+  $ kubectl -n kube-system get pods
+  $ kubectl -n kube-system logs weave-net-h2x9w -c weave
+    # ipalloc-range: 10.32.0.0/12
 
+- service IP range?
+  - grep service-cluster-ip-range /etc/kubernetes/manifests/kube-apiserver.yaml
+    - --service-cluster-ip-range=10.96.0.0/12
 
+- what type of proxy is kube-proxy configured to use?
 
+- what proxy confugration is kube-proxy?
+  - exinstent are:
+    - iptables  (default)
+    - userspace
+    - ipvs
+  - check the logs
+    $ k get pods -n kube-system
+      # "Using iptables Proxier"
+
+- how does this k8s cluster ensure kube-proxy runs on all nodes in cluster?
+  $ kubectl -n kube-system get ds   #daemonsets
+  - or
+  $ kubectl -n kube-system describe pods kube-proxy-2xlvb | less
+    # Controlled By:  DaemonSet/kube-proxy
 
 
 
