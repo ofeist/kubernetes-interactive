@@ -4049,6 +4049,75 @@ $ kubectl get svc
 
 
 
+9.19 core DNS solutions
+---
+$ k get deployments -n kube-system
+  # gives coredns
+
+$ k get svc -n kube-system 
+  # name: kube-dns
+  # ip: 10.96.0.10
+
+- where is the configuration file for coredns
+  $ for i in `find . -name Corefile` ; do echo $i ; more $i; done
+  - gives
+    - ./var/lib/kubelet/pods/0bf92ae2-11c6-4b5b-86c0-2c1ef0d2a2a8/volumes/kubernetes.io~configmap/config-volume/..2023_11_14_11_00_32.2324854149/Corefile
+
+  - video says: "/etc/coredns/Corefile"
+  $ k describe deployments -n kube-system coredns
+      Args:
+          -conf
+          /etc/coredns/Corefile
+      ...
+      Mounts:
+        /etc/coredns from config-volume (ro)
+    Volumes:
+    config-volume:
+      Type:               ConfigMap (a volume populated by a ConfigMap)
+      Name:               coredns
+
+- how it is passed?
+  - up it could be seen "Type: ConfigMap"
+    - object
+
+- what is a root domain configured for this k8s cluster?
+  either
+    1] explore "coredns" configmap
+     $ k -n kube-system describe configmaps coredns
+      # kubernetes cluster.local in-addr.arpa ip6.arpa { ...
+      -> "cluster.local"
+
+    2]create pod and check /etc/resolv.conf
+      $ run busy --image=busybox --command sleep 1000 --dry-run=client -o yaml > busy.yaml
+      $ k apply busy.yaml
+      $ exec -it busy -- bash
+      $/ cat /etc/resolv.conf
+        # search default.svc.cluster.local svc.cluster.local cluster.local
+        # nameserver 10.96.0.10
+        -> "cluster.local"
+
+
+- how to access services?
+  $ k get svc
+  $ curl http://svc-name
+
+
+$ k describe svc web-service
+  # Selector: name=hr 
+$ k get pod hr --show-labels
+
+$ k exec hr -- nslookup mysql.payroll > root/nslookup.out
+
+
+
+
+
+
+
+
+
+
+
 
 
 
