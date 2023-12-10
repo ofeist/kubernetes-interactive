@@ -3819,10 +3819,75 @@ $ ls /opt/cni/bin
       - WRONG !!!
 
 
+9.16 service networking
+---
+- unlike pod networking mentioned in previous videos
+- rarely pod communicate with each other directly
+- a pod is hosted on a pod
 
 
+- pod communication runs through services!
+- service kinds:
+  - clusterip      Create a ClusterIP service
+  - externalname   Create an ExternalName service
+  - loadbalancer   Create a LoadBalancer service
+  - nodeport       Create a NodePort service
 
+- cluster ip
+  - if i want to expose pod to other pods, i would create a service
+  - a service is hosted and accessible across the cluster
+  - a service is accessible only within the cluster
+  - eg. db service
 
+- nodeport
+  - accessible outside the cluster
+  - works like clusterip
+  - exposes port accross all hosts
+  - eg. web application
+
+- service is just a virtual object
+  - not part of node
+  - accross the whole cluster
+  - kube-proxy creates service forwarding rules on each node of the cluster
+    - the same rule on each node
+      - IP : Port   :: 10.99.13.179
+      - forward to  :: 10.244.1.2
+
+- how kube-proxy creates rules? differently:
+  - --proxy-mode (rule types)
+      - iptables  (default)
+      - userspace
+      - ipvs
+  - this can be changed by
+    $ kube-proxy --proxy-mode [userspace | iptables | ipvs ] ...
+
+- ip addresses of pods and services must not overlap!
+
+- how to view them?
+$ k get pods
+$ kubectl get svc
+  - read the IP
+- the IP range is specified in
+  $ kube-api-server --service-cluster-ip-range ipNet 
+    # default: 10.0.0.0/24
+  - check your cluster
+    $ ps aux | grep kube-api-server
+      #  --service-cluster-ip-range
+  - in the provided example
+    - the service range is
+      - 10.96.0.0/12
+        10.96.0.0 > 10.11.255.255.255
+    - pod nw range
+      10.244.0.0 > 10.244.255.255
+
+- kube-proxy creates the nat rules in iptables
+  $ iptables -L -t nat | grep db-service  # search the rule for a specific service
+  - this is done for nodeport and clusterIP service types
+
+- this rules could be seen in kube-proxy node too
+  $ cat /var/log/kube-proxy.log
+    # Using iptables Proxier
+    # Adding new service "default//db-service:3306" at 10.103.132.104:3306/TCP
 
 
 
