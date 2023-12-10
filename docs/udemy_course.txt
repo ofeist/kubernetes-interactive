@@ -3930,7 +3930,7 @@ $ kubectl get svc
     # Controlled By:  DaemonSet/kube-proxy
 
 
-9.18 DNS in k8s
+9.18 DNS in k8s (cluster DNS)
 ---
 - prereq
   - what's dns
@@ -3985,6 +3985,69 @@ $ kubectl get svc
 - fqdn in the default namespace is
   - 10-244-1-5.default.pod.cluster.local
     - namespace = default
+
+
+
+9.19 core DNS
+---
+- how k8s implements dns in the cluster
+
+- one possibility to
+ 1] add entries of all pods to each /etc/hosts on each pod
+  web 10.244.x.x
+  - this not practical if many pods
+
+- easier is to 
+  2] move entries do DNS server
+    web 10.244.x.X
+    db  10.244.x.x
+  - and than to add DNS server to /etc/resolv.conf of each pod
+    nameserver  10.96.0.10
+
+- k8s does similar to 2]
+  - but instead of writing to pod, it uses services for resolving
+  pods -> dashes
+
+- kube DNS was used in versions < 1.12
+- core DNS used in versions >= 1.12
+
+- coreDNS
+  - deploys 2 pods (because redundancy)
+  - actually it is a replicaset within deployment
+
+- ./coredns
+  - /etc/coredens/Corefile
+    - plugins confugured
+      - health, metrics
+      - plugin for kubernetes is "kubernetes culster.local in-addr.arpa {
+          ...
+        }
+  - this file is provided as a configmap object
+    $ kubectl get configmap -n kube-system
+      # coredns
+
+- when coredns deployed, a service is created
+  - kube-dns
+  - ip of this service is configured in resolv.conf on pods
+    nameserver  10.96.0.10
+    - this is done by kubelet
+    - kubelet.conf containd coredns' ip & domain name
+
+- to resolv service:
+  $ host web-service
+    # web-service.default.svc.cluster.local has address 10.x.x.X
+    - but how fqdn?
+    - resolv.conf has search defined
+      search default.svc.cluster.local svc.cluster.local cluster.local
+      # so you can use eiteher only service name till full FQDN
+  - but!
+    - pods can not be reached tonly using pod name
+      $ host 10-255-2-5
+        # Host x x x x not found: 3(NXDOMAIN)
+      $ host 10-255-2-5.default.pod.cluster.local
+        # 10-255-2-5.default.pod.cluster.local has address 10.255.2.5
+
+
 
 
 
