@@ -3725,6 +3725,111 @@ $ ls /opt/cni/bin
 
 
 
+9.14 IP Address Management (weave)
+---
+- this doesn't concern the nodes' IP
+  - IPAN solutions or on the own
+  
+- this concerns how 
+  - how are vBridge nws assigned IP subets
+  - IPs to pods
+  - no duplicate ip
+
+- CNA says
+  - it's our responsibility to assign and manage IP
+
+- we could manage and IP-list.txt
+  - on every node same
+  - providing and updating the list by ourself
+
+- CNPI provides 2 buildint plugins for managing such IP-list
+  - DHCP
+  - host-local
+
+- host local plugin
+--
+- we have to invoke getting ip's ourselves
+  $ ip = get_free_ip_from_host_local()
+
+- this plugin setup is done in net-script.conf
+- cat /etc/cni/net.d/net-script.conf :
+  {
+    "cniVersion": "0.2.0",
+    ...
+    ...
+    "ipam": {
+      "type": "host-locl",
+      "subnet": "10.244.0.0/16",
+      "routes": [
+        { "dst": "0.0.0.0/0" }
+      ]
+    }
+  }
+
+- weaveworks plugin
+---
+- allocates for k8s ip pool 
+  - 10.32.0.0/12
+    - 10.32.0.1 > 10.47.255.254
+      ~ 1 million IP's  (1,048,574)
+  - nodes divide this IP pool equaliy
+    - node 1: 10.32.0.0
+    - node 1: 10.38.0.0
+    - node 1: 10.44.0.0
+    - this ranges are configurable when deploying the cluster
+
+
+
+9.15 networking weave solution
+---
+- what is the networking solution used by k8s cluster?
+  $ ls /etc/cni/net.d/
+    10-weave.conflist
+
+
+- how many agents/peers deployed in the cluster?
+  - they should be deamonSets, but
+  $ kubectl get pods -n kube-system | grep weave
+
+- killercoda:
+  $ k get pods -n kube-system | grep canal
+  $ k get pods -n kube-system | grep coredns
+    - ?
+
+- identify the name of bridge network/interface on each node
+  $ ifconfig
+
+- ip range reserved by weave?
+  $ ip addr show weave
+
+
+- what is defaut gateway on node X?
+  - the solution
+    $ kubectl run busybox --image=busybox --command sleep 1000 --dry-run=client -o yaml > busybox.yaml
+      - edit yaml, add nodeName
+        spec:
+          nodeName: node03
+          containers:
+          ...
+    $ kubectl exec -ti busybox -- sh
+      $ ip route  / ip r    # inside of the container
+
+  - my suggestion was WRONG !!!
+    $ ssh node01 route    # read the default gw
+      - WRONG !!!
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
