@@ -4149,8 +4149,91 @@ add resources (rules)
 
 
 
-10.01 planning the k8s cluster
+10.01 design a k8s cluster
 ---
+- check the docu about the number of nodes vs "power" needed
+
+
+
+10.2 choosing k8s infrastructure
+---
+- tunkey vs hosting solutions
+  - turnkey
+    - openshift
+    - vmware pks 
+    - vagrant
+    ...
+  - hosted solutions
+    - GKE (google container angine)
+    - openshif online
+    - azure k8s service
+    - EKS (amazon elastic container service for k8s)
+
+- we will do virtualbox
+  - 1 master
+  - 2 worker nodes
+  - this design will change in the next video :)
+
+
+
+10.3 HA in k8s
+---
+- HA means 2 master nodes needed
+
+- load balancer
+  - needed n front of master nodes
+    - https://load-balancer:6443 splits between (nginx, haproxy, ..)
+      - https://master1:6443
+      - https://master2:6443
+
+- controller manager & scheduler
+  - only one instances must be allowed
+  - active vs standby
+  - achived per leader-election process
+
+- leader-election process
+  - $ kube-controller-manager --leader-elect true [options]
+                            --leader-elect-lease-duration 15s
+                            --leader-elect-renew-deadline 10s
+                            --leader-elect-retry-period 2s
+  - controller manager and scheduler follow the same process
+
+- etcd
+  - two tactics
+    - stacked topology = etcd is a part of master nodes
+      - pro: easy setup, easy to manage, fewer nodes
+      - con: risk during failures
+    - external etcd topology
+      - each etcd has it's own node
+        - pro: less risky
+        - con: harder to setup, more nodes
+  - api-server is the only component talking to etcd
+    $ cat /etc/systemd/system/kube-apiserver.service
+      -- etcd-servers=https://10.240.0.10:2379,https://10.240.0.11:2379
+
+- our design:
+  - 2 master nodes
+  - 2 workers
+  - 1 node = LoadBalancer (for the API server)
+  - using
+    - weaveworks (let's see about that, nw plugin changed since k8s 1.13)
+    - virtualbox
+    - a laptop
+
+
+
+10.4. ETCD in HA k8s setup
+---
+
+
+
+
+
+
+
+
+
+
 
 
 
