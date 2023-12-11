@@ -833,7 +833,7 @@ $ kubectl expose pod httpd --name=httpd --cluster-ip='' --port=80 --target-port=
 
 
 3. scheduling
-===
+---
 
 3.1. introduction
 ---
@@ -4224,9 +4224,73 @@ add resources (rules)
 
 10.4. ETCD in HA k8s setup
 ---
+- distributed db (shall be)
+
+- for distributed db
+  - read data not a problem
+  - write data needs a leader
+    - the leader writes
+    - the leader sends a copy of the data to other follower nodes
+
+- how leader is selected?
+  - per RAFT protocol (random timers)
+
+- WRITE is complete if succeded on majority of nodes in the cluster
+  - majority = quorum = N/2 + 1
+      - quorum:
+          q(1)=1
+          q(2)=2
+          q(3)=2
+          q(4)=3
+          q(5)=3
+          ...
+  - 3 instances are highly recommended for ha cluster
+    - the fault tolerance = 1 (failed) node (in that case)
+
+- fault tolerance = instances - quorum
+    instances;  quorum; fault tolerance
+    1           1       0
+    2           2       0
+    3           2       1
+    4           3       1
+    5           3       2
+    6           4       2
+    7           4       3
+
+- odd number of nodes is preffered/suggested
+  - in a case e.g. network segmentation, the cluster would continue to work properly
+    - nw segmentation, mening the cluster is split to close a half number of Nodes
+      (5 -> 3 + 2, ...)
+  - more than 5 nodes are not really neccessary
+
+- download, install and configure etcd service
+  # wget -q --http-only \
+    "https://github.com/coreos/etcd/releases/download/v3.3.9/etcd-v3.3.9-linux-amd64.tar.gz"
+  
+  # tar -xvf etcd-v3.3.9-linux-amd64.tar.gz
+
+  # mv etcd-v3.3.9-linux-amd/etcd* /usr/local/bin
+
+  # mkdir -p /etc/etcd  /var/lib/etcd
+
+  # cp ca.pem kubernetes-key.pem kubernetes.pem /etc/etcd/
+    - certification lessons
+    - tls certificate section
+
+  - configure
+    --initial-cluster-peer ... ~10.25
+
+  $ export ETCDCTL_API=3
+  $ etcd put name john
+  $ etcd get name
+  $ etcd get / --prefix --keys-only # all keys
 
 
+- it possible to have 3 master nodes!
+- stacked topology ok
 
+- we will use 2 master nodes for the lesson purposes
+  
 
 
 
