@@ -1,0 +1,67 @@
+$ vagrant up
+---
+   kubemaster: SSH address: 127.0.0.1:2222
+    kubemaster: SSH username: vagrant
+    kubemaster: SSH auth method: private key
+
+
+master: Running: /tmp/vagrant-shell20231211-57733-w7bjws.sh
+    kubemaster: + IFNAME=enp0s8
+    kubemaster: + THISHOST=kubemaster
+    kubemaster: ++ ip -4 addr show enp0s8
+    kubemaster: ++ cut -d/ -f1
+    kubemaster: ++ grep inet
+    kubemaster: ++ head -1
+    kubemaster: ++ awk '{print $2}'
+    kubemaster: + ADDRESS=192.168.56.11
+    kubemaster: ++ echo 192.168.56.11
+    kubemaster: ++ awk 'BEGIN {FS="."} ; { printf("%s.%s.%s", $1, $2, $3) }'
+    kubemaster: + NETWORK=192.168.56
+    kubemaster: + sed -e 's/^.*kubemaster.*/192.168.56.11 kubemaster kubemaster.local/' -i /etc/hosts
+    kubemaster: + sed -e '/^.*ubuntu-jammy.*/d' -i /etc/hosts
+    kubemaster: + sed -e '/^.*kubemaster.*/d' -i /etc/hosts
+    kubemaster: + cat
+    kubemaster: + echo INTERNAL_IP=192.168.56.11
+==> kubemaster: Running provisioner: setup-dn
+
+
+01: + IFNAME=enp0s8
+    kubenode01: + IFNAME=enp0s8
+    kubenode01: + THISHOST=kubenode01
+    kubenode01: ++ cut -d/ -f1
+    kubenode01: ++ awk '{print $2}'
+    kubenode01: ++ head -1
+    kubenode01: ++ grep inet
+    kubenode01: ++ ip -4 addr show enp0s8
+    kubenode01: + ADDRESS=192.168.56.21
+    kubenode01: ++ awk 'BEGIN {FS="."} ; { printf("%s.%s.%s", $1, $2, $3) }'
+    kubenode01: ++ echo 192.168.56.21
+    kubenode01: + NETWORK=192.168.56
+    kubenode01: + sed -e 's/^.*kubenode01.*/192.168.56.21 kubenode01 kubenode01.local/' -i /etc/hosts
+    kubenode01: + sed -e '/^.*ubuntu-jammy.*/d' -i /etc/hosts
+    kubenode01: + sed -e '/^.*kubenode01.*/d' -i /etc/hosts
+    kubenode01: + cat
+    kubenode01: + echo INTERNAL_IP=192.168.56.21
+==> kubenode01: Run
+
+
+ kubenode02: Running: /tmp/vagrant-shell20231211-57733-np4e3q.sh
+    kubenode02: + IFNAME=enp0s8
+    kubenode02: + THISHOST=kubenode02
+    kubenode02: ++ cut -d/ -f1
+    kubenode02: ++ awk '{print $2}'
+    kubenode02: ++ head -1
+    kubenode02: ++ grep inet
+    kubenode02: ++ ip -4 addr show enp0s8
+    kubenode02: + ADDRESS=192.168.56.22
+    kubenode02: ++ awk 'BEGIN {FS="."} ; { printf("%s.%s.%s", $1, $2, $3) }'
+    kubenode02: ++ echo 192.168.56.22
+    kubenode02: + NETWORK=192.168.56
+    kubenode02: + sed -e 's/^.*kubenode02.*/192.168.56.22 kubenode02 kubenode02.local/' -i /etc/hosts
+    kubenode02: + sed -e '/^.*ubuntu-jammy.*/d' -i /etc/hosts
+    kubenode02: + sed -e '/^.*kubenode02.*/d' -i /etc/hosts
+    kubenode02: + cat
+    kubenode02: + echo INTERNAL_IP=192.168.56.22
+==> kubenode02: Running provisioner: se
+
+
