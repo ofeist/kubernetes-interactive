@@ -4149,6 +4149,10 @@ add resources (rules)
 
 
 
+10.01 planning the k8s cluster
+---
+
+
 
 
 
