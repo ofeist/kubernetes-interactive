@@ -8,6 +8,7 @@ kubernetes for absolute beginners
 
 few links
 ---
+- https://www.cncf.io/certification/cka   # certification
 - https://killer.sh/    # the best simulator
   - https://killer.sh/course/preview/e84d0e31-4fff-4c42-8afd-be1bdbc0d994
   - alias k=kubectl
@@ -4293,7 +4294,36 @@ add resources (rules)
   
 
 
+11.1 deployment with kubeadm
+---
+- steps
+  - must have multiple systems
+  - designate master and worker nodes
+  - install docker on all nodes
+  - kubeadm on all nodes
+  - initialize the master server (all components are installed & configured)
+  - set the pod network
+  - join worker nodes on the master node
 
+
+
+11.2 provision vms with vagrant
+---
+- prereq is installed:
+  - virtualbox
+  - vagrant
+
+
+- vagrant
+  - https://kodekloudhub/certified-kubernetes-administrator-course
+  - clone
+  - cd kubeadm/certified-admin... 
+  - vi Vagrant
+    NUM_MASTER_NODE
+    ..
+    IP_NW = "192.168.56."
+  $ vagrant status
+  $ vagrant up
 
 
 
