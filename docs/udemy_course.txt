@@ -4322,7 +4322,6 @@ add resources (rules)
     ..
     IP_NW = "192.168.56."
 
-
 $ vagrant status
 $ vagrant up
   # this will provision 3 VMs
@@ -4341,72 +4340,35 @@ $ vagrant ssh kubenode02
 
 11.3 demo deployemnt with kubeadm
 ---
-- k8s docu
-  - https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
-- set the hosts (master, worker nodes), set net, check conenctivity etc.
-  - https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
-- br_netfilter
-- sudo -i
-- install docker cri (container runtime)
-- kubeadm, kubelet, kubectl
-- cgroup driver configuration NOT APPLICABLE WHEN USING DOCKER!!!!
-- now create cluster using kubeadm
-- control plane node only if HA
-  - skip
-- choose a pod network
-- use weave
-  - cidr: 10.244.0.0/16
-- step 3 (runtime) skipped since we use docker
-- kubeadm init  # ONLY ON MASTER NODE!
-$ kubeadm init \
-    --pod-network-cidr 10.244.0.0/16 \
-    --apiserver-advertise-address=192.168.56.2  # check the master ip!
-- now for the post-installation tasks
-- exit the root
-- copy / paste lines with $HOME etc.
-    mkdir -p $HOME/.kube
-    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-    sudo chown $(id -u):$(id -g) $HOME/.kube/config
-- copy and save somewhere the command
-  $ kubeadm join 192.168.56.2:644 --token fksfadskhkfjsa
-  $ echo "kubeadm join ..."
-    - so this is available in term history
-- kubectl get nodes   # NotRead & only master -> no pod nw plugin
-- set up the pod network solution   # before running "kubeadm join ..." cmd
-  - weave
-- go to k8s docu, pod networking section
-  k8s.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/#pod-network
-    $ kubectl apply -f "https://cloud.weave.works/k8s/..."
-- add the worker nodes to the cluster
-  - use the saved command "echo "kubeadm join, on both worker nodes
-- kubectl get nodes
-
+- few remarks
+  - cgroup driver configuration NOT APPLICABLE WHEN USING DOCKER!!!!
+  - control plane node only if HA
 
 - hands-on @ the local computer
 ---
 - check k8s docu
   - https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
-- set the hosts (master, worker nodes), set net, check conenctivity etc.
-  - https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
-- check CRI
-https://kubernetes.io/docs/setup/production-environment/container-runtimes/
+- this link i also checked:
+  https://www.cherryservers.com/blog/install-kubernetes-on-ubuntu
 
-
-- lesgo!
+- let's go!
 ---
-devops/certified-kubernetes-administrator-course/kubeadm-clusters/virtualbox$ 
-$ vagrant ssh kubemaster
-$ vagrant ssh kubenode01
-$ vagrant ssh kubenode02
+- devops/kodecloud/kubeadm-clusters/virtualbox$ 
+    $ vagrant ssh kubemaster
+    $ vagrant ssh kubenode01
+    $ vagrant ssh kubenode02
+  - todo:
+    - learn vagrant / check vagrant config
 
+- on all nodes:
 1.  forwarding-ipv4-and-letting-iptables-see-bridged-traffic
   https://kubernetes.io/docs/setup/production-environment/container-runtimes/#forwarding-ipv4-and-letting-iptables-see-bridged-traffic
 
 2. install docker cri (container runtime)
   # Install using the apt repository
     https://kubernetes.io/docs/setup/production-environment/container-runtimes/#docker
+    https://docs.docker.com/engine/install/ubuntu/
   # CRI ( https://github.com/Mirantis/cri-dockerd )
-        # ???? ubuntu https://docs.mirantis.com/mcr/20.10/install/mcr-linux/ubuntu.html ???
   - as a root!
     mkdir mirantis; cd mirantis
     wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.8/cri-dockerd_0.3.8.3-0.ubuntu-jammy_amd64.deb
@@ -4415,93 +4377,117 @@ $ vagrant ssh kubenode02
     # cleanup not done!
   - THIS PART NOT CLEAR
     Path to Unix domain socket  :: unix:///var/run/cri-dockerd.sock
+    - pass as the kubeadm init param?
+      --cri-socket=unix:///var/run/cri-dockerd.sock
 
-3. install kubeadm (kubeadm, kubelet, kubectl)
+3. default containerd config file
+  https://www.cherryservers.com/blog/install-kubernetes-on-ubuntu
+  $ sudo sh -c "containerd config default > /etc/containerd/config.toml"
+
+4. set "SystemdCgroup" to true
+  $ sudo sed -i 's/ SystemdCgroup = false/ SystemdCgroup = true/' /etc/containerd/config.toml
+      - This is important because Kubernetes requires all its components,
+        and the container runtime uses systemd for cgroups.
+
+5.restart containerd and kubelet services to apply the changes you made on all nodes
+  - on all nodes:
+    $ sudo systemctl restart containerd.service
+
+6. install kubeadm (kubeadm, kubelet, kubectl), and pin the version!
   https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
-  # kubeadm init \
-    --pod-network-cidr 10.244.0.0/16 \
-    --apiserver-advertise-address=192.168.56.2 \
-    --cri-socket=unix:///var/run/cri-dockerd.sock
-  - the older installation manual didnt define cri-socket
-    - the result was an error
-      Found multiple CRI endpoints on the host. 
-      Please define which one do you wish to use by setting the 'criSocket' 
-      field in the kubeadm configuration file: 
-      unix:///var/run/containerd/containerd.sock, 
-      unix:///var/run/cri-dockerd.sock
+  https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#installing-kubeadm-kubelet-and-kubectl
+    - copy-paste commands from the page
+  - the question remains if cgroup driver has to be changed here?
+    https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/configure-cgroup-driver/
 
+7. master node
+    $ kubeadm config images pull --cri-socket=unix:///var/run/cri-dockerd.sock
 
-???
-https://discuss.kubernetes.io/t/couldnt-get-current-server-api-group-list-get-http-localhost-8080-api-timeout-32s-dial-tcp-127-0-0-1-connect-connection-refused/25471/4
-???
+9. all nodes
+    $
+      sudo systemctl restart kubelet.service
+      sudo systemctl enable kubelet.service
 
-kubeadm config images pull
+10. install net-tools and check the ip
+  $ apt install net-tools
+  $ ifconfig
+    # gives
+      enp0s8: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+      inet 192.168.56.11  netmask 255.255.255.0  broadcast 192.168.56.255
 
-preflight] You can also perform this action in beforehand using 'kubeadm config images pull'
-W1211 18:14:08.093402    8904 checks.go:835] detected that the sandbox image "registry.k8s.io/pause:3.6" of the container runtime is inconsistent with that used by kubeadm. It is recommended that using "registry.k8s.io/pause:3.9" as the CRI sandbox image.
-[ce
+11. master node
+    $
+      kubeadm init \
+          --pod-network-cidr 10.244.0.0/16 \
+          --apiserver-advertise-address=192.168.56.11 \
+          --cri-socket=unix:///var/run/cri-dockerd.sock
+      
+      - THE IP WAS WRONG (192.168.56.11)
+    ---
+      Your Kubernetes control-plane has initialized successfully!
 
+      To start using your cluster, you need to run the following as a regular user:
 
-elet-start] Writing kubelet configuration to file "/var/lib/kubelet/config.yaml"
-[kubelet-start] Starting the kubelet
-[wait-control-plane] Waiting for the kubelet to boot up the control plane as static Pods from directory "/etc/kubernetes/manifests". This can take up to 4m0s
-[kubelet-check] Initial timeout of 40s passed.
+        mkdir -p $HOME/.kube
+        sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+        sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
+      Alternatively, if you are the root user, you can run:
 
-Unfortunately, an error has occurred:
-	timed out waiting for the condition
+        export KUBECONFIG=/etc/kubernetes/admin.conf
 
-This error is likely caused by:
-	- The kubelet is not running
-	- The kubelet is unhealthy due to a misconfiguration of the node in some way (required cgroups disabled)
+      You should now deploy a pod network to the cluster.
+      Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+        https://kubernetes.io/docs/concepts/cluster-administration/addons/
 
-If you are on a systemd-powered system, you can try to troubleshoot the error with the following commands:
-	- 'systemctl status kubelet'
-	- 'journalctl -xeu kubelet'
+      Then you can join any number of worker nodes by running the following on each as root:
 
-Additionally, a control plane component may have crashed or exited when started by the container runtime.
-To troubleshoot, list all containers using your preferred container runtimes CLI.
-Here is one example how you may list all running Kubernetes containers by using crictl:
-	- 'crictl --runtime-endpoint unix://///var/run/cri-dockerd.sock ps -a | grep kube | grep -v pause'
-	Once you have found the failing container, you can inspect its logs with:
-	- 'crictl --runtime-endpoint unix://///var/run/cri-dockerd.sock logs CONTAINERID'
-error execution phase wait-control-plane: couldn't initialize a Kubernetes cluster
-To see the stack trace of this error execute with --v=5 or higher
-root@kubemaster:/var/run# 
-root@kubemaster:/var/run# 
+      kubeadm join 192.168.56.11:6443 --token sl6110.websmhhhe29b21l8 \
+        --discovery-token-ca-cert-hash sha256:a09d034e24106d4afc6463d6bb6a586705ae49a8c609a681416b8b4cfc805350 
+      ---
 
+12. exit root privs 
+  $ exit
+  - check nodes
+    $ kubectl get nodes
+      # kubemaster NotReady status
 
-
-couldn't get current server API group list: Get "http://localhost:8080/api?timeout=32s": dial tcp 127.0.0.1:8080: connect: connection refused
-E1211 18:45:07.338450   11489 memcache.go:265] couldn't get current server API group list: Get "http://localhost:8080/api?timeout=32s": dial tcp 127.
-    
-
-
-
-
-
-
-3
-. your cluster will need a working network plugin.
+13. set up the pod network solution
+  - https://kubernetes.io/docs/concepts/cluster-administration/networking/
+  - https://kubernetes.io/docs/concepts/cluster-administration/addons/#networking-and-network-policy
+  -
+  - this one mentioned in video
+    - https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/#pod-network
+    -
+  - cidr: 10.244.0.0/16
   - weave
-  $ kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+    - on the control-plane node or a node that has the kubeconfig credentials:
+      $ kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+        # from: https://www.weave.works/docs/net/latest/kubernetes/kube-addon/#install
+  - where was the pod nw ip range setup????
 
+14.- add the worker nodes to the cluster
+  - on both worker nodes
+  - use the saved command "kubeadm join ..." command
+  $ kubeadm join 192.168.56.11:6443 --token sl6110.websmhhhe29b21l8 \
+        --cri-socket=unix:///var/run/cri-dockerd.sock \
+        --discovery-token-ca-cert-hash sha256:a09d034e24106d4afc6463d6bb6a586705ae49a8c609a681416b8b4cfc805350 
+  
+  - without "--cri-socket=unix:///var/run/cri-dockerd.sock" gives:
 
+      Found multiple CRI endpoints on the host. Please define which one 
+      do you wish to use by setting the 'criSocket' field in the 
+      kubeadm configuration file: 
+      unix:///var/run/containerd/containerd.sock, unix:///var/run/cri-dockerd.sock
+      To see the stack trace of this error execute with --v=5 or higher
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  - kubectl get nodes
+    NAME         STATUS   ROLES           AGE     VERSION
+    kubemaster   Ready    control-plane   48m     v1.28.4
+    kubenode01   Ready    <none>          3m31s   v1.28.4
+    kubenode02   Ready    <none>          4m18s   v1.28.4
+      
+  
 
 
 
