@@ -4575,4 +4575,98 @@ $ vagrant ssh kubenode02
 
 
 
+13.5 control plane failure solution
+---
+- pod in status pending
+  - scheduler is responsible
+
+- k get pods -n kube-system
+- k describe kube-scheduler-master
+  - static pod ("-master" in the name)
+
+- check the hand-crafted service config in the kubelet service
+    - cat /etc/systemd/system/kubelet.service.d/10-kubead.conf
+
+- scale deployment
+  - didn't work
+  - controller-manager is responsible for deployemts and replicaSets
+
+- check logs
+  - kubectl -n kube-system logs kube-controller-manager-master
+
+- ca file err in controller-manager
+ - hostPath was wrong (volume mount)
+
+
+
+13.5 worker node failure
+---
+- k8s docs: .../docs/tasks/debug-application-cluster/debug-cluster
+- k get nodes
+- k describe node worker01
+  Conditions:
+    OutOfDisk
+    MemoryPressure
+    DiskPressure
+    PIDPressure
+    Ready
+  
+  - if comm with master doesn't work -> COnditions: Unknown
+
+- top
+- df -h
+
+- service kubelet status
+- sudo journalctl -u kubelet
+
+- check certificates
+  - openssl x509 -in /var/lib/kubelet/worker01.crt -text
+    - issuer, etc.
+
+
+
+13.5 worker node failure solution
+---
+- ps aux | grep kubelet
+- systemctl status kubelet
+- systemctl status kubelet -l
+- systemctl restart kubelet
+- systemctl status kubelet -l
+- k describe node node01
+- journalctl -u kubelet
+  - SHIFT+g-> goes to the bottom of the log
+
+- connection refused kubectl -> apiserver
+
+- kubelet service definition file location
+  / etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+  - inside there is
+  --kubeconfig=/etc/kubernetes/kubelet.conf
+
+- in kubelet.conf are the api-server details stored
+
+- reload and restart after changing the config
+  $ systemctl daemon-reload
+  $ systemctl restart kubelet
+  $ systemctl status kubelet.service -l
+
+- kubelet service definition file location
+  / etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+  - CA config is located at
+    --config=/var/lib/kubelet/config.yaml
+  
+
+
+14.1 advanced kubectl commands
+---
+
+
+
+
+
+
+
+
+
+
 
