@@ -4730,7 +4730,37 @@ end
   $ grep -i staticPod /var/lib/kubelet/config.yaml
     # /etc/kubernetes/manifests
 
-~13.20
+- nodeport service doesn't have a switch to define (node)port
+  $ k expose deployment hr-web-app \
+    --name hr-web-app-service \
+    --port 8080 --target-port 8080 --type='NodePort' \
+    --dry-run=client -o yaml > hr-web-app-service.yaml
+
+  - now edit the yaml and under the targetPort(8080) add 
+    nodePort: 30082
+
+- kubectl cheat sheet (jsonpath)
+  - https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+
+- explain object
+  $ kubectl explain pv --recursive | less
+  # /hostpath
+  ...
+      apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: pv-analytics
+      spec:
+        capacity:
+          storage: 100Mi
+        accessModes:
+        - ReadWriteMany
+        hostPath:
+          path: /pv/data-analytics
+  ...
+
+
+
 
 
 
