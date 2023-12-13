@@ -4659,6 +4659,66 @@ $ vagrant ssh kubenode02
 
 14.1 advanced kubectl commands
 ---
+- JSON path in kubectl
+- learn basics
+-  json path for beginners (yt)
+    - www.kodekloud.com/p/json-path-quiz
+
+- json path query
+  - .items[0].spec.containers[0].image
+  - $.items[0]. .. -> $ not mandatory, kubectl adds it
+
+  $ kubectl get nodes -o=jsonpath='{ s.items[0].spec.containers[0].image }'
+
+- jsonpath.com
+  - validate and play around
+
+- jsonpath examples
+$ k get nodes -o=jsonpath='{.items[*].metadata.name}'
+$ k get nodes -o=jsonpath='{.items[*].status.nodeInfo.architecture}'
+$ k get nodes -o=jsonpath='{.items[*].status.capacity.cpu}'
+
+- combining queries is possible
+$ k get nodes -o=jsonpath='{.items[*].metadata.name} {.items[*].status.capacity.cpu}'
+$ k get nodes -o=jsonpath='{.items[*].metadata.name} {"\n"} {.items[*].status.capacity.cpu}'
+
+
+- formatters
+  - {"\n"} = new line
+  - {"\t"} = tab
+
+- loops - range
+  - .range = is like forEach loop
+
+- analogy:
+forEach Node
+  print "nodeName \t cpuCount \n"
+end
+
+- the upper part in jsonpath:
+'{range .items[*]}
+  {.metadata.name}{"\t"}{.status.capacity.cpu}{"\n"}
+ {end}'
+
+- range loops
+  - put this in oneliner
+    - '{range .items[*]}{.metadata.name}{"\t"}{.status.capacity.cpu}{"\n"}{end}'
+    $ k get nodes -o=jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.capacity.cpu}{"\n"}{end}'
+
+- custom columns
+  - k get nodes -o=custom-columns=<COLUMN NAME>:<JSON PATH>
+  - .items[*] is assumed
+  - examples
+    $ k get nodes -o=custom-columns=NODE:.metadata.name
+    $ k get nodes -o=custom-columns=NODE:.metadata.name,CPU:.status.capacity.cpu
+
+- sort 
+  - k get nodes --sort-by=
+  $ k get nodes --sort-by=.metadata.name
+  $ k get nodes --sort-by=.status.capacity.cpu
+  $ k get nodes -o=custom-columns=NODE:.metadata.name,CPU:.status.capacity.cpu --sort-by=.status.capacity.cpu
+
+
 
 
 
