@@ -4760,7 +4760,16 @@ end
   ...
 
 
+16.1 mock exam 2
+---
+
 - take the etcd backup
+--
+  - https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/#snapshot-using-etcdctl-options
+
+  - check the version of ETCD
+    $ ETCDCTL_API=3 etcdctl version
+
   - chapeer 6.8
     - or, use the builtin snapshot solution
       - ETCDCTL_API=3 etcdctl \
@@ -4790,5 +4799,68 @@ end
     $ ETCDCTL_API=3 etcdctl --write-out=table snapshot status snapshot.db
 
 
+- create a pod, assign 1 cpu & 200 MiB
+--
+  - https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/
+  - elephant.yaml
+  --
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    labels:
+      run: elephant
+    name: elephant
+  spec:
+    containers:
+    - image: redis
+      name: elephant
+      resources:
+        requests:
+          cpu: "0.5"
+          memory: "200Mi"
+    restartPolicy: Always
+
+
+- create a pod which has capabilities to set system_time
+--
+  - Set capabilities for a Container
+    - https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-capabilities-for-a-container
+
+  - super-user-pod.yaml
+  ---
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      labels:
+        run: super-user-pod
+      name: super-user-pod
+    spec:
+      containers:
+      - command: ["sleep","4800"]
+        image: busybox:1.28
+        name: super-user-pod
+        image: gcr.io/google-samples/node-hello:1.0
+        securityContext:
+          capabilities:
+            add: ["SYS_TIME"]
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+    status: {}
+
+
+- create a pod which claims a pvc
+--
+- https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/
+
+
+- create deployment + rolling update of nginx version
+--
+- https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
+kubectl create deployment nginx-deploy --image=nginx:1.16 --replicas=2
+  590  k get deployments
+kubectl set image deployment/nginx-deploy nginx=nginx:1.16.1
+deployment.apps/nginx-deploy image updated
+
+~15.42
 
 
