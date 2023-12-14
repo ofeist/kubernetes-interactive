@@ -4760,11 +4760,34 @@ end
   ...
 
 
+- take the etcd backup
+  - chapeer 6.8
+    - or, use the builtin snapshot solution
+      - ETCDCTL_API=3 etcdctl \
+          --CA-PARAMETERS \
+          snapshot save snapshot.db
 
+  - params needed; e.g. params and values:
+    - --cert-file=/etc/kubernetes/pki/etcd/server.crt
+    - --key-file=/etc/kubernetes/pki/etcd/server.key
+    - --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
 
+  $ kubectl describe -n kube-system pod etcd-kubemaster | more
+  $ kubectl describe -n kube-system pod etcd-kubemaster | grep \
+      -e --cert-file \
+      -e --key-file \
+      -e --trusted-ca-file
 
-
-
+  $ sudo ETCDCTL_API=3 etcdctl \
+    --cert="/etc/kubernetes/pki/etcd/server.crt" \
+    --key="/etc/kubernetes/pki/etcd/server.key" \
+    --cacert="/etc/kubernetes/pki/etcd/ca.crt" \
+    snapshot save snapshot.db
+    
+  - enpoint option not needed -> this is run on the same server where etcd is installed
+  
+  - snapshot status 
+    $ ETCDCTL_API=3 etcdctl --write-out=table snapshot status snapshot.db
 
 
 
