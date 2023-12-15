@@ -4856,10 +4856,10 @@ end
 - create deployment + rolling update of nginx version
 --
 - https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
-kubectl create deployment nginx-deploy --image=nginx:1.16 --replicas=2
-  590  k get deployments
-kubectl set image deployment/nginx-deploy nginx=nginx:1.16.1
-deployment.apps/nginx-deploy image updated
+
+  - kubectl create deployment nginx-deploy --image=nginx:1.16 --replicas=2
+  - kubectl set image deployment/nginx-deploy nginx=nginx:1.16.1
+      # deployment.apps/nginx-deploy image updated
 
 ~15.42
 
