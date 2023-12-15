@@ -4853,14 +4853,43 @@ end
 - https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/
 
 
-- create deployment + rolling update of nginx version
+- create deployment + record the version + rolling update of nginx version
 --
 - https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
 
-  - kubectl create deployment nginx-deploy --image=nginx:1.16 --replicas=2
-  - kubectl set image deployment/nginx-deploy nginx=nginx:1.16.1
+  $ kubectl create deployment nginx-deploy --image=nginx:1.16 --replicas=2 --record
+  $ kubectl rollout history deployment
+  $ kubectl set image deployment/nginx-deploy nginx=nginx:1.16.1 --record
       # deployment.apps/nginx-deploy image updated
+  $ kubectl rollout history deployment nginx-deploy
+  $ kubectl set image deployment/nginx-deploy nginx=nginx:1.17 --record
+    # Flag --record has been deprecated, --record will be removed in the future
+    # deployment.apps/nginx-deploy image updated
+  $ kubectl rollout history deployment nginx-deploy
+  $ k rollout undo deployment nginx-deploy --to-revision=1
 
-~15.42
+- Flag --record has been deprecated, --record will be removed in the future
+  - use annotate
+    - https://jamesdefabia.github.io/docs/user-guide/kubectl/kubectl_annotate/
+    - https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+
+  - the workflow:
+    - create the deployment
+      $ kubectl create deployment nginx-deploy --image=nginx:1.16.0 --replicas 1
+
+    - check the history
+      $ kubectl rollout history deployment nginx-deploy
+
+    - update the image on deployment
+      $ kubectl set image deployment nginx-deploy nginx=nginx:latest
+
+    - annotate the deployment now and create the history
+      $ kubectl annotate deployment nginx-deploy kubernetes.io/change-cause="version change to 1.16.0 to latest" --overwrite=true
+
+    - check the history
+      $ kubectl rollout history deployment nginx
+
+- annotate vs record!
+
 
 
