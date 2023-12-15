@@ -4889,7 +4889,95 @@ end
     - check the history
       $ kubectl rollout history deployment nginx
 
-- annotate vs record!
+  - check: annotate vs record!
+    - "record" has been deprecated
+
+- create a new user + grant him access to the cluster/add role
+---
+  - useful link:
+  - https://discuss.kubernetes.io/t/how-to-create-user-in-kubernetes-cluster-and-give-it-access/9101/4
+  
+  - a Q:
+    - are kubernetes.io discussions available during the exam?
+    - or only strictly the k8s documentation?
+
+  - the solution:
+    - link
+      - https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests/#normal-user
+    
+    - steps:
+      - create the user Certificate Signing Request (CSR)
+      - approve the CSR
+      - create the role
+      - create the role binding
+      - set-credentials
+
+  - create the user Certificate Signing Request (CSR)
+    $ sudo su
+    $ openssl genrsa -out developer-john.key 2048
+    $ openssl req -new -key developer-john.key -out developer-john.csr -subj "/CN=john"
+    $ cat developer-john.csr | base64 | tr -d "\n"
+      # LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJQ1ZqQ0NBVDRDQVFBd0VURVBNQTBHQTFVRUF3d0diWGwxYzJWeU1JSUJJakFOQmdrcWhraUc5dzBCQVFFRgpBQU9DQVE4QU1JSUJDZ0tDQVFFQTFaT29nRE5sVEVHYVBPS2tmeGJWU09QaXNYSzZYazFqMnNiSUQ5d3YzTWZ0CjFLa011NGtMM1h1S2o0bFd1c3FmY0xtVmdLYkUvdjFBU09oaWFXeXQ4T3lHUks0MkIyK1VQT0dGdkZzdFBhSEUKOVRKSU1YK1ZlM3JJMGVtb0J1c2tpd24zSmlzaCtZV0pGdzVFMlRMcVpPNmJ5SWJoMjZGbU5IRVVGNU1CdUlYNwphYi93ckZ5VjdudWowTXlIa21TeXBjTWxQSy81SFpHVnVyN0RacGY4NmRJMGk0akNaaXpSTHoyQmVpYXVkOFRZCklCa1BzbGFFa2hLNnVCT25vNUx0ZmN4Ty9HQTF4T2Zpd0hYc0ZvdTJjQzQ0SGZhS3Znc0V2WFVzQThQenRHVDEKbUpmZTdzWDVtcXF1eDBhR3lDelhpNCs4cS8vcitRVk1vb0JiajhOTEp3SURBUUFCb0FBd0RRWUpLb1pJaHZjTgpBUUVMQlFBRGdnRUJBRHpZRUt3bEdHaTF1M3VGR3FSWkZnNzBiTlUyNXR4TFphRVpDeXhsV2RhNTZTL0lsbUlZCkhKclFuNnhhTldGUGFuRUd0bHBEY09OSjlHUS9TOEx3WWJkRU1ickl2OUVsSXo1QVdBRWFwaHpYV0JYdW5aRXcKbFdDcm5YQy93MXBuQkRJQ0xYdDBvdnVaR2NhbEltQ1pVMHQ5bm10K2Rpc3BZUDB1dXpxNTBRclVyV2hLc2N3Vgp3WTg1YXgyM1hLRnJiMnFCT0VoTVYyNEJNNmQ2Q0NUUmdnd0JnakdQaFFZOTlwLzYzSS93OE10b1JvYU02VzNZClgvakJaSWgyUkFsaG0rbllsUFIwUmJSeGNSNVVEVytJd1l5Q25SNk85NWVaNitiVVZaVlU4bjVLRFhqWXNFZUYKZks3R2F1cUtJdFVNTXB5L2hmOWZXaXVLdnI2a2tpajBKRms9Ci0tLS0tRU5EIENFUlRJRklDQVRFIFJFUVVFU1QtLS0tLQo=
+    $
+      cat <<EOF | kubectl apply -f -
+      apiVersion: certificates.k8s.io/v1
+      kind: CertificateSigningRequest
+      metadata:
+        name: john
+      spec:
+        request: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJQ1ZqQ0NBVDRDQVFBd0VURVBNQTBHQTFVRUF3d0diWGwxYzJWeU1JSUJJakFOQmdrcWhraUc5dzBCQVFFRgpBQU9DQVE4QU1JSUJDZ0tDQVFFQTFaT29nRE5sVEVHYVBPS2tmeGJWU09QaXNYSzZYazFqMnNiSUQ5d3YzTWZ0CjFLa011NGtMM1h1S2o0bFd1c3FmY0xtVmdLYkUvdjFBU09oaWFXeXQ4T3lHUks0MkIyK1VQT0dGdkZzdFBhSEUKOVRKSU1YK1ZlM3JJMGVtb0J1c2tpd24zSmlzaCtZV0pGdzVFMlRMcVpPNmJ5SWJoMjZGbU5IRVVGNU1CdUlYNwphYi93ckZ5VjdudWowTXlIa21TeXBjTWxQSy81SFpHVnVyN0RacGY4NmRJMGk0akNaaXpSTHoyQmVpYXVkOFRZCklCa1BzbGFFa2hLNnVCT25vNUx0ZmN4Ty9HQTF4T2Zpd0hYc0ZvdTJjQzQ0SGZhS3Znc0V2WFVzQThQenRHVDEKbUpmZTdzWDVtcXF1eDBhR3lDelhpNCs4cS8vcitRVk1vb0JiajhOTEp3SURBUUFCb0FBd0RRWUpLb1pJaHZjTgpBUUVMQlFBRGdnRUJBRHpZRUt3bEdHaTF1M3VGR3FSWkZnNzBiTlUyNXR4TFphRVpDeXhsV2RhNTZTL0lsbUlZCkhKclFuNnhhTldGUGFuRUd0bHBEY09OSjlHUS9TOEx3WWJkRU1ickl2OUVsSXo1QVdBRWFwaHpYV0JYdW5aRXcKbFdDcm5YQy93MXBuQkRJQ0xYdDBvdnVaR2NhbEltQ1pVMHQ5bm10K2Rpc3BZUDB1dXpxNTBRclVyV2hLc2N3Vgp3WTg1YXgyM1hLRnJiMnFCT0VoTVYyNEJNNmQ2Q0NUUmdnd0JnakdQaFFZOTlwLzYzSS93OE10b1JvYU02VzNZClgvakJaSWgyUkFsaG0rbllsUFIwUmJSeGNSNVVEVytJd1l5Q25SNk85NWVaNitiVVZaVlU4bjVLRFhqWXNFZUYKZks3R2F1cUtJdFVNTXB5L2hmOWZXaXVLdnI2a2tpajBKRms9Ci0tLS0tRU5EIENFUlRJRklDQVRFIFJFUVVFU1QtLS0tLQo=
+        signerName: kubernetes.io/kube-apiserver-client
+        expirationSeconds: 86400  # one day
+        usages:
+        - client auth
+      EOF
+
+  - approve the CSR
+    $ kubectl get csr
+    $ kubectl certificate approve john
+
+    - get the CSR and/or export it
+      $ kubectl get csr/john -o yaml
+      $ kubectl get csr john -o jsonpath='{.status.certificate}'| base64 -d > john.crt
+
+  - create the role
+    - pods: create,list,get,update,delete
+    $ kubectl create role developer --verb=create --verb=get --verb=list --verb=update --verb=delete --resource=pods
+  
+  - create the role-binding
+    $ kubectl create rolebinding developer-binding-john --role=developer --user=john
+
+  - add to kubeconfig 
+    1] set-credentials ( add new credentials ):
+      $ kubectl config set-credentials john --client-key=developer-john.key --client-certificate=john.crt --embed-certs=true
+
+    2] set-context ( add the context ):
+      $ kubectl config set-context john --cluster=kubernetes --user=john
+
+  - test
+    $ kubectl auth can-i create pods --as john (--namespace default)
+    $ kubectl config current-context
+      # kubernetes-admin@kubernetes
+    $ kubectl config use-context john
+      - create/delete pod
+
+
+  - ERROR (AS A SIDENOTE)
+  - "The connection to the server localhost:8080 was refused"
+    - when running kubectl as the ROOT, the error was thrown
+      # The connection to the server localhost:8080 was refused - did you specify the right host or port?
+      -> the solution:
+        - AS THE ROOT, RUN:
+          mkdir -p $HOME/.kube
+          cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+          chown $(id -u):$(id -g) $HOME/.kube/config
+
+~19.54
+
+
+
+
+
 
 
 
