@@ -4760,7 +4760,7 @@ end
   ...
 
 
-16.1 mock exam 2
+16.2 mock exam 2
 ---
 
 - take the etcd backup
@@ -5029,7 +5029,30 @@ $ k run test-nslookup --image=busybox:1.28
     - 10-36-0-7.default.pod 
     ??? 10-244-2-5.apps.pod.cluster.local
 
-~36:20
+
+
+- create a static pod on node01 & configure kubelet service on node01
+---
+
+- check the kubelet config file
+  - which is the location for static pods?
+
+  $ ssh kubenode01
+  $ ps aux | grep kubelet   # OR: systemctl status kubelet
+    -> ... --config=/var/lib/kubelet/config.yaml
+  $ grep -i static /var/lib/kubelet/config.yaml
+    -> staticPodPath: /etc/kubernetes/manifests
+
+- create the YAML pod definition on node01 in the "staticPodPath" directory (/etc/kubernetes/manifests/)
+
+- it is normal to get the following err when running the command kubectl on the worker node(?)
+  - E1216 22:42:03.315706   50651 memcache.go:265] couldn't get current server API group list: Get "http://localhost:8080/api?timeout=32s": dial tcp 127.0.0.1:8080: connect: connection refused
+
+- a possible solution is to create the definition yaml on the master node, and then to copy it onto the worker node (vi file on worker)
+
+
+16.3 mock exam 3
+---
 
 
 
