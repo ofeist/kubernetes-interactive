@@ -3968,7 +3968,7 @@ $ kubectl get svc
 - organization of k8s dns
   - serviceName < namespace < type  < root
   - web-service < apps      < svc   < cluster.local
-  - web-service.apps.svc.clucter.local
+  - web-service.apps.svc.cluster.local
 
 - the apps namespace is a namespace for
   - pods and
@@ -4982,10 +4982,54 @@ end
           chown $(id -u):$(id -g) $HOME/.kube/config
 
 
-- create pod, expose it internally, record results in two files
+- create pod, expose it internally, record results into two files (.svc & .pod)
 ---
-~28.40
+- CD / NoWE (ClusterIp Db / Nodeport WEb app)
 
+- cluster ip
+  - eg. db service
+  - if i want to expose pod to other pods, i would create a service
+  - a service is hosted and accessible across and only within the cluster
+ 
+- nodeport
+  - eg. web application
+  - accessible outside the cluster
+  - works like clusterip
+  - exposes port accross all hosts
+  - --nodePort imperative switch doesn't exist
+
+- pod: nginx-resolver
+- svs: nginx-resolver-service
+  
+$ k run nginx-resolver --image=nginx
+$ k expose pod nginx-resolver --name=nginx-resolver-service --port=80 --target-port=80 (--type=ClusterIp)
+
+- to test nslookup within the cluster, use busybox
+- TAKE CARE ABOUT THE BUSYBOX VERSION (not all work correctly)
+- use busybox:1.28
+
+$ k run test-nslookup --image=busybox:1.28
+- test the service dns
+  $ k exec -it test-busybox -- bash
+    $ nslookup nginx-resolver-service
+  - or
+  $ kubectl run --generator=run-pod/v1 test-nslookup --image-busybox:1.28 --rm -it -- nslookup nginx-resolver-service
+    - or
+    - the winner is
+  $ k exec nslookup -- nslookup nginx-resolver-service > /root/nginx.svc
+- test the pod dns
+  $ k get pod nginx-resolver -o wide  # -> 10.36.0.7
+  $ kubectl exec test-nslookup -- nslookup 10-36-0-7.default.pod
+  $ kubectl exec test-nslookup -- nslookup 10-36-0-7.default.pod > /root/nginx.pod
+
+- todo:
+  - check DNS entries created by k8s
+  - ?
+    - nginx-resolver-service.default.svc.cluster.local
+    - 10-36-0-7.default.pod 
+    ??? 10-244-2-5.apps.pod.cluster.local
+
+~36:20
 
 
 
