@@ -5079,6 +5079,20 @@ $ k run test-nslookup --image=busybox:1.28
   $ kubectl describe pod pvviewer | grep -i service
 
 
+- task: list the InternalIP of all nodes of the cluster
+--
+- save the results to file /root/node_ips
+- cheat sheet
+  - https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+    # get ExternapIPs of all nodes
+    # -> kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="ExternalIP")].address}'
+    
+$ kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}'
+$ sudo su
+$ kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}' > /root/node_ips
+
+- btw. since no ExternalIP type, even this command would work
+$ kubectl get nodes -o jsonpath='{.items[*].status.addresses[].address}'
 
 
 
