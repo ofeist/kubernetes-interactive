@@ -5051,8 +5051,36 @@ $ k run test-nslookup --image=busybox:1.28
 - a possible solution is to create the definition yaml on the master node, and then to copy it onto the worker node (vi file on worker)
 
 
+
 16.3 mock exam 3
 ---
+
+- service account and a pod
+--
+- create a service account: pvviewer
+- create a cluster role: pvviewer-role : list all PersistentVolumes
+- create the cluster role binding
+- cerate a pod pvviewer, redis, svcacc pvviewer
+  - https://kubernetes.io/docs/reference/access-authn-authz/authentication/#service-account-tokens
+
+
+- my solution:
+  $ kubectl create serviceaccount pvviewer
+  $ kubectl create role pvviewer-role --verb=list --resource=PersistentVolume
+  $ kubectl create clusterrolebinding pvviewer-role-binding --serviceaccount=default:pvviewer-role --clusterrole=pvviewer-role
+  $ kubectl run pvviewer --image=redis --dry-run=client -o yaml > pvviewer.yaml
+    - edit the file and add under 
+      spec:
+        serviceAccountName: pvviewer
+
+- test:
+  $ kubectl describe pod pvviewer
+  $ kubectl describe pod pvviewer | grep -i service
+
+
+- the link from the video solution
+--
+- https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 
 
 
