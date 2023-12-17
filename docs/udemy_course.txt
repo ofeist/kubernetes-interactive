@@ -5157,6 +5157,7 @@ spec:
 
 
 
+
 home/splinter/Documents/2_EDU/kubernetes/Udemy - Certified Kubernetes Administrator (CKA) with Practice Tests
 
 
