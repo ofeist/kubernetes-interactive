@@ -5124,6 +5124,33 @@ spec:
     command: ["sleep","4800"]
 
 
+- task: create a pod with cpu and memory limits
+--
+- name: lion 
+- image: redis:alpine
+- resource limits:
+    cpu: "2"
+    memory: "500MiB"
+
+- lion.yaml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lion
+spec:
+  containers:
+  - image: redis:alpine
+    name: redis
+    resources:
+      limits:
+        cpu: "2"
+        memory: "500Mi"
+
+
+- task: fix network for pod, fix network policy
+--
+- https://kubernetes.io/docs/concepts/services-networking/network-policies/
 
 
 
