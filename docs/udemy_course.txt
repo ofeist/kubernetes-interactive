@@ -5055,12 +5055,13 @@ $ k run test-nslookup --image=busybox:1.28
 16.3 mock exam 3
 ---
 
-- service account and a pod
+- task: create a service account and a pod
 --
 - create a service account: pvviewer
 - create a cluster role: pvviewer-role : list all PersistentVolumes
 - create the cluster role binding
 - cerate a pod pvviewer, redis, svcacc pvviewer
+  https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   - https://kubernetes.io/docs/reference/access-authn-authz/authentication/#service-account-tokens
 
 
@@ -5078,9 +5079,6 @@ $ k run test-nslookup --image=busybox:1.28
   $ kubectl describe pod pvviewer | grep -i service
 
 
-- the link from the video solution
---
-- https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 
 
 
