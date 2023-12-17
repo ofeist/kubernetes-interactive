@@ -5095,6 +5095,40 @@ $ kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="Internal
 $ kubectl get nodes -o jsonpath='{.items[*].status.addresses[].address}'
 
 
+- task: create a multi-pod with two containers and env vars
+--
+- container 1: name=alpha, imege=nginx
+- container 2: name=beta, image=multibox, sleep 4800
+- environment var @ container 1=name: alpha
+- environment var @ container 2=name: beta
+
+
+- multi-pod.yaml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multi-pod
+spec:
+  containers:
+  - image: nginx
+    name: alpha
+    env:
+    - name: name
+      value: alpha
+  - image: busybox
+    name: beta
+    env:
+     - name: name
+       value: beta
+    command: ["sleep","4800"]
+
+
+
+
+
+
+
 
 home/splinter/Documents/2_EDU/kubernetes/Udemy - Certified Kubernetes Administrator (CKA) with Practice Tests
 
