@@ -5151,8 +5151,52 @@ spec:
 - task: fix network for pod, fix network policy
 --
 - https://kubernetes.io/docs/concepts/services-networking/network-policies/
+- https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/
+
+- todo: network policies
+  - improve
+
+- video
+  $ k exec test-nslookup -it -- sh
+  $ nc -z -v -w 2 np-test-service 80
+  $ nc -zv np-test-service 80
+  $ nc -zvw 2 10.100.184.235 80
+    # nc: 10.100.184.235 (10.100.184.235:80): Connection timed out
+
+$ k get netpol
+
+- all pods were selected
+- ingress policy type defined
+
+- spec:
+  podSelector:
+    matchLabels:
+      run: np-test-1
+
+- ingress rullae allowing traffic to np-test-1:80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-np-traffic
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      run: np-test-1
+  policyTypes:
+    - Ingress
+  ingress:
+  - ports:
+    - protocol: TCP
+      port: 80
 
 
+- task: taint the node to be unschedulable, then tolerate for one pod
+---
+- taint node01
+- dev-redis:alpine @ node-1 (not scheduled)
+- prod-redis:alpine @ node-1 (toleration)
 
 
 
