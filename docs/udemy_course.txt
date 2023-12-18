@@ -5173,7 +5173,7 @@ $ k get netpol
     matchLabels:
       run: np-test-1
 
-- ingress rullae allowing traffic to np-test-1:80
+- ingress rule allowing traffic to np-test-1:80
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -5198,6 +5198,35 @@ spec:
 - dev-redis:alpine @ node-1 (not scheduled)
 - prod-redis:alpine @ node-1 (toleration)
 
+$ kubectl taint nodes kubenode01 nodename=kubenode01:NoSchedule
+
+- add a toleration for the pod
+---
+spec:
+  tolerations:
+  - key: "example-key"
+    operator: "Exists"
+    effect: "NoSchedule"
+
+
+-prod-redis.yaml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: prod-redis
+  name: prod-redis
+spec:
+  containers:
+  - image: redis:alpine
+    name: prod-redis
+  nodeSelector:
+    kubernetes.io/hostname: kubenode01
+  tolerations:
+  - key: "nodename"
+    operator: "Exists"
+    effect: "NoSchedule"
 
 
 
