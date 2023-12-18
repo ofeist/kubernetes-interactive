@@ -5234,7 +5234,7 @@ $ kubectl taint nodes kubenode01 nodename=kubenode01:NoSchedule-
 
 
 
-- create a namespace, label pods
+- task: create a namespace, label pods
 ---
 $ kubectl create namespace hr
 ($ kubectl label namespace hr tier=frontend)
@@ -5242,6 +5242,50 @@ $ kubectl create namespace hr
 $ kubectl run hr-pod -n hr --image=redis:alpine \
   --labels="environment=production,tier=frontend" \
   --dry-run=client -o yaml > hr-pod.yaml
+
+
+
+- task: kubeconfig file
+---
+- kubeconfig file /root/super.kubeconfig needs a fix
+
+$ kubectl cluster-info
+  - kubectl runs on port 6433
+  - etcd runs on port 2379
+
+- to override the $HOME/.kube/config kubeconfig file
+  $ kubectl cluster-info --kubeconfig=/root/super.kubeconfig
+
+
+
+- task: scale deployment to 3 replicas
+---
+- nginx-deploy
+- doesn't scale from 1 to 3 replicas
+
+- control manager is not running
+  - the reason why this didn't scale
+
+- check the file /etc/kubernetes/manifests/kube-controller-manager.yaml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
