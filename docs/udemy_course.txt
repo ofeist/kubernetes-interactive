@@ -5209,7 +5209,7 @@ spec:
     effect: "NoSchedule"
 
 
--prod-redis.yaml
+- prod-redis.yaml
 ---
 apiVersion: v1
 kind: Pod
@@ -5227,6 +5227,21 @@ spec:
   - key: "nodename"
     operator: "Exists"
     effect: "NoSchedule"
+
+
+- to remove taint from kubenode01
+$ kubectl taint nodes kubenode01 nodename=kubenode01:NoSchedule-
+
+
+
+- create a namespace, label pods
+---
+$ kubectl create namespace hr
+($ kubectl label namespace hr tier=frontend)
+($ kubectl label namespaces hr environment=production)
+$ kubectl run hr-pod -n hr --image=redis:alpine \
+  --labels="environment=production,tier=frontend" \
+  --dry-run=client -o yaml > hr-pod.yaml
 
 
 
