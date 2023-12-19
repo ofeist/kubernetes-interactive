@@ -1,3 +1,15 @@
 # https://kubernetes.io/docs/tasks/
 ---
+# this one next: https://leetcode.com/problemset/
+#
 
+
+- task: install v1.27
+
+
+- task: upgrade cluster to 1.28.4
+    - https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
+
+
+- task: upgrade linux nodes (+ drain the node)
+    - https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/upgrading-linux-nodes/
