@@ -20,5 +20,118 @@ Exam Tips: http://training.linuxfoundation.org/go//Important-Tips-CKA-CKAD
 
 
 
+---
+https://killer.sh/pricing
+
+
+
+---
+Slack Group URL:
+https://kodekloud.com/pages/community
+
+
+
+---
+We have created a repository with notes, links to documentation and answers to practice questions here. Please make sure to go through these as you progress through the course:
+
+https://github.com/kodekloudhub/certified-kubernetes-administrator-course
+
+
+
+
+2.11 cluster architecture
+---
+
+- master node:
+    - etcd cluster
+    - kube-apiserver
+    - kube controller manager
+    - kube-scheduler
+
+
+- worker nodes
+    - kubelet
+    - kube-proxy
+    - container runtime engine (docker/rkt/containerd)
+
+
+- k8s | CRI (I = interface!)| container runtimes
+    - container runtime interface
+
+- dockershirm
+    - pseudo interface developed from k8s only for docker
+
+
+
+2.12. docker vs containerD
+---
+- containerd is enough
+    - docker doesn't need to be installed
+
+- ctr tool
+    - only for debugging
+
+- nerdctl (tool)
+    - supports docker compose
+    - supports newest features in containerd
+        - encrypted images
+        - lazy pulling
+        - p2p image distribution
+        - image signing & verifying
+        - namespaces in k8s
+
+- nerdctl commands analogue to docker commands
+    - D -> docker run --name redis redis:alpine
+    - N -> nerdctl run --name redis redis:alpine
+
+    - D -> docker run --name webserver -p 80:80 -d nginx
+    - N -> nerdctl run --name webserver -p 80:80 nginx
+
+
+- crictl - CLI
+    - used to interaction with CRI (container runtime interface)
+    - for debugging and inspection
+    - not user friendly
+
+- to communicate with containerd you got to do api calls
+
+- before (1.13 e.g.), for troubleshooting docker commands were used
+    - now crictl (cry control) tool will be used
+
+- commands
+    - crictl
+    - crictl pull busybox
+    - crictl images
+    - crictl ps -a
+    - crictl exec -i -t 3e423421dd23424a4324ac42423 ls
+    - crictl logs 3e953789dd8421ae943c24
+    - crictl pods
+
+- check the difference between docker and crictl commands
+    - https://kubernetes.io/docs/reference/tools/map-crictl-dockercli/
+
+- crictl --runtime-endpoint
+- export CONTAINER_RUNTIME_ENDPOINT
+- unix:///var/run/cri-docker.sock
+
+
+
+
+
+
+
+https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/37105770#overview
+
+
+
+
+
+
+
+
+
+
+
+
 
 
