@@ -115,6 +115,55 @@ https://github.com/kodekloudhub/certified-kubernetes-administrator-course
 - unix:///var/run/cri-docker.sock
 
 
+2.13 etcd for beginners
+---
+./etcdctl --version
+
+- run the spec version
+    $ ETCDCTL_API=3 ./etcdctl version
+
+- or specify for the session
+    $ export ETCDCTL_API=3
+    $ ./etcdctl version
+
+- we work with version 3
+
+$ export ETCDCTL_API=3
+$ ./etcdctl put key1 value1
+
+$ etcdctl get key1
+
+
+
+2.14 etcd in k8s
+---
+- etcd is a cluster datastore for:
+    - nodes
+    - podes
+    - configs
+    - secrets
+    - accounts
+    - roles
+    - bindings
+    - others
+
+- port: 2379
+
+- list all keys stored in etcd db
+    $ kubectl exec etcd-master -n kube-system etcd get / --prefix -keys-on
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
