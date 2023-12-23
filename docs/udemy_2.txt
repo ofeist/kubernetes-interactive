@@ -153,10 +153,11 @@ $ etcdctl get key1
     $ kubectl exec etcd-master -n kube-system etcd get / --prefix -keys-on
 
 
+
 - https://gist.github.com/lalyos/aef94a4c23973eaee4a17bb26b6972a2
 ~2.27
 
-
+https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/14298422#learning-tools
 
 
 
