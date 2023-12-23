@@ -1,0 +1,83 @@
+work on basics
+threading
+parallelizations
+care about values - put people at the right place
+
+https://leetcode.com/problemset/
+
+https://github.com/neovim/neovim
+
+
+example of coding q's comming, and good to have them in your tuck:
+minimum subarray
+data structure and algorithm
+binary search tree algorithm
+binary search array alg
+avl tree
+100 top interview questions
+
+
+the primetime suggestion
+- do the data structure and algorithm course + understand fundamentals
+- 50 leetcode questions (https://www.youtube.com/watch?v=vHua-t_8hrA)
+	- easy & medium
+	- target: array style questions
+	- touch of dp experience (dynamic programming)
+	- go for the interviews (places where you do not wanna work)
+	- fail interviews
+	- use a pencile + paper -> think
+	- set time / timing of a problem (25 mins)
+	- do 3,4,5 commits in open source, in something that is really good (neovim)
+
+
+- all prgramming (95%) comes down to 2 patterns
+- builder pattern & strategy pattern
+- strategy pattern works with
+	- functional and
+	- object programming
+- and use a little bit od dependency injection
+- observer pattern -> 1% (=rest)
+
+
+- understand a pattern means
+	- to interface things out, and
+	- to use the strategy pattern
+	
+programming:
+- prototype the shit out of it
+- look all places where you failed
+- then implement the actual thing
+- DRY sucks / is root of all kinds of evil
+	- go martin fowler: when you've repeated yourself 3 times - then refactor!
+- make the function testable
+
+
+
+
+
+The Sugarhill Gang - Rapper's Delight (Official Video)
+https://www.youtube.com/watch?v=WjE4Vxe5-Ak
+
+
+Jonas Kaufmann - Wien, Wien, nur du allein 
+https://www.youtube.com/watch?v=y9s9I3IFJIk
+
+
+Émile Waldteufel: The Skater's Waltz
+https://www.youtube.com/watch?v=wWuccFOyayU
+
+
+Der Jägerchor (Carl Maria von Weber - Der Freischütz)
+https://www.youtube.com/watch?v=qH4e6SBzQMk
+
+
+
+
+
+
+- slacks
+- or team
+- tangerine
+
+	
+
