@@ -152,9 +152,65 @@ $ etcdctl get key1
 - list all keys stored in etcd db
     $ kubectl exec etcd-master -n kube-system etcd get / --prefix -keys-on
 
-
-
 - https://gist.github.com/lalyos/aef94a4c23973eaee4a17bb26b6972a2
+
+
+ETCDCTL_CACERT=/etc/kubernetes/pki/etcd/ca.crt \
+    ETCDCTL_CERT=/etc/kubernetes/pki/etcd/peer.crt \
+    ETCDCTL_KEY=/etc/kubernetes/pki/etcd/peer.key \
+    ETCDCTL_API=3  \
+    etcdctl \
+      get \
+      --keys-only \
+      --prefix=true \
+      "/registry/namespaces/"
+
+
+etcdctl get --keys-only --prefix=true "/registry/" | less
+
+- you must also specify path to certificate files 
+    so that ETCDCTL can authenticate to the ETCD API Server
+        --cacert /etc/kubernetes/pki/etcd/ca.crt     
+        --cert /etc/kubernetes/pki/etcd/server.crt     
+        --key /etc/kubernetes/pki/etcd/server.key
+
+
+- k8s components
+---
+- kube-api-scheduler
+    - communication between components
+- kube-controller-manager
+    - the brain
+- kube-scheduler
+    - decides which pod on which node
+- kubelet
+    - connection between nodes and master
+- kube-proxy
+    - networking
+
+
+- pod = smallest object of k8s
+
+
+- accessing labs
+---
+https://uklabs.kodekloud.com/courses/labs-certified-kubernetes-administrator-with-practice-tests/
+
+https://kodekloud.com/topic/practice-test-replicasets-2/
+
+q:
+- how to check the number of containers in a pod?
+    $ k get pods -o wide
+        # ready
+
+
+
+
+
+
+
+
+
 ~2.27
 
 https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/14298422#learning-tools
