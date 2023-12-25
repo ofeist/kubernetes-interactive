@@ -240,6 +240,17 @@ commands:
 
 2.32 deployments
 ---
+- supports rolling updates
+    - different versions of app
+
+- pod < replicaSet < deployment
+
+- yaml similar to replicaSet ("kind=Deployment" is the only difference to rs)
+
+
+
+
+
 
 https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/14295508#questions/19114274
 
