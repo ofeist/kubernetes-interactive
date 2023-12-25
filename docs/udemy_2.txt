@@ -249,6 +249,27 @@ commands:
 
 
 
+2.36 services
+---
+- can span accros more nodes in the cluster
+
+- nodeport service
+    - nodePort : Port : targetPort
+    - NoPeWeB = NodePort is used for Web Apps/containers
+
+- clusterip service
+    - CLuPi DaBar = clusterIp is used for e.g. database (as a backEnd ip aggregator)
+
+
+- loadbalancer
+    - on the cloud platform that supports LoadBalancer type
+    - instead od NodePort
+    
+
+
+
+
+
 
 
 
