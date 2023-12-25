@@ -201,17 +201,48 @@ https://kodekloud.com/topic/practice-test-replicasets-2/
 q:
 - how to check the number of containers in a pod?
     $ k get pods -o wide
-        # ready
+        # ready column
+
+
+2.29 replica sects 
+---
+- use cases
+    - keeps pods always running
+    - loadbalancing and scaling
+    - to monitor already existing pods (and re-deploy failed ones if needed)
+
+- replication controller -> older technology
+- replicaSet -> same purpose as the replication controller
+
+- main difference between replicaSets and replication controller is the "selector" field 
+- selector matches the pod, e.g.
+    selector:
+        matchLabels:
+        type: front-end
+
+- use "replace" command to update the replicasets
+    $ kubectl replace -f replicaset-definition.yaml
+        - what about "apply"???
+
+- scale
+$ kubectl scale -replicas=6 -f replicaset-definition
+
+$ kubectl edit replicaset ...
+
+commands:
+    $ kubectl edit replicaset ...
+    $ kubectl scale -replicas=6 -f replicaset-definition
+    $ kubectl replace -f replicaset-definition.yaml
+    $ kubectl explain replicaset
+        # gives the kind & version
 
 
 
+2.32 deployments
+---
 
+https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/14295508#questions/19114274
 
-
-
-
-
-~2.27
 
 https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/14298422#learning-tools
 
