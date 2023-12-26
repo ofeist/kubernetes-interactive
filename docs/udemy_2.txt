@@ -260,11 +260,43 @@ commands:
 - clusterip service
     - CLuPi DaBar = clusterIp is used for e.g. database (as a backEnd ip aggregator)
 
-
 - loadbalancer
     - on the cloud platform that supports LoadBalancer type
-    - instead od NodePort
+    - instead of NodePort
     
+
+
+2.41 namespaces
+---
+- permanently set the "dev" namespace
+    $ kubectl config set-context $(kubectl config current-context) --namespace=dev
+
+
+
+2.44 imperative vs declerative
+---
+https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/21500820#questions/19114274
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -274,22 +306,7 @@ commands:
 
 
 https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/14295508#questions/19114274
-
-
 https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/14298422#learning-tools
-
-
-
-
-
-
-
-
-
-
-
-
-
 https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/37105770#overview
 
 
