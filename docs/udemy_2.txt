@@ -343,20 +343,69 @@ commands:
     $ kubectl run httpd --image=httpd:alpine --port=80 --expose=true
 
 
+2.48 apply command
+---
+- works on 3 objects
+    - local file
+    - last applied config
+    - live object configuration
+
+- last applied configuration
+    - to figure out what fields have been removed from the local file
+    - used to check if some lines are removed from configs
 
 
 
+3.53 manual scheduling
+---
+- two ways of manual scheduling
+    - set the nodeName field in pod definition file
+        $ kubectl replace --force -f nginx.yaml     # if the pod already existed
+    - create a binding object (pod to node)
+
+- kube-scheduler schedules the pod
+    - how this is done:
+        - checks pod definitions and sets the "nodeName" property
+            - nodeName: node02
+
+- without the scheduler, the easiest way to schedule a pod is to
+    - set the nodeName property in the pod definition file
+    - Pending state (pod)
+        - if scheduler no present then pod in Pending state
+
+- another way is to create a binding object
+    - this mimics the way the scheduler works
+    - if the pod already assigned to a node
+        - in such case, the scheduler won't allow to change the existing object
+
+- binding object to be sent as a POST req
+    $ curl --header "Content-Type:application/json" --request POST \
+        --data '{"apiVersion":"v1", "kind": "Binding", ...pod-bind-def-to-json..."}' \
+        http://$SERVER/api/v1/namespaces/default/pods/$PODNAME/binding/
+
+- pod-bind-definition.yaml
+---
+apiVersion: v1
+kind: Binding
+metadata:
+    name: nginx
+target:
+    apiVersion: v1
+    kind: Node
+    name: node02
 
 
 
+3.55 manual scheduling solution
+---
+- in order to delete/create a pod (use one command)
+    $ kubectl replace --force -f nginx.yaml
+- instead of these two
+    $ k delete pod
+    $ k create -f pod
 
-
-
-
-
-
-
-
+- there is no way to move pod from one node to the other
+    - a pod is a process on the system actually
 
 
 
