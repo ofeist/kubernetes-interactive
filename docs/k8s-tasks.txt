@@ -13,3 +13,9 @@
 
 - task: upgrade linux nodes (+ drain the node)
     - https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/upgrading-linux-nodes/
+
+
+- there is a open task for setting labels when create service!
+    - https://github.com/kubernetes/kubernetes/issues/46191    
+
+
