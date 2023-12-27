@@ -263,20 +263,6 @@ commands:
 - loadbalancer
     - on the cloud platform that supports LoadBalancer type
     - instead of NodePort
-    
-
-
-2.41 namespaces
----
-- permanently set the "dev" namespace
-    $ kubectl config set-context $(kubectl config current-context) --namespace=dev
-
-
-
-2.44 imperative vs declerative
----
-https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/21500820#questions/19114274
-
 
 - difference between "expose" and "create service"
     - https://stackoverflow.com/questions/59397542/kubernetes-create-service-vs-expose-deployment
@@ -290,11 +276,34 @@ https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-te
         $ kubectl set selector service demo myapp=hello
         - service to work with a deployment with pods labeled myapp: hello
             - must be set afterwards
+- there is a open task for setting labels when create service!
+    - https://github.com/kubernetes/kubernetes/issues/46191    
 
 
 
+2.41 namespaces
+---
+- permanently set the "dev" namespace
+    $ kubectl config set-context $(kubectl config current-context) --namespace=dev
 
 
+
+2.44 imperative vs declerative
+---
+- commands used for manipulating objects in k8s
+
+- imperative approach example
+    - create yaml object (yaml file)
+    - edit the yaml file, when needed
+    - replace (update) the object
+        $ kubectl replace -f nginx.yaml
+        -  fails if the object doesn;t exist
+    - completly delete and replace the object: --force
+        $ kubectl replace --force -f nginx.yaml
+
+- declarative example
+    $ kubectl apply -f nginx.yaml
+    $ kubectl apply -f path-to/dir-with/object-files
 
 
 
