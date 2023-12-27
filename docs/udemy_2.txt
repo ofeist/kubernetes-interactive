@@ -278,6 +278,18 @@ commands:
 https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/21500820#questions/19114274
 
 
+- difference between "expose" and "create service"
+    - https://stackoverflow.com/questions/59397542/kubernetes-create-service-vs-expose-deployment
+    - create service
+        $ kubectl create service nodeport demo --tcp=8080:80 --node-port=31888
+        - can set nodeport, port and target port
+    - expose
+        $ kubectl expose deployment demo --name=demo --type=NodePort --port=8080 --target-port=80
+        - node port must be set afterwards (kubectl edit)
+    - create service doesn't have the "set selector"
+        $ kubectl set selector service demo myapp=hello
+        - service to work with a deployment with pods labeled myapp: hello
+            - must be set afterwards
 
 
 
