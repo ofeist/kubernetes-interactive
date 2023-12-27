@@ -409,18 +409,39 @@ target:
 
 
 
+3.56 labels and selector (& annotations)
+---
+$ kubectl get pods --selector app=App1
+
+- annotations
+    - different details; may be used e.g. for integration purposes
+        - buildVersion: 1.34
+        - toolVersions
+    - in metadata
+    - same level as labels
 
 
 
+3.57 taints and tolerations
+---
+- taint the node (TaN)
+    - as a repellent
+    $ kubectl taint nodes node1 app=blue:NoSchedule
+    # kubectl taint nodes node-name key=value:taint-effect
+
+- toleration on pod (ToP)
+    - to accept the taint
+
+- TaN vs ToP
+
+- master node gets a taint per default, when deployed
+    - Taints: node-role.kubernetes.io/control-plane:NoSchedule
 
 
 
-
-
-
-
-
-
+3.61 taints and tolerations - solutions
+---
+https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/21738764#questions/19114274
 
 
 
