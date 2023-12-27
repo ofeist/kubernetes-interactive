@@ -264,7 +264,7 @@ commands:
     - on the cloud platform that supports LoadBalancer type
     - instead of NodePort
 
-- difference between "expose" and "create service"
+- a difference between "expose" and "create service"
     - https://stackoverflow.com/questions/59397542/kubernetes-create-service-vs-expose-deployment
     - create service
         $ kubectl create service nodeport demo --tcp=8080:80 --node-port=31888
@@ -276,6 +276,16 @@ commands:
         $ kubectl set selector service demo myapp=hello
         - service to work with a deployment with pods labeled myapp: hello
             - must be set afterwards
+
+- in short 
+    - expose no NodePort (eno nodeport)
+    - create service no label (kresxe no label)
+
+- when creating a service from an existing object, a suggestion is to use expose
+    - kubectl expose deployment nginx-deployment --type=NodePort --port=80 --target-port=80
+        - if nodePort important, then edit the service (yaml definition file) and set the nodePort
+        - nodePort: 30080
+
 - there is a open task for setting labels when create service!
     - https://github.com/kubernetes/kubernetes/issues/46191    
 
@@ -304,6 +314,29 @@ commands:
 - declarative example
     $ kubectl apply -f nginx.yaml
     $ kubectl apply -f path-to/dir-with/object-files
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
