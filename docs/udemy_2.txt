@@ -281,10 +281,27 @@ commands:
     - expose no NodePort (eno nodeport)
     - create service no label (kresxe no label)
 
-- when creating a service from an existing object, a suggestion is to use expose
-    - kubectl expose deployment nginx-deployment --type=NodePort --port=80 --target-port=80
-        - if nodePort important, then edit the service (yaml definition file) and set the nodePort
-        - nodePort: 30080
+- use "expose object"
+    - when creating a service from an existing object, a suggestion is to use expose
+        $ kubectl expose deployment nginx-deployment --type=NodePort --port=80 --target-port=80
+            - if nodePort important, then edit the service (yaml definition file) and set the nodePort
+            - nodePort: 30080
+
+- examples of exposing and creating the service 
+    - https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/15018998#questions/19114274
+
+    - Create a Service named redis-service of type ClusterIP to expose pod redis on port 6379
+        $ kubectl expose pod redis --port=6379 --name redis-service --dry-run=client -o yaml
+        ( This will automatically use the pod's labels as selectors )
+
+    - Or
+        $ kubectl create service clusterip redis --tcp=6379:6379 --dry-run=client -o yaml 
+        ( This will not use the pods labels as selectors, instead it will assume selectors as app=redis. 
+        You cannot pass in selectors as an option. So it does not work very well if your pod has a different label set. 
+        So generate the file and modify the selectors before creating the service )
+
+- a trick to expose a service when creating the pod, at the same time, one-liner
+    $ kubectl run httpd --image=httpd:alpine --port=80 --expose=true
 
 - there is a open task for setting labels when create service!
     - https://github.com/kubernetes/kubernetes/issues/46191    
@@ -315,12 +332,15 @@ commands:
     $ kubectl apply -f nginx.yaml
     $ kubectl apply -f path-to/dir-with/object-files
 
+- a trick to expose a service when creating the pod, at the same time, one-liner
+    $ kubectl run httpd --image=httpd:alpine --port=80 --expose=true
 
 
 
-
-
-
+2.47 solutions
+---
+- a trick to expose a service when creating the pod, at the same time, one-liner
+    $ kubectl run httpd --image=httpd:alpine --port=80 --expose=true
 
 
 
