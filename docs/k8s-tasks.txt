@@ -19,5 +19,23 @@
     - https://github.com/kubernetes/kubernetes/issues/46191    
 
 
+-  a trick to expose a service when creating the pod, at the same time, one-liner
+    $ kubectl run httpd --image=httpd:alpine --port=80 --expose=true
+
+
+- taint the node
+    $ kubectl taint nodes node-name key=value:taint-effect
+
+- label the node, then find it
+    $ kubectl get pods --selector app=App1
+
+- backup etcd
+
+- deployments rollback / rolling update
+
+- is killed deployment automatically brought back online?
+
+
+- practice tests <= 2.30
 
 

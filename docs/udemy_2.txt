@@ -225,9 +225,10 @@ q:
         - what about "apply"???
 
 - scale
-$ kubectl scale -replicas=6 -f replicaset-definition
+    $ kubectl scale -replicas=6 -f replicaset-definition
 
-$ kubectl edit replicaset ...
+- edit
+    $ kubectl edit replicaset ...
 
 commands:
     $ kubectl edit replicaset ...
@@ -251,7 +252,7 @@ commands:
 
 2.36 services
 ---
-- can span accros more nodes in the cluster
+- can span across more nodes in the cluster
 
 - nodeport service
     - nodePort : Port : targetPort
@@ -277,7 +278,7 @@ commands:
         - service to work with a deployment with pods labeled myapp: hello
             - must be set afterwards
 
-- in short 
+- expose/create differences in short 
     - expose no NodePort (eno nodeport)
     - create service no label (kresxe no label)
 
@@ -315,6 +316,13 @@ commands:
 
 
 
+2.42 namespaces - solutions
+---
+- to access a service DNS accross the cluster use e.g.
+    - "db-service.dev.svc.cluster.local"
+
+
+
 2.44 imperative vs declerative
 ---
 - commands used for manipulating objects in k8s
@@ -341,6 +349,7 @@ commands:
 ---
 - a trick to expose a service when creating the pod, at the same time, one-liner
     $ kubectl run httpd --image=httpd:alpine --port=80 --expose=true
+
 
 
 2.48 apply command
@@ -439,30 +448,139 @@ $ kubectl get pods --selector app=App1
 
 
 
-3.61 taints and tolerations - solutions
+3.62 node selectors
 ---
-https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/21738764#questions/19114274
+- first a node is labeled
+- when creating a resource, a node selector can be used
+
+- drawback: no advance expressions
+    - no NOT operation
+        - label = not small
+    - no "either" operation
+        - label = medium or large
+    - for such purpose the "node affinity" is used
 
 
 
+3.66 taints, tolearations and node affinity
+---
+- these 3 must be used simultaneously to place pods on right nodes and prevent the same
 
 
 
+3.67 resource requests and limits
+---
+- cpu limits will be throttled
+    - if no cpu available
+        - err = insufficient cpu
+        - existing pods will be throttled
+- memory limits can not be throttled
+    - the only way to un-assign the memory is to kill the pod
+    - if a pod consumes more than the limit/available
+        - err = OOM (Out Of Memory)
+        - existing pod will be terminated
 
-https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/14295508#questions/19114274
-https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/14298422#learning-tools
-https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/37105770#overview
+- 1G    = 1,000,000,000 bytes (1 Gigabyte)
+- 1Gi   = 1,073,741,824 bytes (1 Gibibyte)
+
+- minimum CPU limit = 1m 
+    - 1 CPU ~ 1 AWS vCPU
+    - 0.1 CPU = 100m 
+    - 1m = 0.001 CPU
+
+- ideal CPU settings
+    - Requests (are set)
+        - for all pods!
+        - otherwise a pod could be left with no resources
+    - No Limits
+    
+- ideal Memory settings
+    - Requests (are set)
+        - for all pods!
+        - otherwise a pod could be left with no resources
+    - No Limits
+
+- limits could be set on pod level (pod yaml spec)
+
+- default limits
+    - per default limits could be set with limit ranges
+        - set at the namespace level
+
+- limit-range-cpu.yaml
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+    name: cpu-resource-constraint
+spec:
+    limits:
+    - default:
+        cpu: 500m
+      defaultRequest:
+        cpu: 500m
+      max:
+        cpu: "1"
+      min:
+        cpu: 100m
+      type: Container
+
+
+- limit-range-memory.yaml
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+    name: memory-resource-constraint
+spec:
+    limits:
+    - default:
+        memory: 1Gi
+      defaultRequest:
+        memory: 1Gi
+...
+
+
+- these limits are enforced when a pod is created!
+
+- resource quotas
+    - at the namespace level (namespace level object)
+    - to limit overall resources 
+
+
+- resource-quota.yaml
+---
+apiVersion: v1
+kind: ResourceQuota
+metadate: 
+    name: my-resource-quota
+spec:
+  hard:
+    requests.cpu: 4
+    requests.memory: 4Gi
+    limits.cpu: 10
+    limits.memory: 10Gi
 
 
 
+2.68 editing pods and deployments
+---
+- a deployment can be edited
+    $ kubectl edit deployement ABC 
 
+- pod can not be edited always
 
+- what can be edited in pod is
+    - spec.containers[*].image
+    - spec.initContainers[*].image
+    - spec.activeDeadlineSeconds
+    - spec.tolerations
 
-
-
-
-
-
+- a tactic to re-create the pod
+    $ kubectl edit pod <pod name>
+        - edit the field which can not be edited
+        - save: new /tmp/ file will be created
+    $ kubectl delete pod webapp
+    $ kubectl create -f /tmp/kubectl-edit-ccvrq.yaml
 
 
 
