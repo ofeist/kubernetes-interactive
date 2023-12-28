@@ -16,6 +16,9 @@
 - no daemonset/replicaset create command
     - instead "k create deployment" is used
 
+- contributing, a guide
+    - https://github.com/kubernetes/community/tree/master/contributors/guide
+
 --
 --- get a commit or two
 

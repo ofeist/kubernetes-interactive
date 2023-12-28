@@ -206,6 +206,7 @@ q:
 
 2.29 replica sects 
 ---
+-  is often used to guarantee the availability of a specified number of identical Pods.
 - use cases
     - keeps pods always running
     - loadbalancing and scaling
@@ -672,5 +673,26 @@ spec:
 - kube-proxy component is not deployed as a static pod
 
 
+
+2.77 multiple schedulers
+---
+https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/14295588#questions/19114274
+
+
+
+
+
+
+
 Practice Test - Static Pods
 https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/14865655#questions/19114274
+
+
+
+
+
+
+
+
+
+
