@@ -595,7 +595,11 @@ spec:
     - kube-proxy
     - ...
 
-- creating of DeamonSert is similar to replicaSet
+- when creating daemonSet, you could create deployent instead
+    $ kubectl create deployment --image= ...
+        - then change "kind:"
+
+- creating of DeamonSert is also similar to replicaSet
     - what is a difference to RS?
 
 - how k8s create daemonSet? k8s uses
@@ -607,14 +611,66 @@ spec:
 
 
 
+3.74 static pods
+---
+- created by kubelet
+- so, only a worker node is needed
+    - /etc/kubernetes/manifests
+
+- static pods are recreated if they get terminated
+    - without the intervention of api-server!
+
+- this way, only the creation of pods is possible
+    - not possible to create
+        - daemonSets
+        - replicaSets
+        - deployments
+        - services
+    - this rest needs other k8s components like
+        - replication controller
+        - deployment controller, ...
+        - etc.
+
+- kubelet works on a pod level
+
+- kubelet setting for statis pod is in "kubelet.service" file
+    - --pod-manifest-path=/etc/Kubernetes/manifests \\
+
+- the other way is to put in "kubelet.service" file
+    - --config=kubeconfig.yaml \\
+    - and then put in "kubeconfig.yaml" the path:
+        - staticPodPath: /etc/kubernetes/manifets
+    - such approach (kubeconfig.yaml) is used by kubeadm tool
+        - kubeadm install
+
+- to inspect static pods on a node use
+    - one of a command
+        - docker ps     # docker
+        - crictl ps     # cri-O
+        - nerdctl ps    # container-d
+    - since, no kube api server = no kubectl installed
+
+- the usage
+    - to create controlplane components
+        - install kubelet and place in manifest/ folder
+            - controller-manager.yaml
+            - apiserver.yaml
+            - etcd.yaml
+            - manager.yaml
+    - services recreated if they would crash
+
+- difference between static pods and daemonSets
+    - static pods
+        - created by kubelet
+        - deploy control plane components as static pods
+        - ignored by kube-scheduler
+    - daemonSets
+        - created by kube-api server (DaemonSet Controller)
+        - deploy monitoring & logging agents on nodes
+        - ignored by kube-scheduler
+
+- kube-proxy component is not deployed as a static pod
 
 
-
-
-
-
-
-
-
-
-
+Practice Test - Static Pods
+https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/14865655#questions/19114274

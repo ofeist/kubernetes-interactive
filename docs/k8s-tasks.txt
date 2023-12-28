@@ -4,24 +4,32 @@
 #
 
 
-- task: install v1.27
+--- get a commit or two
+--
 
-
-- task: upgrade cluster to 1.28.4
-    - https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
-
-
-- task: upgrade linux nodes (+ drain the node)
-    - https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/upgrading-linux-nodes/
-
+- all k8s issues:
+    - https://github.com/kubernetes/kubernetes/issues
 
 - there is a open task for setting labels when create service!
     - https://github.com/kubernetes/kubernetes/issues/46191    
 
+- no daemonset/replicaset create command
+    - instead "k create deployment" is used
+
+--
+--- get a commit or two
+
+
+- task: install v1.27
+
+- task: upgrade cluster to 1.28.4
+    - https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
+
+- task: upgrade linux nodes (+ drain the node)
+    - https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/upgrading-linux-nodes/
 
 -  a trick to expose a service when creating the pod, at the same time, one-liner
     $ kubectl run httpd --image=httpd:alpine --port=80 --expose=true
-
 
 - taint the node
     $ kubectl taint nodes node-name key=value:taint-effect
@@ -38,4 +46,6 @@
 - practice tests <= 2.30
 
 - a difference between ReplicaSet and DaemonSet?
+
+- what is fluentd?
 
