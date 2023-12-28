@@ -584,3 +584,37 @@ spec:
 
 
 
+3.71 daemon sets
+---
+- they get deployed once per node
+
+- use cases
+    - monitoring
+    - logging
+    - networking (weave-net)
+    - kube-proxy
+    - ...
+
+- creating of DeamonSert is similar to replicaSet
+    - what is a difference to RS?
+
+- how k8s create daemonSet? k8s uses
+    - NodeAffinity &
+    - default scheduler
+
+- before (version < 1.12) it set nodeName in pod definition
+    - this creates pod without using scheduler
+
+
+
+
+
+
+
+
+
+
+
+
+
+
