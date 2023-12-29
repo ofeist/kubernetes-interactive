@@ -831,22 +831,68 @@ spec:
 
 
 
+4.85 metrics and monitoring
+---
+- do not use this for prod environment !
+    git clone https://github.com/kodekloudhub/kubernetes-metrics-server.git
+    cd kubernetes-metrics-server/
+    k create -f .
 
 
+4.86 managing application logs
+---
+$ docker run kodekloud/event-simulator
+    - prints output / shows logs
+$ docker run kodekloud/event-simulator      # detached mode
+    - no logs shown
+$ docker logs -f ecf    # ecf = container_id
+
+- for k8s certification only this is needed:
+    - singlecontainer pod
+        $ k logs -f event-simulator-pod     # pod name = event-simulator-pod
+
+    - multiple containers
+        $ k logs -f event-simulator-pod event-simulator     # container name = "event-simulator"
 
 
+4.92 rolling udpates and rollbacks (of a deployment)
+---
+- deployment creates a rollout
 
+- 2 deployment strategies
+    - recreate
+        - destroys all & creates all
+    - rollout
+        - one pod by one
+        - default strategy
 
+- kubectl "apply" vs "set image"
+    - apply 
+        - if you change the YAML input
+    - set image
+        - doesn't update the YAML input!
+        $ kubectl set image deployment/myapp-deployment \
+            nginx-container=nginx:1.9.1
 
+- upgrade happens per(via) changing of replicasets
+    $ kubectl get replicasets
+        - check this during a deployment upgrade
 
+- rollback
+    $ kubectl rollout undo deployment myapp-deployment      # rollback
+        $ k get rs  # try this one again
 
+- status
+    $ kubectl rollout status deployment myapp-D
 
+- history
+    $ kubectl rollout history deployment myapp-d
 
-
-
-
-
-
+- commands:
+    $ kubectl rollout
+        status
+        history
+        undo    # rollback
 
 
 
