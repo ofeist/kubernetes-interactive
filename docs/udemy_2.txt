@@ -889,14 +889,19 @@ $ docker logs -f ecf    # ecf = container_id
     $ kubectl rollout history deployment myapp-d
 
 - commands:
+    $ k apply
+    $ k set image 
     $ kubectl rollout
         status
         history
         undo    # rollback
 
-
-
-
+- set the deployment image
+    - set image
+        $ k set image deploy frontend simple-webapp=kodekloud/webapp-color:v2
+        $ k set image deploy $DEPLOYMENT_NAME $CONTAINER_NAME=$IMAGE_NAME
+    - edit deployment
+        $ k edit deployment frontend
 
 
 
