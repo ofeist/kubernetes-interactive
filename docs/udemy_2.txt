@@ -916,9 +916,18 @@ $ docker logs -f ecf    # ecf = container_id
 
 
 
+4.96 commands
+---
+- a task for me
+    - run busybox with bash instead of sleep / without sleep
+        - check if process dies
+            -> it recreates the container after 'sleep 10"!
+            - after(?) that it ends in "CrashLoopBackOff
 
 
 
+
+https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/14296014#questions/19114274
 
 
 
