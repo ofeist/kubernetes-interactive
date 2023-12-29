@@ -204,7 +204,7 @@ q:
         # ready column
 
 
-2.29 replica sects 
+2.29 replica sets 
 ---
 -  is often used to guarantee the availability of a specified number of identical Pods.
 - use cases
@@ -220,6 +220,9 @@ q:
     selector:
         matchLabels:
         type: front-end
+
+- no daemonset/replicaset create command
+    - instead "k create deployment" is used
 
 - use "replace" command to update the replicasets
     $ kubectl replace -f replicaset-definition.yaml
@@ -676,7 +679,71 @@ spec:
 
 2.77 multiple schedulers
 ---
-https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/14295588#questions/19114274
+
+- to install kube-scheduler
+    - binary, or
+    - kubeadm
+
+- define config file
+    - my-scheduler-config.yaml
+    ---
+    apiVersion: kubescheduler.config.k8s.io/v1
+    kind: KubeSchedulerConfiguration
+    profiles:
+    - schedulerName: my-scheduler
+    leaderElection:     # needed if multiple copies of schedulers run in HA cluster
+      leaderElect: true
+      resourceNamespaces: kube-system
+      resourceName: lock-object-my-scheduler
+
+
+- use the config file from my-scheduler.service
+    - if this were a installation from a "bin" file
+        ExecStart=/usr/local/bin/kube-scheduler \\
+            -- config=/etc/kubernete/config/my-scheduler.config.yaml
+    - if this were the "Pod" installation (kubeadm)
+        - pass the --config= option to a pod definition
+            my-custom-scheduler.yaml
+            ---
+            apiVersion: v1:
+            kind: Pod
+            ...
+            spec:
+            containers:
+            - command:
+                - kube-scheduler
+                - --address=127.0.0.1
+                - --kubeconfig=/etc/kubernetes/scheduler.comf
+                - --config=/etc/kubernetes/my-scheduler-config.yaml # the sched.-name here defined
+
+                image: k8s.gcr.io/kube-scheduler-amd64:v1.11.3
+                name: kube-scheduler
+
+- to view schedulers
+    $ kubectl get pods --namespace=kube-system
+
+- to use the custom scheduler from a pod
+    - specify "schedulerName: my-scheduler" in 
+        - pod.yaml
+        ---
+        apiVersion: v1
+        kind: Pod
+        metadata:
+        name: nginx
+        spec:
+        containers:
+        - name: nginx
+            image: nginx
+        schedulerName: my-scheduler
+    - if pod remains in Pending state
+        - there is something wrong with the scheduler config then
+
+- whoch scheduler did configure which pod 
+    - view events
+        $ kubectl get events -o wide
+            # REASON & SOURCE
+    - view logs of the scheduler
+        $ kubectl logs my-scheduler -n kube-system
 
 
 
@@ -684,8 +751,18 @@ https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-te
 
 
 
-Practice Test - Static Pods
-https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/14865655#questions/19114274
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
