@@ -747,6 +747,93 @@ spec:
 
 
 
+2.78 multiple schedulers - solution
+---
+
+- create a configmap (configmap as a volume)
+    - name: my-scheduler-config
+    - from-file=my-scheduler-config.yaml
+    $ kubectl create configmap my-scheduler-config --from-file=/root/my-scheduler-config.yaml
+
+
+
+2.80 configuring scheduler profiles
+---
+- ver >= 1.18
+
+- pods get scheduled in this order
+    - scheduling queue
+        - priorityClassName: high-priority     # defined in pod.yaml
+            - if a PriorityClass is defined
+        - done by plugin
+            - PrioritySort
+    - Filtering
+        - resource check: pods against nodes
+        - plugins:
+            - NodeResourceFit
+            - NodeName      # nodeName in YMAL
+            - NodeUnschedulable     # kubectl cordon $NODENAME
+    - Scoring
+        - free CPU space, after reserving the current pod
+        - the node with more left CPUS gets a higher score
+        - plugin
+            - NodeResourcesFit
+            - ImageLocallity     # high score if container image exists on a node
+    - Binding
+        - plugin
+            - DefaultBinder
+
+- extension points
+    - to customize what plugins go where
+    - to write our plugins and plug them in here
+    - at each stage (scheduling queue, filtering, scoring, binding) there is an extension point
+        - queueSort
+        - filter
+            - prefilter     # this extension point exists too; before filere EP
+            - postFilter    # after filter
+        - score
+            - prescore      # before
+            - reserve       # after score
+            - permit        # after reserve
+        - bind
+            - preBind       # before bind
+            - postBind      # after bind
+
+- possible to have one scheduler (one binary) running more profiles
+    - configuration done per
+        - my-scheduler.yaml
+        ---
+        apiVersion: kubescheduler.config.k8s.io/v1
+        kind: KubeSchedulerConfiguration
+        profiles:
+        - schedulerName: my-scheduler-2
+          plugins:
+            score:
+              disabled:
+              - name: TaintToleration
+              enabled:
+              - name: MyCustomPluginA
+              - name: MyCustomPluginB
+        - schedulerName: my-scheduler-3
+          plugins:
+            preScore:
+              disabled:
+              - name: "*"
+            score:
+              disabled:
+              - name: "*"
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
