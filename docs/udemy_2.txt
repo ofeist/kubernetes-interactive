@@ -907,6 +907,12 @@ $ docker logs -f ecf    # ecf = container_id
 
 
 
+4.95 Configure Applications
+---
+- Configuring applications comprises the following configurations
+    - Command and Arguments on applications
+    - Environment Variables
+    - Secrets
 
 
 
