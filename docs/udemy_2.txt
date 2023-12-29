@@ -892,9 +892,11 @@ $ docker logs -f ecf    # ecf = container_id
     $ k apply
     $ k set image 
     $ kubectl rollout
-        status
-        history
-        undo    # rollback
+        - pause
+        - status
+        - history
+        - undo    # rollback
+            $ k rollout undo deployment frontend --to-revision=2
 
 - set the deployment image
     - set image
