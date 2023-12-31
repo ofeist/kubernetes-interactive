@@ -926,6 +926,17 @@ $ docker logs -f ecf    # ecf = container_id
 
 
 
+4.97 commands and arguments
+---
+- docker style
+Form Ubuntu
+ENTRYPOINT["sleep"]
+CMD["5"]
+
+- k8s stype
+command:["sleep2.0"]    <- overrides ENTRYPOINT[] from docker image
+args:["10"]             <- overrides CMD[]  from docker image
+
 
 https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/14296014#questions/19114274
 
