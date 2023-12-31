@@ -980,6 +980,66 @@ args:["10"]             <- overrides CMD[]  from docker image
 
 
 
+5.101 configure configMaps in apps
+---
+- two steps involved:
+    - 1: create config map
+    - 2: inject into the pod
+
+- step 1: create
+---
+    - (imperative) :: to create configMap
+        - from command line
+            $ k create configmap \
+                app-config --from-litaral=APP_COLOR=blue \
+                            --from-litaral=APP_MOD=prod
+        - from a file
+            $ k create configmap \
+                app-config --from-file=app.properties
+
+    - (declerative) :: to create configMap
+        $ kubectl create -f
+
+    - to view configMaps
+        $ k get configmaps
+        $ k describe configmaps
+
+
+- step 2: inject
+---
+    - as the environment variable (from config-map.yaml)
+        - pod-definition.yaml
+        ---
+        ...
+        spec:
+        containers:
+        - name:
+            image:
+            envFrom:
+            - configMapRef:
+                    name: app-config    
+                        # app-config = the name of config-map.yaml metadata / name: app-config
+    - as single ENV
+        env:
+          - name: APP_COLOR
+            valueFrom:
+              configMapKeyRef:
+                name: app-config
+                key: APP_COLOR
+    - as a volume
+        volumes:
+        - name: app-config-volume
+          configMap:
+            name: app-config
+
+
+
+
+
+
+
+
+
 
 
 
