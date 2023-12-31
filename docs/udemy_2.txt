@@ -855,7 +855,7 @@ $ docker logs -f ecf    # ecf = container_id
         $ k logs -f event-simulator-pod event-simulator     # container name = "event-simulator"
 
 
-4.92 rolling udpates and rollbacks (of a deployment)
+5.92 rolling udpates and rollbacks (of a deployment)
 ---
 - deployment creates a rollout
 
@@ -907,7 +907,7 @@ $ docker logs -f ecf    # ecf = container_id
 
 
 
-4.95 Configure Applications
+5.95 Configure Applications
 ---
 - Configuring applications comprises the following configurations
     - Command and Arguments on applications
@@ -916,7 +916,7 @@ $ docker logs -f ecf    # ecf = container_id
 
 
 
-4.96 commands
+5.96 commands
 ---
 - a task for me
     - run busybox with bash instead of sleep / without sleep
@@ -926,7 +926,7 @@ $ docker logs -f ecf    # ecf = container_id
 
 
 
-4.97 commands and arguments
+5.97 commands and arguments
 ---
 - docker style
 Form Ubuntu
@@ -939,8 +939,7 @@ args:["10"]             <- overrides CMD[]  from docker image
 
 
 
-
-4.99 commands and args - solution
+5.99 commands and args - solution
 ---
 - pass command and args to the pod
     $ kubectl run webapp-green --image=kodekloud/webapp-color --command -- $cmd -- $arg1 $arg2
