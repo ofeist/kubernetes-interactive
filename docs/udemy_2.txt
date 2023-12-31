@@ -1013,7 +1013,7 @@ args:["10"]             <- overrides CMD[]  from docker image
         ...
         spec:
         containers:
-        - name:
+          - name:
             image:
             envFrom:
             - configMapRef:
@@ -1033,6 +1033,78 @@ args:["10"]             <- overrides CMD[]  from docker image
             name: app-config
 
 
+
+5.104 secrets in applications
+---
+- as per configMaps
+    - create a secret
+    - inject into a pod
+
+- to create
+    - imperative
+        $ kubectl create secret generic \\
+            sec-name --from-literal
+
+
+    - declerative
+        $ kubectl create -f secret-data.yaml
+        - secret data in base64
+            $ echo -n "mysql" | base64
+
+    - to get the values
+        $ kubectl get secrets app-secret -o yaml
+        $ echo -n "bXlzcWw=" | base64 --decode
+
+- to inject
+    - from secrets-def.yaml
+        pod-def.yaml
+        ---
+        ...
+        spec:
+        containers:
+        - name: ..
+            image: ..
+            envFrom
+            - secretRef:
+                    name: app-secret
+    - as single ENV
+        env:
+          - name: DB_PASS
+            valueFrom:
+              secretKeyRef:
+                name: app-config
+                key: APP_COLOR
+    - as a volume
+        - to use
+            volumes:
+            - name: app-secret-volume
+            secret:
+                name: app-secret
+        - each value of the secret gets mounted as a volume on the pod
+            - /opt/app-secret-volumes/DB_Password
+            - /opt/app-secret-volumes/DB_User
+            - ...
+
+- not on secrets
+    - secrets are not encrypted (only base64 encoded)
+    - secretds in etcd not encrypted
+        - consider encrypting data at rest
+            https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/
+    - anyone able to create pods/deployments in namespace can access secrets
+        - configure least-privilege access to secrets - RBAC
+    - consider third-party secrets store providers
+        - AWS, Azure, GCP, Vault provider
+
+- some best practices around using secrets make it safer:
+    - Not checking-in secret object definition files to source code repositories
+    - Enabling Encryption at Rest for Secrets so they are stored encrypted in ETCD
+        - https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/
+
+- there are other better ways of handling sensitive data like passwords in Kubernetes
+    - such as using tools like 
+        - Helm Secrets
+        - HashiCorp Vault
+            - https://www.vaultproject.io/
 
 
 
