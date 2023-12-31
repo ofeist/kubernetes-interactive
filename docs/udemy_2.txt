@@ -949,10 +949,34 @@ args:["10"]             <- overrides CMD[]  from docker image
 
 
 
+5.100 ENV variables
+---
+- -env => array
+    - has 2 properties
+        - name:
+          value:
 
+- 3 types:
+    - Plain Key Value
+    - configMap
+    - Secrets
 
+- Plain Key Value
+    - env:
+      - name: APP_COLOR
+        value: pink
 
+- configMap
+    - env:
+      - name: APP_COLOR
+        valueFrom:
+            configMapKeyRef:
 
+- Secrets
+    - env:
+      - name: APP_COLOR
+        valueFrom:
+            secretKeyRef:
 
 
 
