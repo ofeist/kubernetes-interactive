@@ -943,7 +943,7 @@ args:["10"]             <- overrides CMD[]  from docker image
 4.99 commands and args - solution
 ---
 - pass command and args to the pod
-    $ kubectl run webapp-green --image=kodekloud/webapp-color --command $cmd -- $arg1 $arg2
+    $ kubectl run webapp-green --image=kodekloud/webapp-color --command -- $cmd -- $arg1 $arg2
 
 - pass only args to the pod
     $ kubectl run webapp-green --image=kodekloud/webapp-color -- $arg1 $arg2
