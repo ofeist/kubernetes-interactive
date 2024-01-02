@@ -1120,6 +1120,8 @@ $ ETCDCTL_API=3 etcdctl \
 
 
 
+5.113 Multi-container Pods Design Patterns
+---
 
 
 
