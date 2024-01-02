@@ -1129,10 +1129,26 @@ $ ETCDCTL_API=3 etcdctl \
 
 
 
+5.114 InitContainers
+---
+- multicontainter pods expect all containers to run throughout the whole lifecycle of the pod
+    - when one container stops, the pod restarts
 
+- initContainers
+    - do stop after execution
+    - run a task when pod is created
+    - e.g. a process that pulls a code or binary from a repository
+         that will be used by the main web application.
 
+- Init containers always run to completion.
 
+- Each init container must complete successfully before the next one starts.
 
+- when multiple initContainers
+    - each init container is run one at a time in sequential order
+
+- if any of the initContainers fail to complete
+    - Pod restarted repeatedly until the Init Container succeeds
 
 
 
