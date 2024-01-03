@@ -1152,6 +1152,41 @@ $ ETCDCTL_API=3 etcdctl \
 
 
 
+5.117 Self Healing Applications
+---
+
+- Kubernetes supports self-healing applications through 
+    -ReplicaSets and Replication Controllers.
+    
+- The replication controller helps in ensuring that a POD is re-created automatically 
+    - when the application within the POD crashes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
