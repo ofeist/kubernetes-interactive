@@ -54,3 +54,9 @@
 
 - kubectl quick reference (e.g. kubectl autocomplete)
     - https://kubernetes.io/docs/reference/kubectl/quick-reference/
+
+- for vim easier editing
+    set number
+    set tabstop=2
+    set expandtab
+    set shiftwidth=2

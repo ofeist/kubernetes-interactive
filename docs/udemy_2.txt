@@ -1327,19 +1327,71 @@ $ etcdctl snapshot restore -h
 
 
 
+6.132 Practice Test - Backup and Restore Methods
+---
+$ export ETCDCTL_API=3
+$ ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  snapshot save /opt/snapshot-pre-boot.db
+
+$ etcdctl snapshot restore \
+    --data-dir /var/lib/etcd-from-backup \
+    /opt/snapshot-pre-boot.db
+
+- change the mount math on the host to point to /var/lib/etcd-from-backup
+
+- restart the etcd-controlplane pod
+    - delete the pod
 
 
 
+6.134 practice test - backup and restore/multiple clusters
+---
+$ kubectl config view
+$ kubectl config use-context cluster1
+
+- apiserver will reveal the etcd-server address
+    $ describe apiserver-cluster1-controlplane -n kube-system
+
+- how many nodes are part of etcd cluster?
+    $ etcdctl member list
+    $ etcdctl member list \
+        --cacert=/etc/etcd/pki/ca.pem \
+        --cert=/etc/etcd/pki/etcd.pem \
+        --key=/etc/etcd/pki/etcd-key.pem \
+        --endpoints=https://192.37.38.3:2379
+
+
+- after restoring on EXTERNAL ETCD server
+    - change the owner of the etcd files
+        $ chown -r etcd:etcd etcd-data-new/
+    - change --data-dir folder
+        $ vi /etc/systemd/system/etcd.service
+    - restart the service
+        $ systemctl daemon-reload
+        $ systemctl restart etcd
+        $ systemctl status etcd
+    - restart all controlplane components
+        - delete pods (controller-manager, scheduler)
+        - systemctl restart kubelet
 
 
 
+7.140 k8s security primitives
+---
+- whO can access the cluster
+    - authEntication
+    - whO - authE
+    - O-E
+    - to aute
 
-
-
-
-
-
-
+- whAt can they do
+    - authOrization
+    - what - authO
+    - A-O 
+    - ta auto
 
 
 
