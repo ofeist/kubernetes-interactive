@@ -1298,7 +1298,6 @@ $ etcdctl snapshot restore -h
     - --key
         - identify secure client using this TLS key file
 
-
 - backup etcd
     $ export ETCDCTL_API=3
     $ etcdctl snapshot save snapshot.db
