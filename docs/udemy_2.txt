@@ -1004,7 +1004,6 @@ args:["10"]             <- overrides CMD[]  from docker image
         $ k get configmaps
         $ k describe configmaps
 
-
 - step 2: inject
 ---
     - as the environment variable (from config-map.yaml)
@@ -1163,7 +1162,6 @@ $ ETCDCTL_API=3 etcdctl \
 
 
 
-
 6.121 os updates
 ---
 $ kubectl drain node01
@@ -1224,7 +1222,7 @@ $ kubeadm upgrade plan
                 $ kubeadm version   # check the kubeadm ver
             $ kubectl get nodes
                 - master still showing old ver
-        2. upgrade kubelet
+        2. upgrade kubelet (& kubectl)
             (- fyi kubelet doesn't have to run on master node)
             $ apt-get upgrade -y kubelet=1.12.0-00
             $ systemctl daemon-reload
@@ -1322,7 +1320,10 @@ $ etcdctl snapshot restore -h
         --cert=/etc/kubernetes/pki/etcd/server.crt  \
         --key=/etc/kubernetes/pki/etcd/server.key
 
-
+- references
+    - https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/#backing-up-an-etcd-cluster
+    - https://github.com/etcd-io/website/blob/main/content/en/docs/v3.5/op-guide/recovery.md
+    - https://www.youtube.com/watch?v=qRPNuT080Hk
 
 
 
