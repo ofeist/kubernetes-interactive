@@ -1164,7 +1164,7 @@ $ ETCDCTL_API=3 etcdctl \
 
 
 
-5.121 os updates
+6.121 os updates
 ---
 $ kubectl drain node01
     - terminates and moves pods to another node
@@ -1178,7 +1178,7 @@ $ kubectl cordon node01
 
 
 
-5.125 k8s sw versions
+6.125 k8s sw versions
 ---
 - not needed for the exam
 
@@ -1188,7 +1188,7 @@ $ kubectl cordon node01
 
 
 
-5.126 cluster upgrade process
+6.126 cluster upgrade process
 ---
 - upgrading kubeadm clusters @ k8s docu page
     - https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
@@ -1246,7 +1246,7 @@ $ kubeadm upgrade plan
 
 
 
-5.128 cluster upgrade - solution
+6.128 cluster upgrade - solution
 ---
 - check the OS release
     $ cat /etc/*release*
@@ -1255,7 +1255,94 @@ $ kubeadm upgrade plan
     - https://v1-27.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
 
 
-            
+
+6.130 backup and restore methods
+---
+- backup candidates are
+    - resource configuration
+        - namespace, secret, configmap, ... (imperative and declerative)
+    - etcd cluster
+        - keeps the state of cluster
+        - instead of saving resources, you can save etcd cluster
+    - persistent volumes
+
+- backup
+    - resource configuration
+        $ kubectl get all --all-namespaces -o yaml > all-deploy-services.yaml
+        - check VELERO  (formerly called ARK by HeptiO)
+    - etcd cluster
+        $ ETCDCTL_API=3 etcdctl snapshot save snapshot.db
+
+
+
+6.131 Working with ETCDCTL
+---
+- etcdctl is a command line client for etcd
+- make sure that you set the ETCDCTL_API to 3
+    $ export ETCDCTL_API=3
+        # on the master node!
+
+- first stop the kube-apiserver
+    $ service kube-apiserver stop
+
+$ etcdctl snapshot save -h
+$ etcdctl snapshot restore -h
+
+- the following options are mandatory
+    - --cacert
+        - verify certificates of TLS-enabled secure servers using this CA bundle
+    - --cert
+        - identify secure client using this TLS certificate file
+    - --endpoints=[127.0.0.1:2379]
+        - This is the default as ETCD is running on master node and exposed on localhost 2379
+    - --key
+        - identify secure client using this TLS key file
+
+
+- backup etcd
+    $ export ETCDCTL_API=3
+    $ etcdctl snapshot save snapshot.db
+
+- restore etcd
+    $ service kube-apiserver stop       # stop the api server
+    $ etcdctl snapshot restore snapshot.db \
+        -- data-dir /var/lib/etcd-from-backup   # backup is restored as a new cluster
+    - now configure the etcd config file to use new data-dir
+        - etcd.service
+        ---
+        --data-dir=/var/lib/etcd-from-backup
+    $ systemctl daemon-reload           # reload the service daemon
+    $ service etcd restart              # restart the etcd service
+    $ service kube-apiserver start      # start the api server
+
+- with all etcd commands you have to specify
+    $ ETCDCTL_API=3 etcdctl \
+        snapshot save snapshot.db   \
+        -- endpoints=https://127.0.0.1:2379 \
+        --cacert=/etc/kubernetes/pki/etcd/ca.crt    \
+        --cert=/etc/kubernetes/pki/etcd/server.crt  \
+        --key=/etc/kubernetes/pki/etcd/server.key
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
