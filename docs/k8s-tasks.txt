@@ -52,3 +52,5 @@
 
 - what is fluentd?
 
+- kubectl quick reference (e.g. kubectl autocomplete)
+    - https://kubernetes.io/docs/reference/kubectl/quick-reference/

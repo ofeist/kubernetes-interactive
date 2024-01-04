@@ -1188,17 +1188,74 @@ $ kubectl cordon node01
 
 
 
+5.126 cluster upgrade process
+---
+- upgrading kubeadm clusters @ k8s docu page
+    - https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
+
+- allowed components' versions
+    - x (e.g. x=1.10)
+        - kube-apiserver
+    - x-1
+        - controller-manager
+        - kube-scheduler
+    - x-2
+        - kubelet
+        - kube-proxy
+    - x+1, x, x-1
+        - kubectl
+
+- k8s supports 3 minor versions
+- recommended upgrade upproach
+    - one minor version at a time
+        - 1.10 -> 1.11 -> 1.12 -> 1.13
+
+- first master nodes are upgraded
+- after that worker nodes are upgraded
+
+$ kubeadm upgrade plan
+    - shows available versions
+
+- how to upgrade
+    - master node
+        1. upgrade kubeadm
+            $ apt-get upgrade -y kubeadm=1.12.0-00
+            $ kubeadm upgrade apply v1.12.0
+                $ kubeadm version   # check the kubeadm ver
+            $ kubectl get nodes
+                - master still showing old ver
+        2. upgrade kubelet
+            (- fyi kubelet doesn't have to run on master node)
+            $ apt-get upgrade -y kubelet=1.12.0-00
+            $ systemctl daemon-reload
+            $ systemctl restart kubelet
+            $ kubectl get nodes
+                - master showing new ver
+    - worker nodes, one at a time
+        1. move the workloads from a node
+            $ kubectl drain node01
+        2. upgrade kubeadm and kubelet
+            $ apt-get upgrade -y kubeadm=1.12.0-00
+                $ kubeadm upgrade apply v1.12.0
+            $ apt-get upgrade -y kubelet=1.12.0-00
+            $ kubeadm upgrade node config --kubelet-version v1.12.0
+            $ systemctl restart kubelet
+        3. uncordon the node
+            $ kubectl uncordon node01
+        4. continue with the next node
 
 
 
+5.128 cluster upgrade - solution
+---
+- check the OS release
+    $ cat /etc/*release*
+
+- 1.26 -> 1.27
+    - https://v1-27.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
 
 
-
-
-
-
-
-
+            
 
 
 
