@@ -1394,7 +1394,39 @@ $ kubectl config use-context cluster1
     - ta auto
 
 
+7.141 authentication
+---
+- all user access is managed by kube-apiserver
 
+- kube-apiserver authenticates requests via
+    - static pwd file
+    - static token file
+    - certificates
+    - identity services (LDAP, kerberos, ..)
+
+- basic auth
+    - create static pwd file
+        - user-details.csv
+            ---
+            pwd1,user1,u0001(,group1)       # group1 is optional
+            pwd2,user2,u0002
+        - pass to kubeapi-server
+            - --basic-auth-file=user-details.csv
+    - static token file
+        - static-token-file.csv
+            ---
+            Kpfsdfaef,user10,u0010,group1   # group1 is optional
+            ...
+        - pass to kubeap-server
+            - --token-auth-file=user-token-details.csv
+
+
+
+7.144 TLS certificates
+---
+- PKI 
+    - public key infrastructure
+    - pki is the whole process with people and certificates and signing etc.
 
 
 
