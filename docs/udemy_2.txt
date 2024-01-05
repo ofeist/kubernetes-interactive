@@ -1428,6 +1428,44 @@ $ kubectl config use-context cluster1
     - public key infrastructure
     - pki is the whole process with people and certificates and signing etc.
 
+- public key
+    - .pem | .crt
+    - a convention
+
+- private key
+    - have key in their extension
+    - .key | .pem.key
+    - a convention
+
+
+
+7.146 certificate creation
+---
+- generate key
+    $ openssl genrsa -out ca.key 2048
+    - ca.key
+
+- certificate signing request
+    $ openssl req -new -key ca.key -sub "/CN=KUBERNETES-CA" -out ca.csr
+    - ca.csr
+
+- sign certificate
+    $ openssl x509 -req -in ca.csr -signkey ca.key -out ca.crt
+    - ca.crt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
