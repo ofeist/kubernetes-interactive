@@ -64,3 +64,9 @@
 - todo
     - 78. Practice Test - Multiple Schedulers
         - and above (< 78.)
+
+- vi small tutor
+    - https://docs.oracle.com/cd/E19455-01/806-2902/6jc3b36e2/index.html
+
+
+

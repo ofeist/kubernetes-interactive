@@ -1507,7 +1507,9 @@ $ kubectl config use-context cluster1
     - jane-csr.yaml
     ---
         kind: CertificateSigningRequest
-        request: {`cat jane.csr | base64`}
+        request: {`cat jane.csr | base64 | tr -d "\n"`}
+            $ cat jane.csr | base64 -w 0
+                - this works too, instead of tr -d "\n"
 
 - review request
     $ kubectl get csr
@@ -1518,6 +1520,62 @@ $ kubectl config use-context cluster1
 - view the certificate in yaml
     $ kubectl get csr jane -o yaml
     $ echo 'FASFASVD4242314' | base64 --decode
+
+
+
+7.154 KubeConfig
+---
+$ curl https://my-kube-playground:6433/api/v1/pods  \
+    --key admin.key 
+    --cert admin.crt
+    --cacert ca.crt
+
+$ kubectl get pods
+    --server my-kube-playground:6433
+    --client-key admin.key 
+    --client-certificate admin.crt
+    --cacercertificate-authority ca.crt
+
+$ kubectl get pods
+    --kubeconfig config
+
+- by default KubeCOnfig file is in
+    -$HOME/.kube/config
+
+- KubeConfig file
+    - clusters
+    - contexts
+    - users
+
+$ kubectl config view
+$ kubectl config use-context prod-user@production
+
+
+7.154 kubeconfig solutions
+---
+- https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/#explore-the-home-kube-directory
+
+$ kubeconfig config use-context research --kubeconfig /root/my-kube-config
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
