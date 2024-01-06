@@ -1453,15 +1453,71 @@ $ kubectl config use-context cluster1
     $ openssl x509 -req -in ca.csr -signkey ca.key -out ca.crt
     - ca.crt
 
+- check/decode the certificate's details
+    $ openssl x509 -in file-path.crt -text -noout
+    $ openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text -noout
+      - Subject: CN=kube-apiserver
+      - X509v3 Subject Alternative Name:
+      - validity: Not After : Feb 11 ... 2020
+      - Issuer: CN=kubernetes
 
 
 
+7.150 view certification details - solution
+---
+- view pod logs (when kubectl doesn't work)
+    $ docker ps -a | grep kube-apiserver
+    $ crictl ps -a | grep kube-apiserver
+
+    $ docker logs 25c825c2152a3
+    $ crictl logs 25c825c2152a3
+
+
+- kube-apiserver config for --etcd-cafile
+    - is in the etcd/ folder!
+    - --etcd-cafile=/etc/kubernetes/pki/etcd/ca.crt
 
 
 
+7.151 Certificates API
+---
+- CA server
+    - actually ca files & server where these files are kept
 
+- cert API used to
+    - sign
+    - rotate
+    - manage certificates
 
+- all certificate operations performed by
+    - Controller manager
 
+- workflow
+    - create CSR object (certificateSigningRequest)
+    - review request
+    - approve req
+    - share cert to users
+
+- user creates CSR object (certificateSigningRequest)
+    $ openssl genrsa -out jane.key 2048
+    $ openssl req -new -key jane.key -subj "/CN=jane" -out jane.csr
+
+- admin generates CSR
+    - yaml file
+    - jane-csr.yaml
+    ---
+        kind: CertificateSigningRequest
+        request: {`cat jane.csr | base64`}
+
+- review request
+    $ kubectl get csr
+
+- approve req
+    $ kubectl certificate approve jane
+
+- view the certificate in yaml
+    $ kubectl get csr jane -o yaml
+    $ echo 'FASFASVD4242314' | base64 --decode
 
 
 
