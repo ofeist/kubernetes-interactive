@@ -1396,6 +1396,9 @@ $ kubectl config use-context cluster1
 
 7.141 authentication
 ---
+- WHO
+- O-E
+
 - all user access is managed by kube-apiserver
 
 - kube-apiserver authenticates requests via
@@ -1559,10 +1562,64 @@ $ kubeconfig config use-context research --kubeconfig /root/my-kube-config
 
 
 
+7.158 api groups
+---
+- all resources in k8s are organized in api groups
+
+- our focus in this lecture are these apis
+    - the version
+        - /version
+    - the API
+        - /api  (core group)
+            / v1
+                /namespaces
+                /pods
+                /rc
+        - /apis (named group)
+            - going forward all apis will be organized in the named groups
+            - api group (apps, extensions, networking.k8s.io, ...)
+            /apps
+                /v1
+                    - resources:
+                    /deployments
+                    /replicasets
+                    /statefulsets
+                        - set of actions = verbs (each resource has one!)
+                        - list 
+                        - get 
+                        - create 
+                        - delete 
+                        - update 
+                        - watch
+                    ...
+            /extensions
+            /networking.k8s.io
+                /v1
+                    /networkpolicies
+            /storage.k8s.io
+            /authentication.k8s.io
+            /certificates.k8s.io
+                /v1
+                    /certificatesigningrequests
+
+- accessing api groups per curl (3.35)
+    - https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/14296108#overview
+    - kubectl proxy (!= kube proxy !!!)
 
 
+7.159 authOrization
+---
+- WHAT can somebody
+- O-A
 
-
+- mechanisms / modes (--authorization-mode)
+    - node
+    - ABAC (attribute based authorization)
+        - not easy to manage (k8s restart needed after new policy)
+    - RBAC (role based)
+    - webhook
+    - AlwaysAllow
+    - AlwaysDeny
 
 
 
