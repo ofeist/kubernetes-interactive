@@ -1695,9 +1695,110 @@ $ kubectl api-resources | grep -e pv -e storageclass
 $ k create clusterrole -h
 $ k create clusterrolebindings -h
 
+$ k get nodes --as michelle
 
 
 
+7.166 Service Accounts & tokenRequestAPI
+---
+$ k create serviceaccount dashboard-sa
+$ k create token dashboard-sa   # since ver 1.24
+    - expiry date!
+$ k get sa
+$ k describe sa dashboard-sa
+
+
+- when SA created, per default
+    - a token was created too
+    - "Tokens: dashboard-sa-token-kbbdm"
+    $ kubectl describe secret dashboard-sa-token-kbbdm
+        -> "eyJhbGciTRALALA ..."
+
+- token could be used for authentication when making a request
+    $ curl https://192.168.56.70:6443/api -insecure
+        -- header "Authorization: Bearer eyJhbGciTRALALA ..."
+
+- this token could be mounted inside of the pod on k8s cluster
+
+- each namespace has it's own service account created
+    - default       # k get serviceaccount
+
+- when pod created, a token "default-token-j4hkv" is mounted to the pod
+    - location: /var/run/secrets/kubernetes.io/serviceaccount
+    $ k exec -it my-pod -- ls /var/run/secrets/kubernetes.io/serviceaccount
+    $ k exec -it my-pod -- cat /var/run/secrets/kubernetes.io/serviceaccount
+
+- default token is limited in permissions
+
+- if i want to use another token
+    - mount it to the pod
+    ---
+    spec:
+        containers:
+          - name: ..
+            image: ..
+        serviceAccountName: dashboard-sa
+
+- you cannot edit the service account of an existing pod.
+- However, in case of a deployment,
+    you will be able to edit the service account
+    as any changes to the pod definition file
+    will automatically trigger a new rollout for the deployment.
+        
+- since version 1.22
+    - tokenRequestAPI introduced
+    - pod doesn't rely on SA token (default one) anymore
+    - sets the time boundary/limits on the created token
+
+$ k create token dashboard-sa   # since ver 1.24
+    - expiry date!
+
+- you still can create non-expiry token (like it was auto-created before)
+    - secret-definition.yaml
+    ---
+    annotations: 
+        ...
+    - this should be don only if you can not use tokenRequest API to obtain token
+
+
+7.167 sa token - solution
+---
+$ kubectl create token dashboard-sa
+
+
+
+7.169 image security
+---
+- image: nginx
+- actually
+    - image: docker.io/library/nginx
+             registry / user account / image repository
+
+- popular registries
+    - docker.io
+    - gcr.io
+
+- for the private repo:
+    $ kubectl create secret docker-registry regcred \
+        --docker-server=
+        --docker-username=
+        --docker-password=
+        --docker-email=
+    - docker-registry
+        - builtin type
+
+- private repo
+    $ docker login private-registry.io
+    $ docker run private-registry.io/apps/internal-app
+    - k8s:
+        - nginx-pod.yaml
+        ---
+        spec:
+        containers:
+        - name: nginx
+          image: private-registry.io/apps/internal-app
+        imagePullSecrets:
+        - name: regcred
 
 
 
