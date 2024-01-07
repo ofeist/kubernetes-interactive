@@ -1607,6 +1607,7 @@ $ kubeconfig config use-context research --kubeconfig /root/my-kube-config
     - kubectl proxy (!= kube proxy !!!)
 
 
+
 7.159 authOrization
 ---
 - WHAT can somebody
@@ -1620,6 +1621,89 @@ $ kubeconfig config use-context research --kubeconfig /root/my-kube-config
     - webhook
     - AlwaysAllow
     - AlwaysDeny
+
+
+
+7.160 RBAC
+---
+- developer-role.yaml
+    $ k create -f yaml
+    $ k get roles
+    $ k describe role developer
+
+- devuser-developer-binding.yaml
+    $ k create -f yaml
+    $ k get rolebindings
+    $ k describe rolebinding developer
+
+$ kubetl auth can-i create deployments
+    ... delete nodes
+    ...
+
+$ kubetl auth can-i create deployments --as dev-user
+
+- resource level RBAC could be defined
+    - resources such as pods (blue, green, etc ..)
+
+
+
+7.162 RBAC solution
+---
+$ k create role --help
+$ k create rolebinding --help
+
+
+
+7.163 cluster roles and role bindings
+---
+- nodes can not be associated with namespaces
+- nodes are cluster-scoped resources
+
+- resources can be
+    - namespaced    
+        - e.g. pods, rs, jobs, deployments, ...
+        $ kubectl api-resources --namespaced=true
+    - cluster-scoped
+        - nodes, 
+        - PV, 
+        - clusterroles, 
+        - clusterrolebindings, 
+        - certificateSigningRequest
+        - namespaces
+        $ kubectl api-resources --namespaced=false
+
+- to authorize users there are (similar to roles and rolebindings)
+    - clusterroles
+    - clusterrolebindings
+
+- e.g. clusterroles:
+    - cluster admin
+        - CRUD nodes
+    - storage admin
+        - CRUD PVs / PVCs
+    - cluster-admin-role.yaml
+    - cluster-admin-role-binding.yaml
+
+- a cluster role for a namespaced resource possible
+    - in that case, the user has access to the resource accross the cluster (all namespaces???)
+
+
+
+7.164 cluster roles and binidings - solution
+---
+$ kubectl api-resources | grep -e pv -e storageclass
+$ k create clusterrole -h
+$ k create clusterrolebindings -h
+
+
+
+
+
+
+
+
+
+
 
 
 
