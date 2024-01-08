@@ -1803,6 +1803,83 @@ $ kubectl create token dashboard-sa
 
 
 
+7.172 security in docker
+---
+- process isolation
+    - diff proc id's in diff namespaces
+        - PID=123 @ container
+        - PID=456 @ host
+
+- user security
+    - by default docker runs processes as the root user
+        $ docker run ubuntu sleep 3600  # as root
+    - user security could be enforced by changing the user which runs proc
+        - with the --user command
+            $ docker run --user=1000 ubuntu sleep 3600
+        - to define the user in the image
+            Dockerfile
+            ---
+            FROM ubuntu
+            USER 1000
+    - additionally, docker sets the limit on the container's root user
+        - this happens using linux capabilities
+        - e.g. no reboot allowed, cannot disrupt host or other container, ...
+
+- linux capabilities
+    - /usr/include/linux/capability.h
+    - to add the capability
+        $ docker run --cap-add MAC_ADMIN ubuntu
+    - to drop the capability
+        $ docker run --cap-drop MAC_ADMIN ubuntu
+    - or, with all privileges enabled
+        $ docker run --privileged drop MAC_ADMIN ubuntu
+
+
+
+7.173 security contexts (security in k8s)
+---
+- similar to docker
+- security contexts / capabilities could be enforced on
+    - container level
+    - pod level
+
+- settings on container > settings on the pod
+    - > means: stronger/overrides
+
+- pod level securityContext
+    - pod definition:
+        - pod.yaml
+        ---
+        apiVersion ...
+        ..
+        spec:
+        securityContext:
+            runAsUser: 1000
+        containers:
+        - name: ubuntu
+            image: ubuntu
+
+- container level securityContext
+    - pod definition + capabilities
+        - pod.yaml
+        ---
+        apiVersion ...
+        ..
+        spec:
+            securityContext:
+                runAsUser: 1000
+            containers:
+            - name: ubuntu
+            image: ubuntu
+            securityContext:
+                runAsUser: 1000
+                capabilities:
+                add: ["MAC_ADMIN"]
+    - capabilities only supported ath the container level
+    
+
+
+
 
 
 
