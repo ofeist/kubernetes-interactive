@@ -1769,6 +1769,7 @@ $ kubectl create token dashboard-sa
 
 7.169 image security
 ---
+- https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#create-a-pod-that-uses-your-secret
 - image: nginx
 - actually
     - image: docker.io/library/nginx
