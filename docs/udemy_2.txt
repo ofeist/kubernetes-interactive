@@ -1844,7 +1844,7 @@ $ kubectl create token dashboard-sa
     - pod level
 
 - settings on container > settings on the pod
-    - > means: stronger/overrides
+    - > means: are stronger/override
 
 - pod level securityContext
     - pod definition:
@@ -1876,23 +1876,92 @@ $ kubectl create token dashboard-sa
                 capabilities:
                 add: ["MAC_ADMIN"]
     - capabilities only supported ath the container level
-    
 
 
 
+7.175 security contexts - solutions
+---
+$ kubectl exec ubuntu-sleeper -- whoami
 
 
 
+7.176 network policies
+---
+- by default all pod communication is allowed
+
+- nw-policy.yaml
+---
+...
+policyTypes:
+- Ingress
+- ingres:
+  - from:
+    - podSelector:
+      matchLabels:
+        name: api-pod
+    ports:
+    - protocol: TCP
+      port: 3306
+
+
+- 3 types of selectors
+    - podSelector
+    - namespaceSelector
+    - ipBlock
+
+- list (-) = OR selector
+    - from:
+      - podSelector
+      - ipBlock
+
+- item = AND selector
+    - from:
+      - podSelector:
+        ...
+        namespaceSelector:
 
 
 
+7.179  Kubectx and Kubens – Command line Utilities
+---
+- in a real “live” kubernetes cluster implemented for production,
+     there could be a possibility of often switching between a 
+     large number of namespaces and clusters
 
+- This is where command line tools such as kubectx and kubens come in to picture.
+    - Reference: https://github.com/ahmetb/kubectx
 
+- Kubectx:
+    - With this tool, you don't have to make use of lengthy “kubectl config” commands to switch between contexts. This tool is particularly useful to switch context between clusters in a multi-cluster environment.
 
+    - Installation:
+        sudo git clone https://github.com/ahmetb/kubectx /opt/kubectx
+        sudo ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx
 
+    - To list all contexts:
+        kubectx
 
+    - To switch to a new context:
+        kubectx <context_name>
 
+    - To switch back to previous context:
+        kubectx -
 
+    - To see current context:
+        kubectx -c
+
+- Kubens:
+    - This tool allows users to switch between namespaces quickly with a simple command.
+
+- Installation:
+    sudo git clone https://github.com/ahmetb/kubectx /opt/kubectx
+    sudo ln -s /opt/kubectx/kubens /usr/local/bin/kubens
+
+    - To switch to a new namespace:
+        kubens <new_namespace>
+
+    To switch back to previous namespace:
+        kubens -
 
 
 
