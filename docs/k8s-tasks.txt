@@ -68,5 +68,17 @@
 - vi small tutor
     - https://docs.oracle.com/cd/E19455-01/806-2902/6jc3b36e2/index.html
 
+- what-you-can-t-do-with-network-policies-at-least-not-yet
+    - https://kubernetes.io/docs/concepts/services-networking/network-policies/#what-you-can-t-do-with-network-policies-at-least-not-yet
+
+
+
+
+
+
+
+
+
+
 
 

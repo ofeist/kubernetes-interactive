@@ -1970,7 +1970,40 @@ policyTypes:
 - storage drivers
 - volume drivers
 
+- storage
+    - storage
+        - /var/lib/docker/volumes
 
+    - 2 types of mounts:
+        - volume mount
+            - mounts volume from volumes dir
+        - bind mount
+            - mounts dir from in-location on the docker host
+
+    $ docker run \
+        --mount type=bind, source=/data/mysql,target=/var/lib/mysql mysql
+
+    - docker uses storage drivers
+        - it chooses the driver automatically, based on OS 
+
+    - storage drivers
+        - aufs
+            - available on ubuntu
+        - zfs
+        - btrfs
+        - device mapper
+            - available on centos, fedora
+        - overlay
+        - overlay2
+
+- volume drivers
+    - default one = Local
+    - rexray, portworx, flocker, ..
+
+
+
+187. Volumes
+---
 
 
 
