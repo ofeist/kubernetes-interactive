@@ -2057,7 +2057,7 @@ kubectl get persitentvolume
 - pvc-definition.yaml
     ---
     apiVersin: v1
-    kind: PersistentVOlumeClaim
+    kind: PersistentVolumeClaim
     ...
 
 $ k create -f ...
@@ -2102,6 +2102,16 @@ $ k delete pvc
 
 - Reference URL: 
     - https://kubernetes.io/docs/concepts/storage/persistent-volumes/#claims-as-volumes
+
+
+
+8.194 additional topics
+---
+
+- Additional topics such as StatefulSets are out 
+    of scope for the exam. However, if you wish to learn them,
+    they are covered in the 
+    Certified Kubernetes Application Developer (CKAD) course.
 
 
 
