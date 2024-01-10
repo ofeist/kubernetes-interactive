@@ -2004,6 +2004,122 @@ policyTypes:
 
 187. Volumes
 ---
+- host path not recomended on the multinode cluster
+    - pods would always moundt the same folder
+    - unless you have some cluster-storage solution, e.g.
+        - nfs, gluster, ceph, scaleio, flocker, aws, ...
+        - aws: awsElasticBlockStore:
+
+
+
+188. Persistent Volumes
+---
+- a large amount of storage "carved" out by an admin
+- users takes peaces from the large storage amount
+
+- PV = large amount of storage defined by an admin
+
+- PVC = using pvc's users now can use the storage (use out the PV)
+
+- pve-definition.yaml
+    ---
+    apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+        nameL pv-vol1
+    ...
+
+$ k create -f ..
+
+kubectl get persitentvolume
+
+
+
+189. Persistent Volume Claims
+---
+- PVC 
+    - using pvc's users now can use the storage (use out the PV)
+
+- PVC is taken out of PV
+    - by k8s dependant on
+        - sufficient capacity
+        - access modes
+        - volume modes
+        - storage class
+    - by user
+        - labels and selectors
+
+- the relationship between PV:PVC = 1:1
+
+- PVC could be defined before PV
+    - it stays in the pending state until PV is defined
+
+- pvc-definition.yaml
+    ---
+    apiVersin: v1
+    kind: PersistentVOlumeClaim
+    ...
+
+$ k create -f ...
+$ k get pvc
+$ k delete pvc
+    - persistentVolumeReclaimPolicy: Retain
+        - defines what happens with PV after PVC woudl be deleted
+            - Retain 
+                -> until manually deleted by an admin (not available for the re-use)
+            - Delete
+                -> deleted with the PVC
+            - Recycle
+                -> the data will be scrubbed
+
+
+
+190. Using PVCs in Pods
+---
+- Once you create a PVC use it in a POD definition file by 
+    specifying the PVC Claim name under persistentVolumeClaim
+     section in the volumes section like this:
+
+
+        apiVersion: v1
+        kind: Pod
+        metadata:
+        name: mypod
+        spec:
+        containers:
+            - name: myfrontend
+            image: nginx
+            volumeMounts:
+            - mountPath: "/var/www/html"
+                name: mypd
+        volumes:
+            - name: mypd
+            persistentVolumeClaim:
+                claimName: myclaim
+
+- The same is true for ReplicaSets or Deployments. Add this
+     to the pod template section of a Deployment on ReplicaSet.
+
+- Reference URL: 
+    - https://kubernetes.io/docs/concepts/storage/persistent-volumes/#claims-as-volumes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
