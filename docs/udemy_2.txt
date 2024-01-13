@@ -2264,6 +2264,7 @@ $ ip netns exec red route
         - host on one network, ns on another
     - what is missing is the ip addr assignet to the swithc-interface
     $ ip addr add 192.168.15.5/24 dev v-net-0
+        $ ip netns exec red ping 192.168.15.2
         - ping 192.168.15.1 works now
 
 
@@ -2313,6 +2314,54 @@ $ ip netns exec red route
                 one namespace to another. 
             - Or disable IP Tables all together 
                 (Only in a learning environment).
+
+
+
+205. Prerequisite - Docker Networking
+---
+- network
+    - none
+    - host
+    - bridge
+        - this one is ok for us
+
+$ ip link
+    -> gives "docker0"
+    - docker0 = actually bridge network
+
+$ ip addr
+    - inet 172.17.0.1/24
+
+- whenever container created, docker creates a network for it
+
+$ ip netns
+    - to list the namespace
+    - container = network namespace in a networking sense
+
+- connect container nw to the host nw
+    $ docker run -p 8080:80 nginx
+    $ curl http://192.168.1.10:8080
+
+- this port fw happens per nat routing (iptables), same as above
+    - docker creates the rule
+        $ iptables \
+            - t nat \
+            -A DOCKER   \
+            -j DNAT \
+            --dport 8080    \
+            --to-destination 173.17.0.3:80
+    - check the rule
+        $ iptables -nvL -t nat
+
+
+206. Prerequisite - CNI
+
+
+
+
+
+
+
 
 
 
