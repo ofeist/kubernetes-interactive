@@ -2409,6 +2409,11 @@ $ ip netns
     arp
     netstat -plnt
 
+- etcd ports
+    - 2379 is the port of ETCD to which all control plane components connect to. 
+        2380 is only for etcd peer-to-peer connectivity. When you have multiple 
+        controlplane nodes
+
 
 
 208. Important Note about CNI and CKA Exam
@@ -2423,8 +2428,6 @@ $ ip netns
     solutions described in the link above
 
 - NOTE: In the official exam, all essential CNI deployment details will be provided.
-
-
 
 
 
