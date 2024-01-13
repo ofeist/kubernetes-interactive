@@ -2354,19 +2354,75 @@ $ ip netns
         $ iptables -nvL -t nat
 
 
+
 206. Prerequisite - CNI
+---
+- same workflow for solving networking challenges/namespaces came from different container solutions
+    - docker, rkt, mesos, k8s
+
+- this steps could be then generalized 
+    - this could be my networking solution
+    - let's call it "bridge"
+    - solves all steps besides 1] create network namespace
+
+- bridge solution, in order to work with docker, rkt, mesos, k8s, etc. namespaces
+    - has to follow the standard
+    -> CNI
+
+- CNI
+    - caontainer network interface
+    - a standard how the program should look like
+
+- bridge solution = called "plugin"
+
+- CNI commes with a set of support for plugins
+    - bridge
+    - vlan
+    - ipvlan
+    - macvlan
+    - windows
+    - dhcp
+    - host-local
+    ---
+    - weave (3rd party)
+    - flannel
+    - cilium
+    - vmware
+    - calico
+
+- docker 
+    - doesn't implement CNI
+    - implements CNM (container network model)
 
 
 
+207. Cluster Networking
+---
+- commands
+    ip link
+    ip addr
+    ip addr add 192.168.1.10/24 dev eth0
+    ip route
+    ip route add 192.168.1.0/24 via 192.168.2.1
+    route
+    cat /proc/sys/net/ipv4/ip_forward
+    arp
+    netstat -plnt
 
 
 
+208. Important Note about CNI and CKA Exam
+---
+- Network Addons
+- you can use any of the plugins which are described here:
+    - https://kubernetes.io/docs/concepts/cluster-administration/addons/
+    - https://kubernetes.io/docs/concepts/cluster-administration/networking/#how-to-implement-the-kubernetes-networking-model
 
+- In the CKA exam, for a question that requires you to deploy 
+    a network addon, unless specifically directed, you may use any of the 
+    solutions described in the link above
 
-
-
-
-
+- NOTE: In the official exam, all essential CNI deployment details will be provided.
 
 
 
