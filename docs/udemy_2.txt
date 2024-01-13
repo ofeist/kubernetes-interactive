@@ -2484,6 +2484,18 @@ $ ps -aux | grep kubelet
 
 
 
+214. CNI weave
+---
+- weave agents deployed on each node
+    - svc or daemonset
+
+$ k exec busybox ip route
+
+$ k get pods -n kube-system
+    - waeve-net-2jfg
+
+$ k logs waeve-net-2jfg weave -n kube-system
+
 
 
 
