@@ -2498,6 +2498,14 @@ $ k logs waeve-net-2jfg weave -n kube-system
 
 
 
+217. Practice Test - Deploy Network Solution
+---
+- https://www.weave.works/docs/net/latest/kubernetes/kube-addon/#-installation
+
+$ kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+
+
+
 
 
 
