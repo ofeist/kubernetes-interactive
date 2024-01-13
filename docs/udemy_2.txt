@@ -2206,7 +2206,6 @@ $ ip netns exec red ip link
 $ ip -n red link
     - list nw interfaces inside the red namespace
 
-
 $ arp
     - check arp table on the host
 $ ip netns exec red arp
@@ -2224,8 +2223,8 @@ $ ip netns exec red route
         - attach red interface to the red namespace
     $ ip link set veth-blue netns blue
         - attach blue interface to the blue namespace
-    $ ip -n red addr add 192.168.15.1 dev veth-red
-    $ ip -n blue addr add 192.168.15.2 dev veth-blue
+    $ ip -n red addr add 192.168.15.1 dev veth-red          # $ ip -n red addr add 192.168.1.10/24 dev veth-red
+    $ ip -n blue addr add 192.168.15.2 dev veth-blue        # $ ip -n red addr add 192.168.1.10/24 dev veth-red
         - assign the ip's to namespaces
     $ ip -n red link set veth-red up
     $ ip -n blue link set veth-blue up
@@ -2234,9 +2233,13 @@ $ ip netns exec red route
         $ ip netns exec red ping 192.168.15.2
         $ ip netns exec red arp
 
+- next, switch setup will be made
+    - delete the created links first
+    $ ip -n red link del veth-red
+
 - for multiple namespaces to communicate you create A
     - virtual switch
-        - linux bridge (we use thi), open vSwitch (Ovs)
+        - linux bridge (we use this one), open vSwitch (Ovs)
     $ ip link add v-net-0 type bridge
         - add the interface of the bridge type
     $ ip link set dev v-net-0 up
