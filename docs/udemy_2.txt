@@ -2566,10 +2566,58 @@ $ kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/
 
 
 
+223. solution to network services
+---
+$ ip add
+    - to check interfaces, ip addresses, subnets, ...
+
+- what range does pods get the ip from
+    - check the networking addon logs
+    - weave e.g.
+    $ k logs -n kube-system weave-netrbx4p
+        # ipalloc-range: 10.244.0.0/16
+
+- a services alloaction
+    $ cat kube-apiserver.yaml   # e.g.
+
+- what type of proxy is the kube-proxy configured to use
+    $ k logs -n kube-system kube-proxy-l25qk
 
 
 
+225. DNS in kubernetes
+---
+- tools
+    - host/ns lookup
+    - dig
 
+- focus is pnly on pods and services
+    - not nodes!
+
+- for each service DNS creates a subdomain
+    - e.g. .apps
+- all services grouped under subdomain "svc"
+    - .svc
+- all services and pods grouped under root's "cluster.local"
+    - .cluster.local
+
+- how to reach the service
+    $ ping web-service          # inside the namespace
+    $ ping web-service.apps     # apps = namespace (from other NS)
+    $ ping web-service.apps.svc
+    $ ping web-service.apps.svc.cluster.local   # FQDN 4 the service
+
+- for pods, dns records are not enabled per default
+    - this could be done
+    - 10.244.2.5    -> 10-244-2-5
+    $ ping 10-244-2-5.apps.pod.cluster.local
+        - type = pod
+        - root = .cluster.local
+
+
+
+226. CoreDNS in Kubernetes
+---
 
 
 
