@@ -2456,6 +2456,57 @@ $ ping -> Network is unreachable
 
 
 
+212. CNI in kubernetes
+---
+- defined in kubelet.service
+    - ...
+    - --network-plugin=cni
+    - --cni-bin-dir=/opt/cni/bin
+    - --cni-conf-gir=/etc/cni/net.d
+
+$ ps -aux | grep kubelet
+
+
+
+213. Note CNI Weave
+---
+- weave announced the end of service for Weave Cloud.
+- To know more about this, read the blog from the link below: -
+    https://www.weave.works/blog/weave-cloud-end-of-service
+
+
+- use the below latest link to install the weave net: 
+    - kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+
+- Reference links: 
+    - https://www.weave.works/docs/net/latest/kubernetes/kube-addon/#-installation
+    - https://github.com/weaveworks/weave/releases
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
