@@ -2233,7 +2233,7 @@ $ ip netns exec red route
         $ ip netns exec red ping 192.168.15.2
         $ ip netns exec red arp
 
-- next, switch setup will be made
+- next, switch setup will be made (to connect more namespaces via switch)
     - delete the created links first
     $ ip -n red link del veth-red
 
