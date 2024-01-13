@@ -2401,13 +2401,16 @@ $ ip netns
 - commands
     ip link
     ip addr
+    ip addr show type bridge
+    ip addr show eth0
     ip addr add 192.168.1.10/24 dev eth0
     ip route
     ip route add 192.168.1.0/24 via 192.168.2.1
     route
     cat /proc/sys/net/ipv4/ip_forward
     arp
-    netstat -plnt
+    netstat -npl
+    netstat -npa
 
 - etcd ports
     - 2379 is the port of ETCD to which all control plane components connect to. 
@@ -2431,12 +2434,25 @@ $ ip netns
 
 
 
+211. Pod Networking
+---
+- k8s expects the inter-pod communication to be working
+- k8s doesn't solve this problem
+
+- nw model
+    - every pod has an ip
+    - pods can communicate between e.a. no matter on which node they are
+    - no NAT for pod communication
 
 
+$ ping -> Network is unreachable
+    - route is missing
+        $ ip route add 10.244.2.2. via 192.168.1.12
 
-
-
-
+- etc = config
+    - /etc/cni/net.d/net.conflist
+- bin = binary
+    - /opt/cni/bin/net.sh
 
 
 
