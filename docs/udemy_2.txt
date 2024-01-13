@@ -2129,6 +2129,65 @@ $ k delete pvc
 
 
 
+200.  Prerequisite - Switching Routing
+---
+- switch -> same nw
+    $ ip link         # see the interface on the host
+    $ ip addr add     # assign the address
+
+- router -> connects diff networks
+    $ route                                         # existing route cfg on the system
+    $ ip route add 192.168.2.0/24 via 192.168.1     # configure a gateway on the nw
+    $ ip route add default via 192.168.2.1          # default (0.0.0.0) gw to any other nw
+
+
+$ ping 192.168.2.5
+    - connect: network is unreachable
+    - routing table needs to be fixed
+        $ ip route add 192.168.2.0/24 via 192.168.1.6
+    $ ping 192.168.2.5
+        - blank:    no nw unreachable message
+        - packets are not forwarded
+        - cat /proc/sys/net/ipv4/ip_forward     
+            - echo 1 > /proc/sys/net/ipv4/ip_forward    # temp solution, before restart
+            - /etc/sysctl.conf                          # net.ipv4.ip_forward = 1
+
+
+
+201. Prerequisite - DNS
+---
+$ ping db
+    - ping: unknown host db
+    $ cat /etc/hosts
+
+- dns server 
+    -> manages all hostnames & addresses
+    $ cat /etc/resolv.conf
+        # nameserver    192.168.1.100
+
+- which one first?
+    - etc/hosts
+        - or
+    - /etc/resolv.conf
+        - defined by cat/etc/nsswitch.conf
+
+- subdomain.domain.to-level-domain
+
+- record types
+    - A     = web-server
+    - AAAA  = web-server
+    - CNAME = food.web-server   # name to name mapping
+
+$ nslookup www.google.com
+
+
+
+
+
+
+
+
+
 
 
 

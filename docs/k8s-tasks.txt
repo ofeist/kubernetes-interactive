@@ -72,9 +72,17 @@
     - https://kubernetes.io/docs/concepts/services-networking/network-policies/#what-you-can-t-do-with-network-policies-at-least-not-yet
 
 
+Google: “k8s certification weekends”
+---
+https://www.reddit.com/r/kubernetes/comments/mfgln2/how_long_to_go_from_zero_experience_cka/
+ 
+https://support.kodekloud.com/preparing-for-the-kubernetes-certifications-cka-ckad
 
+ https://www.zhaohuabing.com/post/2022-02-08-how-to-prepare-cka-en/
 
+ 
 
+ 
 
 
 
