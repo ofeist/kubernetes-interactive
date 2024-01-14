@@ -85,8 +85,11 @@ Google: “k8s certification weekends”
     - 217. Practice Test - Deploy Network Solution
     - take flannel e.g.
  
-
-
+- continue practice tests
+    - docker-registry was the last one
+    - 167. Practice Test Service Accounts
+        - go up from there
+ 
 
 
 
