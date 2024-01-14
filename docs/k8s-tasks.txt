@@ -74,14 +74,16 @@
 
 Google: “k8s certification weekends”
 ---
-https://www.reddit.com/r/kubernetes/comments/mfgln2/how_long_to_go_from_zero_experience_cka/
- 
-https://support.kodekloud.com/preparing-for-the-kubernetes-certifications-cka-ckad
+    https://www.reddit.com/r/kubernetes/comments/mfgln2/how_long_to_go_from_zero_experience_cka/
+    
+    https://support.kodekloud.com/preparing-for-the-kubernetes-certifications-cka-ckad
 
- https://www.zhaohuabing.com/post/2022-02-08-how-to-prepare-cka-en/
+    https://www.zhaohuabing.com/post/2022-02-08-how-to-prepare-cka-en/
 
- 
-
+    
+- deploy some other nw solution than weave
+    - 217. Practice Test - Deploy Network Solution
+    - take flannel e.g.
  
 
 

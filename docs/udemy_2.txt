@@ -2550,7 +2550,7 @@ $ kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/
 
 - assigned IP(-range) specified in 
     - kube-api-server --service-cluster-ip-range ipNet
-        - default: 10.0.0.0/24
+        - default:  
     $ ps aux | grep kube-api-server
 
 - the service and the pod ip ranges shouldn't overlap!
@@ -2576,6 +2576,15 @@ $ ip add
     - weave e.g.
     $ k logs -n kube-system weave-netrbx4p
         # ipalloc-range: 10.244.0.0/16
+
+- ip allocation range defined at (found by "grep 10.244.0.0/16")
+    - weave log file
+        - var/log/pods/kube-system_weave-net-q9llz_6c15eb3b-c431-4f3f-8dd9-03a46adf1061/weave/1.log
+    - configmap/kube-proxy
+    - etc/kubernetes/manifests/kube-controller-manager.yaml
+    - proc
+        - ps aux | grep weave
+        - ps aux | grep kube-controller-manager
 
 - a services alloaction
     $ cat kube-apiserver.yaml   # e.g.
