@@ -90,7 +90,8 @@ Google: “k8s certification weekends”
     - 167. Practice Test Service Accounts
         - go up from there
  
-
+- use etcd as dns serv?
+    - use redis?
 
 
 

@@ -2641,6 +2641,41 @@ $ ip add
 
 226. CoreDNS in Kubernetes
 ---
+- after v1.12 coreDNS replaced kube-dns
+
+$ /cat/etc/coredns/Corefile
+    - passed in to coreDns pod as a configmap object
+    $ kubectl get configmap -n kube-system
+
+- next, pods have to point to the dns server
+    $ cat /etc/resolv.conf
+    - coreDns deployed as a service: kube-dns
+        - IP-address of this svc is configured as the "nameserver   10.96.0.10" e.g. on pods
+            - this configuration is done by kubelet (automatically)
+            - cat /var/lib/kubelet/config.yaml
+                ...
+                clusterDNS:
+                - 10.96.0.10
+                clusterDomain: cluster.local
+
+$ host web-service
+    -> returns the FQDN of the service
+    - web-service.default.svc.cluster.local
+
+- host web-service can return FQDN because there is this entry in
+    - /etc/resolv.conf
+        -> search   default.svc.cluster.local svc.cluster.local cluster.local
+    - this allows to find the service using any of
+        $ host web-service
+        $ host web-service.default
+        $ host web-service.default.svc
+
+- $ host WORKS ONLY FOR SERVICES
+    - for PODS you have to specify FQDN
+    $ host 10-244-2-5.default.pod.cluster.local
+
+
+
 
 
 
