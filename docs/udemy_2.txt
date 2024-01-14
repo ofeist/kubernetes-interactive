@@ -2014,7 +2014,11 @@ policyTypes:
 
 188. Persistent Volumes
 ---
+- A PersistentVolume (PV) is a piece of storage in the cluster 
+    that has been provisioned by an administrator or 
+    dynamically provisioned using Storage Classes.
 - a large amount of storage "carved" out by an admin
+
 - users takes peaces from the large storage amount
 
 - PV = large amount of storage defined by an admin
