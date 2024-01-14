@@ -2034,8 +2034,7 @@ policyTypes:
     ...
 
 $ k create -f ..
-
-kubectl get persitentvolume
+$ kubectl get persitentvolume
 
 
 
@@ -2136,6 +2135,11 @@ $ k delete pvc
      and dynamic provisioning should occur. When unset, Immediate
       mode is used by default.
     - https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode
+
+- WaitForFirstConsumer (e.g.)
+    - The Storage Class called local-storage makes use of VolumeBindingMode set 
+        to WaitForFirstConsumer. This will delay the binding and provisioning of 
+        a PersistentVolume until a Pod using the PersistentVolumeClaim is created.
 
 
 
