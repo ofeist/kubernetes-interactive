@@ -2131,6 +2131,12 @@ $ k delete pvc
     - gold: pd-sends
     - platinum: pd-ssd
 
+- Volume binding mode
+    The volumeBindingMode field controls when volume binding
+     and dynamic provisioning should occur. When unset, Immediate
+      mode is used by default.
+    - https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode
+
 
 
 200.  Prerequisite - Switching Routing
