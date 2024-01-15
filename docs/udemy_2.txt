@@ -2742,7 +2742,9 @@ $ host web-service
 
 
 
-
+235. Solution - Ingress Networking - 2 (optional)
+---
+- 
 
 
 

@@ -100,5 +100,7 @@ Google: “k8s certification weekends”
 - how to bookmark links for the exam?
     - everybody says "bookmark links"
 
-
+- easier way to create a service is to use "expose"
+    - k expose deploy ... --type=NodePort ..
+    - nodeport will have to be added with "k edit"
 
