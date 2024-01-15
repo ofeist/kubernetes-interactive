@@ -2742,11 +2742,45 @@ $ host web-service
 
 
 
-235. Solution - Ingress Networking - 2 (optional)
+235. Solution - Ingress Networking - 2
 ---
-- 
+- easier way to create a service is to use "expose"
+
+$ k expose deploy ingress-controller -n ingress-space \
+    --name ingress --port=80 --target-port=80 --type NodePort
+$ k logs webapp-video-8642gjs -n app-space
 
 
+
+239. Configure High Availability
+---
+- api-server
+    - in a case of more master nodes
+        - load balancer needed in front of them (the api-server)
+
+- scheduler & controller manager
+    - leader election process
+        - active vs standby
+
+- etcd
+    - is a distributed system
+        - read or write through any of running etcd instance
+    - topology
+        - stacked (etcd is part of master nodes)
+        - external etcd topology
+    - api servers must communicate to all etcd's
+
+
+
+241. Important Update: Kubernetes the Hard Way
+---
+- An optional series on this is available at our youtube channel 
+    - https://www.youtube.com/watch?v=uUupRagM7m0&list=PL2We04F3Y_41jYdadX55fdJplDvgNGENo
+
+- The GIT Repo for this tutorial
+    - https://github.com/mmumshad/kubernetes-the-hard-way
+
+    
 
 
 
