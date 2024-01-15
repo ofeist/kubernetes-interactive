@@ -92,7 +92,13 @@ Google: “k8s certification weekends”
  
 - use etcd as dns serv?
     - use redis?
+    - implement as a go project
 
+- configure tls bootstrap of the node
+    - 275. More Certification Tips!
+
+- how to bookmark links for the exam?
+    - everybody says "bookmark links"
 
 
 

@@ -2676,10 +2676,69 @@ $ host web-service
 
 
 
+229. Ingress
+---
+- ingress is
+    - layer 7 loadbalancer implemented in k8s
+    - implementation instead of the (many) load-balancers possibly needed
+    - implementing SSL security too
+
+- k8s implementation of ingress consists of
+    1] ingress controller
+        - e.g.
+            - GCE load balancer (supported by k8s), or
+            - nginx (supported by k8s), or
+            - haproxy, or
+            - traefik
+        - doesn't come per default with k8s
+            - you ust deploy one
+    2] ingress resources
+        - configurations, like ssl ETCDCTL_CACERT
+
+- 1] ingress controller
+    - nginx setup
+        - pass 
+            args 
+                - /nginx-ingress-controller
+                - configmap     (-> configmap at the beginning will 
+                                make it easy to change the config only
+                                per configmap in the future)
+            env:
+                - name: POD_NAME
+                ...
+            ports:
+                - name:
+                ...
+
+    - we need a service to expose the ingress controller to inet
+        - nodeport
+
+    - we need a service account
+        - roles
+        - clusterroles
+        - rolebindings
+
+- 2] ingress resources
+    - implement rules like
+        - forward traffic to one pod/svc
+        - forward dependant on url to diff pods/svcs
+        - route based on domain name
 
 
 
+230. Article: Ingress
+---
+- in k8s version 1.20+ we can create an Ingress resource from 
+    the imperative way like this:
+        $ kubectl create ingress <ingress-name> --rule="host/path=service:port"
+        $ kubectl create ingress ingress-test --rule="wear.my-online-store.com/wear*=wear-service:80"
 
+- Find more information and examples in the below reference link:
+    - https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#-em-ingress-em-
+
+- References:
+    - https://kubernetes.io/docs/concepts/services-networking/ingress
+    - https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types
 
 
 
