@@ -2780,7 +2780,7 @@ $ k logs webapp-video-8642gjs -n app-space
 - The GIT Repo for this tutorial
     - https://github.com/mmumshad/kubernetes-the-hard-way
 
-    
+
 
 243. Resources
 ---
@@ -2809,11 +2809,25 @@ $ vagrant ssh kubemaster
     - installing kubeadm
         - https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 
-
 - use containerd
     - follow install page (docker), but do not install docker
 
 - read through cgroup drivers (on the containerd page)
+    - cgroups = control groups
+    - to check which cgroup driver your system uses, use
+        $ ps -p 1       # 1 ?  00:00:01 systemd
+
+- on the master node only:
+    - check the ip of the enp0s8 interface
+        $ ip add    # enp0s8 inet 192.168.56.2/24
+    $ sudo kubeadm init \
+        --pod-network-cidr=10.244.0.0/16 \
+        --apiserver-advertise-address=192.168.56.2
+
+- install network plugin (flannel)
+    - kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+
+
 
 
 
