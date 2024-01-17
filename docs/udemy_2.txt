@@ -2787,12 +2787,33 @@ $ k logs webapp-video-8642gjs -n app-space
 - The vagrant file used in the next video
     - https://github.com/kodekloudhub/certified-kubernetes-administrator-course
 
+# ~/devops/k8s/certified-kubernetes-administrator-course
+
 - Here's the link to the documentation
     - https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 
 
 
+244. vagrant provisions vm's
+---
+$ cd ~/devops/k8s/certified-kubernetes-administrator-course/kubeadm-clusters/virtualbox
+$ vagrant status
+$ vagrant up
+$ vagrant ssh kubemaster
 
+
+
+245. Demo - Deployment with Kubeadm
+---
+- start with documentation
+    - installing kubeadm
+        - https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
+
+
+- use containerd
+    - follow install page (docker), but do not install docker
+
+- read through cgroup drivers (on the containerd page)
 
 
 
