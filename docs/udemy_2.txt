@@ -2879,6 +2879,15 @@ $ vagrant ssh kubemaster
     $ sudo journalctl -u kube-apiserver
 
 
+- pod pending
+    -> kube-scheduler
+- scaling doesn't work
+    -> kube-controller-manager
+
+
+- kubectl autocomplete 
+    - https://kubernetes.io/pt-br/docs/reference/kubectl/cheatsheet/
+
 
 
 
