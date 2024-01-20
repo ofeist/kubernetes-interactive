@@ -2888,8 +2888,10 @@ $ vagrant ssh kubemaster
     - https://kubernetes.io/docs/reference/networking/ports-and-protocols/
 
 
-
-
+- check container logs
+    $ crictl ls
+    $ crictl ps
+    $ crictl logs 78e9e9652b8d7
 
 
 

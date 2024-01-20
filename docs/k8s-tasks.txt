@@ -110,3 +110,9 @@ Google: “k8s certification weekends”
     - https://kubernetes.io/pt-br/docs/reference/kubectl/cheatsheet/
 
 
+- check container logs
+    $ crictl ls
+    $ crictl ps
+    $ crictl logs 78e9e9652b8d7
+
+
