@@ -105,3 +105,8 @@ Google: “k8s certification weekends”
     - nodeport will have to be added with "k edit"
 
 - what is downwardAPI?
+
+- kubectl autocomplete 
+    - https://kubernetes.io/pt-br/docs/reference/kubectl/cheatsheet/
+
+

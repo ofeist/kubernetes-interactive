@@ -2884,12 +2884,8 @@ $ vagrant ssh kubemaster
 - scaling doesn't work
     -> kube-controller-manager
 
-
-- kubectl autocomplete 
-    - https://kubernetes.io/pt-br/docs/reference/kubectl/cheatsheet/
-
-
-
+- learn ports for all control plane nodes
+    - https://kubernetes.io/docs/reference/networking/ports-and-protocols/
 
 
 
