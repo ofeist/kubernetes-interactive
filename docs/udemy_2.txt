@@ -2896,6 +2896,163 @@ $ vagrant ssh kubemaster
 
 
 
+262. Pre-Requisites - JSON PATH
+---
+- yaml data structure
+    - key: value    # notice the space char!
+    - array/list    # dash for each member of an array
+        fruits:
+        - orange
+        - apple 
+        - banana
+
+        vegetables:
+        - carrot
+        - tomato
+    - dictionary/map    # the number of spaces is crucial
+        banana:
+            calories: 105
+            fat: 0.4 g
+            carbs: 27 g
+
+        grapes:
+            calories: 62
+            fat: 0.3 g
+            carbs: 16 g
+
+    - spaces
+        - shows the property of an element
+        - calories, fat, carbs are properties of e.g. grapes
+
+
+    - key value/dictionary/lists
+        fruits:
+            -   banana:
+                    calories: 105
+                    fat: 0.4 g
+                    carbs: 27 g
+
+            -    grapes:
+                    calories: 62
+                    fat: 0.3 g
+                    carbs: 16 g
+
+    - when to use
+        - dictionary
+        - list
+        - list of dictionaries
+
+    - dictionary
+        - used to depict properties
+        - property of a property possible
+            - dictionary inside of an dictionary
+        - unordered collection
+
+    - list / arrays
+        - multiple items of a same tipe of an object
+        - ordered collection (the order is important)
+
+    - list of dictionaries
+        - multiple items of the object
+        - and each object has dictionary (property) attached
+
+    - a comment
+        - #
+        - ignored
+
+
+- json data structure
+    - dictionary
+        - curly brackets
+    - items in a list
+        - square bracket to define a list
+        - each item separated by a comma
+
+    - yaml <-> json
+        - interconvertable
+        - link:
+            - www.json2yaml.com
+        
+- json path
+    - query language to query data structs in
+        - yaml
+        - json
+
+    - curly brackets
+        - dictionary
+
+    - square brackets
+        - list/array
+
+    - dot (.)
+        - dictionary
+
+    - dollar $
+        - the root element
+        - $.car
+        - $.car.color
+
+    - all results of json path
+        - encapsulated as an array
+
+    - lists
+        - first element
+            [0]
+        - get the first element of the list
+            $[0]
+        - get the fourth element of a list
+            $[3]
+        - 1. & 4.
+            $[0,3]
+
+    - an example
+        - the cars second's wheel model
+            - $.car.wheels[1].model
+
+    - criteria
+        - ?
+            - criteria / filter
+        - @
+            - each item in the list
+        - operators
+            - @ == x
+            - @ != x
+            - @ in [40,43,45]
+            - @ nin [40,43,45]
+        - list all numbers from the list that are > 40
+            - $[ ?( @ > 40 ) ]
+
+    - an example
+        - the model of the rear right wheel of the car
+            - $.car.wheels[?(@.location == "rear-right")].model
+                - this example didn't work!!!
+
+    - practice tests link
+        - https://kodekloud.com/p/json-path-quiz
+    
+    - full json path documentation
+        - https://github.com/json-path/JsonPath
+
+
+- https://kodekloud.com/topic/labs-json-path-2/
+   11) cat q11.json 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
