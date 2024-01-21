@@ -2898,147 +2898,69 @@ $ vagrant ssh kubemaster
 
 262. Pre-Requisites - JSON PATH
 ---
-- yaml data structure
-    - key: value    # notice the space char!
-    - array/list    # dash for each member of an array
-        fruits:
-        - orange
-        - apple 
-        - banana
 
-        vegetables:
-        - carrot
-        - tomato
-    - dictionary/map    # the number of spaces is crucial
-        banana:
-            calories: 105
-            fat: 0.4 g
-            carbs: 27 g
+- how to use json path with k8s
+    1] check out the command output
+        $ k get pods podName -o json
 
-        grapes:
-            calories: 62
-            fat: 0.3 g
-            carbs: 16 g
-
-    - spaces
-        - shows the property of an element
-        - calories, fat, carbs are properties of e.g. grapes
-
-
-    - key value/dictionary/lists
-        fruits:
-            -   banana:
-                    calories: 105
-                    fat: 0.4 g
-                    carbs: 27 g
-
-            -    grapes:
-                    calories: 62
-                    fat: 0.3 g
-                    carbs: 16 g
-
-    - when to use
-        - dictionary
-        - list
-        - list of dictionaries
-
-    - dictionary
-        - used to depict properties
-        - property of a property possible
-            - dictionary inside of an dictionary
-        - unordered collection
-
-    - list / arrays
-        - multiple items of a same tipe of an object
-        - ordered collection (the order is important)
-
-    - list of dictionaries
-        - multiple items of the object
-        - and each object has dictionary (property) attached
-
-    - a comment
-        - #
-        - ignored
-
-
-- json data structure
-    - dictionary
-        - curly brackets
-    - items in a list
-        - square bracket to define a list
-        - each item separated by a comma
-
-    - yaml <-> json
-        - interconvertable
-        - link:
-            - www.json2yaml.com
-        
-- json path
-    - query language to query data structs in
-        - yaml
-        - json
-
-    - curly brackets
-        - dictionary
-
-    - square brackets
-        - list/array
-
-    - dot (.)
-        - dictionary
-
-    - dollar $
-        - the root element
-        - $.car
-        - $.car.color
-
-    - all results of json path
-        - encapsulated as an array
-
-    - lists
-        - first element
-            [0]
-        - get the first element of the list
-            $[0]
-        - get the fourth element of a list
-            $[3]
-        - 1. & 4.
-            $[0,3]
-
-    - an example
-        - the cars second's wheel model
-            - $.car.wheels[1].model
-
-    - criteria
-        - ?
-            - criteria / filter
-        - @
-            - each item in the list
-        - operators
-            - @ == x
-            - @ != x
-            - @ in [40,43,45]
-            - @ nin [40,43,45]
-        - list all numbers from the list that are > 40
-            - $[ ?( @ > 40 ) ]
-
-    - an example
-        - the model of the rear right wheel of the car
-            - $.car.wheels[?(@.location == "rear-right")].model
-                - this example didn't work!!!
-
-    - practice tests link
-        - https://kodekloud.com/p/json-path-quiz
+    2] build json path, eg.
+        .item[0].spec.containers[0].image
     
-    - full json path documentation
-        - https://github.com/json-path/JsonPath
+    3] use jsonpath with kubectl command
+        $ kubectl get pods -o=jsonpath='{.item[0].spec.containers[0].image}'
+
+- solution to the q7
+    $ k get pv -o=custom-columns=NODE:.metadata.name,CAPACITY:.spec.capacity.storage --sort-by=.spec.capacity.storage
 
 
-- https://kodekloud.com/topic/labs-json-path-2/
-   11) cat q11.json 
+- combining queries is possible
+$ k get nodes -o=jsonpath='{.items[*].metadata.name} {.items[*].status.capacity.cpu}'
+$ k get nodes -o=jsonpath='{.items[*].metadata.name} {"\n"} {.items[*].status.capacity.cpu}'
 
 
+- formatters
+  - {"\n"} = new line
+  - {"\t"} = tab
 
+- loops - range
+  - .range = is like forEach loop
+
+- analogy:
+forEach Node
+  print "nodeName \t cpuCount \n"
+end
+
+- the upper part in jsonpath:
+'{range .items[*]}
+  {.metadata.name}{"\t"}{.status.capacity.cpu}{"\n"}
+ {end}'
+
+- range loops
+  - put this in oneliner
+    - '{range .items[*]}{.metadata.name}{"\t"}{.status.capacity.cpu}{"\n"}{end}'
+    $ k get nodes -o=jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.capacity.cpu}{"\n"}{end}'
+
+- custom columns
+  - k get nodes -o=custom-columns=<COLUMN NAME>:<JSON PATH>
+  - .items[*] is assumed
+  - examples
+    $ k get nodes -o=custom-columns=NODE:.metadata.name
+    $ k get nodes -o=custom-columns=NODE:.metadata.name,CPU:.status.capacity.cpu
+
+- sort 
+  - k get nodes --sort-by=
+  $ k get nodes --sort-by=.metadata.name
+  $ k get nodes --sort-by=.status.capacity.cpu
+  $ k get nodes -o=custom-columns=NODE:.metadata.name,CPU:.status.capacity.cpu --sort-by=.status.capacity.cpu
+
+
+- unknown solution
+    - Use a JSON PATH query to identify the context configured for 
+        the aws-user in the my-kube-config context file and store the 
+        result in /opt/outputs/aws-context-name.
+    - ???
+    - https://kodekloud.com/community/t/hello-all-jsonpath-question-in-lab-question-is-use-a-json-path-query-to-iden/16425
+    - k config view --kubeconfig=my-kube-config -o jsonpath='{.contexts[?(@.context.user == "aws-user")].context.name}'
 
 
 
