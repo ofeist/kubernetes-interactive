@@ -112,7 +112,16 @@ Google: “k8s certification weekends”
 
 - check container logs
     $ crictl ls
-    $ crictl ps
+    $ crictl ps -a
     $ crictl logs 78e9e9652b8d7
 
+- next to-do
+    - 246. Practice Test - Deploy a Kubernetes Cluster using Kubeadm
 
+- still not done???
+    - 258. Practice Test - Worker Node Failure
+    - https://kodekloud.com/topic/practice-test-cka-ingress-networking-1-2/
+    - or covered already by ingress???
+
+
+    
