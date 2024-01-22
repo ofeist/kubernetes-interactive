@@ -2891,7 +2891,8 @@ $ vagrant ssh kubemaster
 - check container logs
     - https://kubernetes.io/docs/tasks/debug/debug-cluster/crictl/
         $ crictl ls
-        $ crictl ps
+        $ crictl ps -a 
+            -> CONTAINER (e.g.  158a650b03c82)
         $ crictl logs 78e9e9652b8d7
 
 
