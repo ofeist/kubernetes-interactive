@@ -126,4 +126,17 @@ Google: “k8s certification weekends”
 - check the lin version
     $ cat /etc/os-release
 
+- host serviceName
+    - how does this resolve a service dns?
+    - from pod
+        $ host myservice.namespace.svc.cluster.local    # same ns
+        $ host myservice                                # diff ns
+
+
+- continu with this and above
+    - 220. Practice Test - Networking Weave
+
+
+
+
 
