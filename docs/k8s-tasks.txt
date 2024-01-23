@@ -123,5 +123,7 @@ Google: “k8s certification weekends”
     - https://kodekloud.com/topic/practice-test-cka-ingress-networking-1-2/
     - or covered already by ingress???
 
+- check the lin version
+    $ cat /etc/os-release
 
-    
+
