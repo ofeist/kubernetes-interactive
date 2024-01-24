@@ -132,9 +132,13 @@ Google: “k8s certification weekends”
         $ host myservice.namespace.svc.cluster.local    # same ns
         $ host myservice                                # diff ns
 
+- pv and pvc
+    - how to read from pvc?
+    - like you would read from hostPath e.g.
 
 - continue with this and above
-    196. Practice Test - Storage Class
+    174. Practice Test - Security Contexts
+
 
 
 
