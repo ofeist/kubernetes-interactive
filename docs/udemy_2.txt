@@ -2852,7 +2852,11 @@ $ vagrant ssh kubemaster
         $ k logs NAME
         $ k logs NAME -f --previous
             - logs from the previously failed pod
-    4] check the DB/DB service/pod/logs
+    4] check the DB/DB service/pod/container logs
+        - e.g.
+            $ crictl ls
+            $ crictl ps -a
+            $ crictl logs 78e9e9652b8d7
 
 - info:
     - pod < replicaSet < deployment
