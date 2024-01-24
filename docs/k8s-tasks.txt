@@ -133,8 +133,8 @@ Google: “k8s certification weekends”
         $ host myservice                                # diff ns
 
 
-- continu with this and above
-    - 220. Practice Test - Networking Weave
+- continue with this and above
+    196. Practice Test - Storage Class
 
 
 
