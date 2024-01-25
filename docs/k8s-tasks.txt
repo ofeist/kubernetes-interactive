@@ -138,7 +138,7 @@ Google: “k8s certification weekends”
 
 - continue with this and above
     174. Practice Test - Security Contexts
-
+    - check the theory
 
 
 
