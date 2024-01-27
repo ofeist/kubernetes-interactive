@@ -136,6 +136,10 @@ Google: “k8s certification weekends”
     - how to read from pvc?
     - like you would read from hostPath e.g.
 
+- how can a docker container check if it has a capability?
+    - https://stackoverflow.com/questions/46702043/how-can-a-docker-container-check-if-it-has-a-capability
+    $ capsh --print | grep admin
+
 - continue with this and above
     174. Practice Test - Security Contexts
     - check the theory
