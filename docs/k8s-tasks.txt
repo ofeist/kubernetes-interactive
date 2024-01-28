@@ -150,7 +150,7 @@ Google: “k8s certification weekends”
     $ k --as dev-user get pod/dark-blue-app -n blue
 
 - practice again
-    - create cluster
+    - create cluster (kubectl)
     - 167. Practice Test Service Accounts
     - 164. Practice Test - Cluster Roles and Role Bindings
     - 161. Practice Test - RBAC
@@ -162,7 +162,7 @@ Google: “k8s certification weekends”
     - https://fluxcd.io/
 
 - continue with this and above
-    155. Practice Test - KubeConfig
+    149. Practice Test - View Certificates
 
 
 
