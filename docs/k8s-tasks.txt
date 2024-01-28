@@ -161,8 +161,16 @@ Google: “k8s certification weekends”
 - check flux
     - https://fluxcd.io/
 
+- after etcd restore, if external etcd service
+    $ chown -R etcd /var/lib/etcd-data-new
+    $ systemctl daemon-reload
+    $ systemctl restart etcd.service
+
+- set the numespace for the current context
+    $ k config set-context --current --namespace elastic-stack
+
 - continue with this and above
-    149. Practice Test - View Certificates
+    88. Practice Test - Monitor Application Logs
 
 
 

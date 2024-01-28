@@ -1312,6 +1312,11 @@ $ etcdctl snapshot restore -h
     $ service etcd restart              # restart the etcd service
     $ service kube-apiserver start      # start the api server
 
+- after etcd restore, if external etcd service
+    $ chown -R etcd /var/lib/etcd-data-new
+    $ systemctl daemon-reload
+    $ systemctl restart etcd.service
+
 - with all etcd commands you have to specify
     $ ETCDCTL_API=3 etcdctl \
         snapshot save snapshot.db   \
