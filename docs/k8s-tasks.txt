@@ -140,9 +140,29 @@ Google: “k8s certification weekends”
     - https://stackoverflow.com/questions/46702043/how-can-a-docker-container-check-if-it-has-a-capability
     $ capsh --print | grep admin
 
+- downward api
+    - what is it
+
+- check user auth, roles, rolebindings
+    $ k auth can-i create deployment --as dev-user -n blue
+    $ k auth can-i get pod/dark-blue-app --as dev-user -n blue
+    $ k --as dev-user create deployment nginx --image=nginx
+    $ k --as dev-user get pod/dark-blue-app -n blue
+
+- practice again
+    - create cluster
+    - 167. Practice Test Service Accounts
+    - 164. Practice Test - Cluster Roles and Role Bindings
+    - 161. Practice Test - RBAC
+    - token & sa
+        - create web page
+    - ingress
+
+- check flux
+    - https://fluxcd.io/
+
 - continue with this and above
-    174. Practice Test - Security Contexts
-    - check the theory
+    155. Practice Test - KubeConfig
 
 
 
