@@ -170,7 +170,7 @@ Google: “k8s certification weekends”
     $ k config set-context --current --namespace elastic-stack
 
 - continue with this and above
-    69. Practice Test - Resource Requirements and Limits
+    42. Practice Test - Namespaces
 
 
 
