@@ -149,6 +149,7 @@ Google: “k8s certification weekends”
     $ k --as dev-user create deployment nginx --image=nginx
     $ k --as dev-user get pod/dark-blue-app -n blue
 
+
 - practice again
     - create cluster (kubectl)
     - 167. Practice Test Service Accounts
@@ -158,8 +159,10 @@ Google: “k8s certification weekends”
         - create web page
     - ingress
 
+
 - check flux
     - https://fluxcd.io/
+
 
 - after etcd restore, if external etcd service
     $ chown -R etcd /var/lib/etcd-data-new
@@ -179,17 +182,27 @@ Google: “k8s certification weekends”
         being mounted has already been created for you and is 
         called dotfile-secret.
 
+
+- simulation of the exam environment
+    - https://killercoda.com/kimwuestkamp/scenario/cks-cka-ckad-remote-desktop
+
+
+- https://github.com/kodekloudhub/community-faq/blob/main/docs/jsonpath.md
+
+
+- json path
+    - https://github.com/kodekloudhub/community-faq/blob/main/docs/jsonpath.md
+
+
+- custom columns
+    - kubectl get pods -o custom-columns=POD_NAME:.metadata.name
+
+
+- read doku
+    - https://kubernetes.io/docs/concepts/storage/volumes/
+
+
 - continue with this and above
     - lightning lab
-
-
-Some tips to save time during the exam:
-
-    Use the alias of kubectl (already set up in the exam environment), so you can write the k8s command with just " k run my-pod --image=nginx:alpine " instead of " kubectl run my-pod --image=nginx:alpine" .
-    Use short resource names instead of full-name, like po for pod , netpol for networkpolicy , ing for ingress … It will help to save time and reduce typo mistakes. Run this command for the complete list: " kubectl api-resources ".
-    Use kubectl explain {resource_name} --recursive | less to get the schema of any K8S resource, copy the needed part & paste it into the YAML file.
-    Use the –dry-run=client -o yaml flag, do not write the YAML from scratch, always use this flag or copy the YAML template from Kubernetes Documentation | Kubernetes 17 sites.
-    Use –grace-period=0 --force flag when deleting pods, it will save 30 seconds of waiting time.
-
 
 
