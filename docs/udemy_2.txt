@@ -21,6 +21,11 @@ Exam Tips: http://training.linuxfoundation.org/go//Important-Tips-CKA-CKAD
 
 
 ---
+https://github.com/kodekloudhub/community-faq
+
+
+
+---
 https://killer.sh/pricing
 
 

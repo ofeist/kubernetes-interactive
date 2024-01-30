@@ -183,6 +183,13 @@ Google: “k8s certification weekends”
     - lightning lab
 
 
+Some tips to save time during the exam:
+
+    Use the alias of kubectl (already set up in the exam environment), so you can write the k8s command with just " k run my-pod --image=nginx:alpine " instead of " kubectl run my-pod --image=nginx:alpine" .
+    Use short resource names instead of full-name, like po for pod , netpol for networkpolicy , ing for ingress … It will help to save time and reduce typo mistakes. Run this command for the complete list: " kubectl api-resources ".
+    Use kubectl explain {resource_name} --recursive | less to get the schema of any K8S resource, copy the needed part & paste it into the YAML file.
+    Use the –dry-run=client -o yaml flag, do not write the YAML from scratch, always use this flag or copy the YAML template from Kubernetes Documentation | Kubernetes 17 sites.
+    Use –grace-period=0 --force flag when deleting pods, it will save 30 seconds of waiting time.
 
 
 
