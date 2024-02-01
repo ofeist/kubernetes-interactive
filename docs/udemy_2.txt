@@ -23,6 +23,7 @@ Exam Tips: http://training.linuxfoundation.org/go//Important-Tips-CKA-CKAD
 ---
 https://github.com/kodekloudhub/community-faq
 https://github.com/cncf/curriculum/blob/master/CKA_Curriculum_v1.28.pdf
+https://github.com/fireflycons/tips-for-CKA-CKAD-CKS?tab=readme-ov-file
 
 
 
@@ -2823,6 +2824,8 @@ $ cd ~/devops/k8s/certified-kubernetes-administrator-course/kubeadm-clusters/vir
 $ vagrant status
 $ vagrant up
 $ vagrant ssh kubemaster
+$ vagrant ssh kubenode01
+$ vagrant ssh kubenode02
 
 
 

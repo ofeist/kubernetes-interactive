@@ -202,6 +202,21 @@ Google: “k8s certification weekends”
     - https://kubernetes.io/docs/concepts/storage/volumes/
 
 
+- killercoda remote env test (20hours)
+    - https://killercoda.com/kimwuestkamp/scenario/cks-cka-ckad-remote-desktop
+
+
+- real Q
+    - https://www.youtube.com/watch?v=o_7jlMBHFFA
+
+
+- tasks:
+    - install cluster
+        - The GIT Repo for this tutorial can be found here: https://github.com/mmumshad/kubernetes-the-hard-way
+    - upgrade cluster
+    - backup etcd
+
+
 - continue with this and above
     - lightning lab
 
