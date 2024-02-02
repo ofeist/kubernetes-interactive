@@ -150,16 +150,6 @@ Google: “k8s certification weekends”
     $ k --as dev-user get pod/dark-blue-app -n blue
 
 
-- practice again
-    - create cluster (kubectl)
-    - 167. Practice Test Service Accounts
-    - 164. Practice Test - Cluster Roles and Role Bindings
-    - 161. Practice Test - RBAC
-    - token & sa
-        - create web page
-    - ingress
-
-
 - check flux
     - https://fluxcd.io/
 
@@ -215,7 +205,27 @@ Google: “k8s certification weekends”
         - The GIT Repo for this tutorial can be found here: https://github.com/mmumshad/kubernetes-the-hard-way
     - upgrade cluster
     - backup etcd
+    - volume mounts/secrets/configs
+- practice again
+    - create cluster (kubectl)
+    - 167. Practice Test Service Accounts
+    - 164. Practice Test - Cluster Roles and Role Bindings
+    - 161. Practice Test - RBAC
+    - token & sa
+        - create web page
+    - ingress
+    - https://k21academy.com/docker-kubernetes/cka-ckad-exam-questions-answers/
+    - playground for etcdctl
+        - https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/14298854#overview
 
+
+- game of pods
+    - https://kodekloud.com/topic/lab-kubernetes-challenge-1/
+    - the solution
+        - https://github.com/kodekloudhub/kubernetes-challenges
+
+- tmux
+    - https://superuser.com/questions/209437/how-do-i-scroll-in-tmux
 
 - continue with this and above
     - lightning lab
