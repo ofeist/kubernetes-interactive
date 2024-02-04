@@ -218,7 +218,6 @@ Google: “k8s certification weekends”
     - playground for etcdctl
         - https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/14298854#overview
 
-
 - game of pods
     - https://kodekloud.com/topic/lab-kubernetes-challenge-1/
     - the solution
@@ -253,11 +252,8 @@ k get deployments.apps -n admin2406 -o custom-columns=DEPLOYMENT:.metadata.name,
 
 - task
     Create a new user called john. Grant him access to the cluster. John should have permission to create, list, get, update and delete pods in the development namespace . The private key exists in the location: /root/CKA/john.key and csr at /root/CKA/john.csr.
-
     Important Note: As of kubernetes 1.19, the CertificateSigningRequest object expects a signerName.
-
     Please refer the documentation to see an example. The documentation tab is available at the top right of terminal.
-
 
 - solution
     Solution manifest file to create a CSR as follows:
@@ -275,15 +271,30 @@ k get deployments.apps -n admin2406 -o custom-columns=DEPLOYMENT:.metadata.name,
     - key encipherment
     - client auth
 
-
-    To approve this certificate, run: kubectl certificate approve john-developer
-
+-   To approve this certificate, run: kubectl certificate approve john-developer
     Next, create a role developer and rolebinding developer-role-binding, run the command:
-
     $ kubectl create role developer --resource=pods --verb=create,list,get,update,delete --namespace=development
-
     $ kubectl create rolebinding developer-role-binding --role=developer --user=john --namespace=development
-
     To verify the permission from kubectl utility tool:
-
     $ kubectl auth can-i update pods --as=john --namespace=development
+
+- kubectl cheat sheet
+    - autocompletion
+    - jsonpath
+    - https://kubernetes.io/docs/reference/kubectl/quick-reference/
+
+- DNS for Services and Pods
+    - https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+
+- csr
+    - https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests/#normal-user
+
+
+- todo
+    - dns: pod,svc
+    - jsonpath
+    - csr -> user creation
+    - roles, role bindings, non/namespaced resources
+    - etcd backup / rollout
+    - ingress rules
+    - storage & volumes
