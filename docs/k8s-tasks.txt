@@ -289,12 +289,62 @@ k get deployments.apps -n admin2406 -o custom-columns=DEPLOYMENT:.metadata.name,
 - csr
     - https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests/#normal-user
 
+- bound cluster role and service account
+    $ k create clusterrolebinding pvviewer-role-bind --clusterrole=pvviewer --serviceaccount=default:pvviewer
+    $ k describe clusterrolebinding pvviewer-role-bind
+
+- kube-controller-manager ::
+    --cluster-cidr=10.244.0.0/16
+    --service-cluster-ip-range=10.96.0.0/12
+
+$ k get nodes -o json | jq | grep -i internal -B 100
+    - print 100 lines before grep
+$ $ k get nodes -o json | jq -c 'paths' | grep type
+
+- run test container for sh nad curl
+    $ k run curl --image=alpine/curl --rm -it -- sh
+        $ curl np-test-service
+
+- show labels for pods
+    $ k get pods --show-labels
+
+- run different kube config
+    $ k get nodes --kubeconfig /root/CKA/super.kubeconfig
+    - should give the error
+
+- ultimate certified kubernetes administrator mock exam series
+    @ kodekloud
+    - search
+    - pay???
+
+- kubectl commands
+    - exec
+    - attach (on a running container)
 
 - todo
-    - dns: pod,svc
-    - jsonpath
-    - csr -> user creation
-    - roles, role bindings, non/namespaced resources
-    - etcd backup / rollout
-    - ingress rules
-    - storage & volumes
+    1] learn
+        + dns: pod,svc
+        + ingress rules
+        - csr -> user creation
+        - jsonpath
+        - roles, role bindings, non/namespaced resources = clusterroles, crb
+        - etcd backup / rollout
+        - storage & volumes
+    2] kodekloud nr. 3
+    3] learn
+        - deploy stuff locally @ vagrant
+        - game of pods
+    4] deploy a webapp
+        - flask
+        - mysql
+
+- next
+    - https://kodekloud.com/topic/lab-cka-mock-exam-1/
+
+- curl alpine
+    $ k run curl --image=alpine/curl --rm -it -- sh
+    $ k delete pod curly --grace-period=0
+    $ kubectl delete deployment <deployment-name> --grace-period=0
+
+
+
