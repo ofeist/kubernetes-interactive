@@ -356,3 +356,43 @@ $ $ k get nodes -o json | jq -c 'paths' | grep type
         mountPath: /var/log
 
 
+- setup env
+    1]
+    alias k=kubectl                         # will already be pre-configured
+    export do="--dry-run=client -o yaml"    # k create deploy nginx --image=nginx $do
+    export now="--force --grace-period 0"   # k delete pod x $now
+
+    2] ~/.vimrc
+    set tabstop=2
+    set expandtab
+    set shiftwidth=2
+
+- create daemonset
+    - As of now we aren't able to create a DaemonSet directly using kubectl, so we create 
+        a Deployment and just change it up
+
+- check crictl
+    $ crictl ps | grep abba
+    $ crictl inspect 70235fba6141d | grep runtime
+
+- save logs from cluster node
+    $ ssh cluster1-node2 'crictl logs b01edbe6f89ed' &> /opt/course/17/pod-container.log
+
+- check kubelet service
+    service kubelet start
+    service kubelet status
+    systemctl daemon-reload
+    service kubelet restart
+    service kubelet status
+
+- serviceKeyRef vs configMapKeyRef
+18
+ create a NetworkPolicy called np-backend in Namespace aabbbaa
+ It should allow the backend-* Pods only to:
+    connect to db1-* Pods on port 1234
+    connect to db2-* Pods on port 4321
+
+
+
+
+
