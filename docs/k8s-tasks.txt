@@ -346,5 +346,14 @@ $ $ k get nodes -o json | jq -c 'paths' | grep type
     $ k delete pod curly --grace-period=0
     $ kubectl delete deployment <deployment-name> --grace-period=0
 
+- sidecar
+    - elastic logger
+    - name: sidecar
+        image: busybox:1.28
+        args: [/bin/sh, -c, 'tail -f  /var/log/elastic-app.log']
+        volumeMounts:
+        - name: varlog
+        mountPath: /var/log
+
 
 
