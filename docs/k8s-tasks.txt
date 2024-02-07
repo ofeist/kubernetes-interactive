@@ -386,11 +386,78 @@ $ $ k get nodes -o json | jq -c 'paths' | grep type
     service kubelet status
 
 - serviceKeyRef vs configMapKeyRef
-18
- create a NetworkPolicy called np-backend in Namespace aabbbaa
- It should allow the backend-* Pods only to:
-    connect to db1-* Pods on port 1234
-    connect to db2-* Pods on port 4321
+
+- kubeadm create token and join command
+    $ kubeadm token create --print-join-command
+    - If you have troubles with kubeadm join you might need to run kubeadm reset
+
+- expose pod info (env)
+    - https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/
+
+- liveness & readiness probe 
+    - https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+
+- assign pod to node affinity & topology key
+    - affinity:
+    podAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: security
+            operator: In
+            values:
+            - S1
+        topologyKey: topology.kubernetes.io/zone
+    - ...        
+    - topology key  
+        - topologyKey: kubernetes.io/hostname 
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    id: very-important                  # change
+  name: deploy-important
+  namespace: project-tiger              # important
+spec:
+  replicas: 3                           # change
+  selector:
+    matchLabels:
+      id: very-important                # change
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        id: very-important              # change
+    spec:
+      containers:
+      - image: nginx:1.17.6-alpine
+        name: container1                # change
+        resources: {}
+      - image: google/pause             # add
+        name: container2                # add
+      affinity:                                             # add
+        podAntiAffinity:                                    # add
+          requiredDuringSchedulingIgnoredDuringExecution:   # add
+          - labelSelector:                                  # add
+              matchExpressions:                             # add
+              - key: id                                     # add
+                operator: In                                # add
+                values:                                     # add
+                - very-important                            # add
+            topologyKey: kubernetes.io/hostname             # add
+status: {}
+
+
+- todo: 4, 12, 11
+
+
+
+
+
 
 
 
