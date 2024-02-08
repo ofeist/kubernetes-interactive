@@ -455,6 +455,9 @@ status: {}
 - todo: 4, 12, 11
 
 
+- Control Topology Management Policies on a node
+    - https://kubernetes.io/docs/tasks/administer-cluster/topology-manager/
+
 
 
 
