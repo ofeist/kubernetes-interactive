@@ -461,6 +461,9 @@ status: {}
 - hashicorp consul
     - https://www.consul.io/
 
+- network policy editor
+    - https://editor.networkpolicy.io/?id=ZdwxeZgRMItV14Zf
+
 
 
 
