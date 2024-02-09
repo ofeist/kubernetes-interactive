@@ -493,6 +493,8 @@ status: {}
     - docker ps + docker logs (in case when Docker is used)
     - kubelet logs: /var/log/syslog or journalctl
 
+- check the NodePort Service for the Nginx Ingress Controller to see the ports
+    - k -n ingress-nginx get svc ingress-nginx-controller
 - find out the ingressClassName with
     - k get ingressclass
 
