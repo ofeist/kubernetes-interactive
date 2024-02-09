@@ -508,3 +508,12 @@ status: {}
 - run a command from a container
     - command: ["sh", "-c", "while true; do date >> /vol/date.log; sleep 1; done"] 
 
+
+- alias: vi .bash_aliases
+    alias c='clear'
+    export do='--dry-run=client -o yaml'
+    kn='kubectl config set-context --current --namespace '
+$ source .bash_aliases
+
+
+
