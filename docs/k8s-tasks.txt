@@ -505,5 +505,6 @@ status: {}
     - k get events -A --sort-by='{.metadata.creationTimestamp}'
     - https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#how-to-use-priority-and-preemption
 
-
+- run a command from a container
+    - command: ["sh", "-c", "while true; do date >> /vol/date.log; sleep 1; done"] 
 
