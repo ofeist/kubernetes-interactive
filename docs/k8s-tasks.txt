@@ -500,3 +500,7 @@ status: {}
 
 - namespace ns1 deployment manager (system:serviceaccount:ns1:pipeline -n ns1)
     - k auth can-i delete deployments --as system:serviceaccount:ns1:pipeline -n ns1 # YES
+
+- get events for preempted pod
+    - k get events -A --sort-by='{.metadata.creationTimestamp}'
+    - https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#how-to-use-priority-and-preemption
