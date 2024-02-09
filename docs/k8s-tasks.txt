@@ -451,10 +451,6 @@ spec:
             topologyKey: kubernetes.io/hostname             # add
 status: {}
 
-
-- todo: 4, 12, 11
-
-
 - Control Topology Management Policies on a node
     - https://kubernetes.io/docs/tasks/administer-cluster/topology-manager/
 
@@ -464,9 +460,40 @@ status: {}
 - network policy editor
     - https://editor.networkpolicy.io/?id=ZdwxeZgRMItV14Zf
 
+- https://killercoda.com/killer-shell-cka/scenario/networkpolicy-namespace-communication
+    # these should work
+    k -n space1 exec app1-0 -- curl -m 1 microservice1.space2.svc.cluster.local
+    k -n space1 exec app1-0 -- curl -m 1 microservice2.space2.svc.cluster.local
+    k -n space1 exec app1-0 -- nslookup tester.default.svc.cluster.local
+    k -n kube-system exec -it validate-checker-pod -- curl -m 1 app1.space1.svc.cluster.local
 
+    # these should not work
+    k -n space1 exec app1-0 -- curl -m 1 tester.default.svc.cluster.local
+    k -n kube-system exec -it validate-checker-pod -- curl -m 1 microservice1.space2.svc.cluster.local
+    k -n kube-system exec -it validate-checker-pod -- curl -m 1 microservice2.space2.svc.cluster.local
+    k -n default run nginx --image=nginx:1.21.5-alpine --restart=Never -i --rm  -- curl -m 1 microservice1.space2.svc.cluster.local
 
+- config map scenario
+    - https://killercoda.com/killer-shell-cka/scenario/configmap-pod-access
 
+- todo: 4, 12, 11
 
+- environment variable from a field reference fieldRef
+    env:
+        - name: POD_NAMESPACE
+        valueFrom:
+            fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.namespace
+
+- cluster log locations to check:
+    - /var/log/pods
+    - /var/log/containers
+    - crictl ps + crictl logs
+    - docker ps + docker logs (in case when Docker is used)
+    - kubelet logs: /var/log/syslog or journalctl
+
+- find out the ingressClassName with
+    - k get ingressclass
 
 
