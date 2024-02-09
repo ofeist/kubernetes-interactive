@@ -504,3 +504,6 @@ status: {}
 - get events for preempted pod
     - k get events -A --sort-by='{.metadata.creationTimestamp}'
     - https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#how-to-use-priority-and-preemption
+
+
+
