@@ -498,4 +498,5 @@ status: {}
 - find out the ingressClassName with
     - k get ingressclass
 
-
+- namespace ns1 deployment manager (system:serviceaccount:ns1:pipeline -n ns1)
+    - k auth can-i delete deployments --as system:serviceaccount:ns1:pipeline -n ns1 # YES
