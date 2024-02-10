@@ -502,7 +502,7 @@ status: {}
     - k auth can-i delete deployments --as system:serviceaccount:ns1:pipeline -n ns1 # YES
 
 - get events for preempted pod
-    - k get events -A --sort-by='{.metadata.creationTimestamp}'
+    - k get events -A --no-headers --sort-by='{.metadata.creationTimestamp}'
     - https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#how-to-use-priority-and-preemption
 
 - run a command from a container
