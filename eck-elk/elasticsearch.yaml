@@ -7,9 +7,33 @@ spec:
   version: 8.16.0
   nodeSets:
   - name: master-nodes
-    # count: 3
     count: 1
+    podTemplate:
+      spec:
+        securityContext:
+          fsGroup: 1000
+          runAsUser: 1000
+        initContainers:
+        - name: fix-permissions
+          image: busybox
+          command: ["sh", "-c", "chown -R 1000:1000 /usr/share/elasticsearch/data"]
+          securityContext:
+            privileged: true
+          volumeMounts:
+          - name: elasticsearch-data
+            mountPath: /usr/share/elasticsearch/data
+    volumeClaimTemplates:
+    - metadata:
+        name: elasticsearch-data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        storageClassName: manual  # Zamijenite sa stvarnim StorageClass-om koji koristite
+        resources:
+          requests:
+            storage: 30Gi
     config:
-      # node.roles: ["master", "data", "ingest"]
       node.store.allow_mmap: false
+      # Ako želite dodati uloge, odkomentirajte sljedeću liniju
+      # node.roles: ["master", "data", "ingest"]
 

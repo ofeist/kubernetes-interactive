@@ -1,12 +1,13 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pv-elasticsearch-data-1
+  name: pv-elasticsearch-data-0
 spec:
   capacity:
-    storage: 10Gi
+    storage: 30Gi
   accessModes:
     - ReadWriteOnce
+  storageClassName: manual  # Treba se podudarati s storageClassName u volumeClaimTemplates
   hostPath:
-    path: /mnt/data/elasticsearch-data-1
+    path: /mnt/data/elasticsearch/data-0
 
