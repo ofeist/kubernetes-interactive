@@ -1,0 +1,6 @@
+kubectl create namespace elastic-system
+
+kubectl apply -f https://download.elastic.co/downloads/eck/8.16.0/crds.yaml
+kubectl apply -f https://download.elastic.co/downloads/eck/8.16.0/operator.yaml
+
+
