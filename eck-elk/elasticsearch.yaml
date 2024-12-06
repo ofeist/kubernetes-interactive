@@ -11,8 +11,8 @@ spec:
     podTemplate:
       spec:
         securityContext:
-          fsGroup: 1000
-          runAsUser: 1000
+          fsGroup: 1000       # Filesystem group for the Elasticsearch data directory
+          runAsUser: 1000     # Elasticsearch runs as user ID 1000 (non-root)
         initContainers:
         - name: fix-permissions
           image: busybox
@@ -28,12 +28,12 @@ spec:
       spec:
         accessModes:
         - ReadWriteOnce
-        storageClassName: manual  # Zamijenite sa stvarnim StorageClass-om koji koristite
+        storageClassName: manual  # Replace with your storage class
         resources:
           requests:
-            storage: 30Gi
+            storage: 10Gi
     config:
+      xpack.security.enabled: false   # Disable security (including HTTPS and authentication)
+      http.port: 9200                 # Ensure the HTTP port is set
       node.store.allow_mmap: false
-      # Ako želite dodati uloge, odkomentirajte sljedeću liniju
-      # node.roles: ["master", "data", "ingest"]
 
