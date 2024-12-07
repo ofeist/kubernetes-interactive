@@ -4,8 +4,19 @@ metadata:
   name: kibana
   namespace: elastic-system
 spec:
-  version: 8.16.0
+  version: 8.16.1
   count: 1
   elasticsearchRef:
     name: elasticsearch-cluster
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+  config:
+    server.basePath: "/kibana"
+    server.rewriteBasePath: true
+
+  #config:
+  #  elasticsearch.hosts: ["https://elasticsearch-cluster-es-http:9200"]
+  #  elasticsearch.ssl.verificationMode: "none"  # Disable certificate validation for testing
 

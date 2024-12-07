@@ -4,7 +4,7 @@ metadata:
   name: elasticsearch-cluster
   namespace: elastic-system
 spec:
-  version: 8.16.0
+  version: 8.16.1
   nodeSets:
   - name: master-nodes
     count: 1
@@ -14,6 +14,14 @@ spec:
           fsGroup: 1000       # Filesystem group for the Elasticsearch data directory
           runAsUser: 1000     # Elasticsearch runs as user ID 1000 (non-root)
         initContainers:
+        - name: sysctl
+          command:
+            - sh
+            - -c
+            - sysctl -w vm.max_map_count=262144
+          securityContext:
+            privileged: true
+            runAsUser: 0
         - name: fix-permissions
           image: busybox
           command: ["sh", "-c", "chown -R 1000:1000 /usr/share/elasticsearch/data"]
@@ -32,8 +40,8 @@ spec:
         resources:
           requests:
             storage: 10Gi
-    config:
-      xpack.security.enabled: false   # Disable security (including HTTPS and authentication)
-      http.port: 9200                 # Ensure the HTTP port is set
-      node.store.allow_mmap: false
+    #config:
+    #  xpack.security.enabled: false   # Disable security (including HTTPS and authentication)
+    #  http.port: 9200                 # Ensure the HTTP port is set
+    #  node.store.allow_mmap: false
 
