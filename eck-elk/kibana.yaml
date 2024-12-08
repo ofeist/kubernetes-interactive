@@ -8,61 +8,21 @@ spec:
   count: 1
   elasticsearchRef:
     name: elasticsearch-cluster
-  http:
-    tls:
-      selfSignedCertificate:
-        disabled: true
   config:
     server.publicBaseUrl: "http://baba.local/kibana"
     server.basePath: "/kibana"
     server.rewriteBasePath: true
-    # Add secure cookie settings
-    xpack.security.secureCookies: true
-    # Add encryption key for saved objects
-    xpack.encryptedSavedObjects.encryptionKey: "${ENCRYPTION_KEY}"
-    # Add session security
-    xpack.security.session.idleTimeout: "1h"
-    xpack.security.session.lifespan: "24h"
-    # Disable features requiring premium license
-    xpack.fleet.enabled: false
-    xpack.features.aiAssistant.enabled: false
-
-  #config:
-  #  elasticsearch.hosts: ["https://elasticsearch-cluster-es-http:9200"]
-  #  elasticsearch.ssl.verificationMode: "none"  # Disable certificate validation for testing
-
   podTemplate:
     spec:
-      # Add security context
-      securityContext:
-        fsGroup: 1000
-        runAsUser: 1000
-      # Add health probes
       containers:
       - name: kibana
-        readinessProbe:
-          httpGet:
-            path: /api/status
-            port: 5601
-            scheme: HTTP
-          initialDelaySeconds: 20
-          timeoutSeconds: 5
-        livenessProbe:
-          httpGet:
-            path: /api/status
-            port: 5601
-            scheme: HTTP
-          initialDelaySeconds: 30
-          timeoutSeconds: 5
         resources:
-          # Define CPU and memory requests and limits for Kibana
-          # Recommendation: Monitor resource usage and adjust based on workload.
           requests:
-            memory: 1Gi          # Request 1Gi of memory
-            cpu: 500m            # Request 0.5 CPU core
+            memory: "1Gi"
+            cpu: "500m"
           limits:
-            memory: 2Gi          # Limit memory usage to 2Gi
-            cpu: 1               # Limit CPU usage to 1 CPU core
-        env:
-        - name: NODE_OPTIONS
-          value: "--max-old-space-size=1024"  # Set max heap size for Kibana to 1Gi
+            memory: "2Gi"
+            cpu: "1000m"
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
