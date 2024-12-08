@@ -21,6 +21,9 @@ kubectl apply -f pv-elasticsearch-data-0.yaml
 kubectl apply -f elasticsearch.yaml
 kubectl apply -f kibana.yaml
 
+# Create Kibana encryption key secret
+kubectl apply -f kibana-secret.yaml
+
 # Wait for Elasticsearch to be ready
 echo "Waiting for Elasticsearch cluster to be ready..."
 kubectl wait --for=condition=ready elasticsearch elasticsearch-cluster -n elastic-system --timeout=300s
