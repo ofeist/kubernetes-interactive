@@ -3,11 +3,14 @@ kind: Elasticsearch
 metadata:
   name: elasticsearch-cluster
   namespace: elastic-system
+  annotations:
+    # Annotations can be used for ECK-specific configurations or integrations
+    elasticsearch.k8s.elastic.co/initial-master-nodes: elasticsearch-cluster-es-master-nodes-0
 spec:
-  version: 8.16.1
+  version: 8.16.1  # Specify the Elasticsearch version
   nodeSets:
   - name: master-nodes
-    count: 1
+    count: 1  # Number of nodes in this node set
     podTemplate:
       spec:
         securityContext:
@@ -51,9 +54,10 @@ spec:
         storageClassName: manual  # Replace with your storage class
         resources:
           requests:
-            storage: 10Gi
+            storage: 10Gi  # Specify the storage size for the data volume
     config:
-      discovery.type: single-node    # Use single-node for now
-      # cluster.initial_master_nodes:
-      #   - elasticsearch-cluster-es-master-nodes-0 # Uncomment when moving to a multi-node cluster
+      cluster.initial_master_nodes:  # Specify the initial master node(s) for multi-node clusters
+        - elasticsearch-cluster-es-master-nodes-0
+      network.host: 0.0.0.0  # Allow Elasticsearch to bind to all network interfaces
+      node.name: elasticsearch-cluster-es-master-nodes-0  # Ensure node naming consistency
 
