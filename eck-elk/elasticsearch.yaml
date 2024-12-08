@@ -8,25 +8,45 @@ spec:
   nodeSets:
   - name: master-nodes
     count: 1
+    config:
+      # Add recommended Elasticsearch settings
+      node.store.allow_mmap: false
+      indices.memory.index_buffer_size: "10%"
+      indices.queries.cache.size: "5%"
+      thread_pool.write.queue_size: 1000
     podTemplate:
       spec:
-        securityContext:
-          fsGroup: 1000       # Filesystem group for the Elasticsearch data directory
-          runAsUser: 1000     # Elasticsearch runs as user ID 1000 (non-root)
+        # Add affinity rules for better pod scheduling
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    elasticsearch.k8s.elastic.co/cluster-name: elasticsearch-cluster
+                topologyKey: kubernetes.io/hostname
+        # Add health probes
         containers:
         - name: elasticsearch
+          readinessProbe:
+            exec:
+              command:
+              - bash
+              - -c
+              - /usr/share/elasticsearch/bin/elasticsearch-plugin list
+            initialDelaySeconds: 10
+            periodSeconds: 30
           resources:
-            # Define CPU and memory requests and limits for Elasticsearch
-            # Recommendation: Monitor resource usage and adjust based on cluster workload.
             requests:
-              memory: 2Gi      # Request 2Gi of memory
-              cpu: 1           # Request 1 CPU core
+              memory: 2Gi
+              cpu: 1
             limits:
-              memory: 2Gi      # Limit memory usage to 2Gi
-              cpu: 2           # Limit CPU usage to 2 CPU cores
+              memory: 2Gi
+              cpu: 2
           env:
           - name: ES_JAVA_OPTS
-            value: "-Xms1g -Xmx1g"  # Set JVM heap size
+            value: "-Xms1g -Xmx1g -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
         initContainers:
         - name: sysctl
           command:

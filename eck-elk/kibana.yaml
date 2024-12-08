@@ -23,8 +23,27 @@ spec:
 
   podTemplate:
     spec:
+      # Add security context
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+      # Add health probes
       containers:
       - name: kibana
+        readinessProbe:
+          httpGet:
+            path: /api/status
+            port: 5601
+            scheme: HTTP
+          initialDelaySeconds: 20
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /api/status
+            port: 5601
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
         resources:
           # Define CPU and memory requests and limits for Kibana
           # Recommendation: Monitor resource usage and adjust based on workload.
