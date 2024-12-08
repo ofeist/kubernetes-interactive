@@ -8,10 +8,15 @@ spec:
   count: 1
   elasticsearchRef:
     name: elasticsearch-cluster
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
   config:
     server.publicBaseUrl: "http://baba.local/kibana"
     server.basePath: "/kibana"
     server.rewriteBasePath: true
+    server.host: "0.0.0.0"
   podTemplate:
     spec:
       containers:
