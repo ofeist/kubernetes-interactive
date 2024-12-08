@@ -3,16 +3,18 @@ kind: Ingress
 metadata:
   name: kibana-ingress
   namespace: elastic-system
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /kibana/$2
 spec:
   ingressClassName: nginx
   rules:
   - host: baba.local
     http:
       paths:
-      - backend:
+      - path: /kibana(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
           service:
             name: kibana-kb-http
             port:
               number: 5601
-        path: /
-        pathType: Prefix

@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: elasticsearch-ingress
+  namespace: elastic-system
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS" # Added annotation for HTTPS
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: baba.local
+      http:
+        paths:
+          - path: /es(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: elasticsearch-cluster-es-http
+                port:
+                  number: 9200
+
