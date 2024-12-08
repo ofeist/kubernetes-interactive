@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elastic-config
+  namespace: elastic-system
+data:
+  elasticsearch.yml: |
+    xpack.security.audit.enabled: true
+    xpack.monitoring.collection.enabled: true
+  kibana.yml: |
+    server.maxPayloadBytes: 10485760
+    xpack.reporting.enabled: true
+    xpack.security.audit.enabled: true
