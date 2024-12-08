@@ -18,6 +18,7 @@ spec:
         disabled: true
   config:
     server.publicBaseUrl: "http://192.168.0.230:5601" # Update to match LoadBalancer IP and Kibana's port
+    #server.publicBaseUrl: "https://baba.local:5601"
     #server.basePath: "/kibana"                       # Optional, remove if unnecessary
     #server.rewriteBasePath: true                     # Optional, based on basePath usage
   podTemplate:
