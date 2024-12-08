@@ -12,7 +12,7 @@ kubectl create -f https://download.elastic.co/downloads/eck/2.15.0/crds.yaml
 kubectl apply -f https://download.elastic.co/downloads/eck/2.15.0/operator.yaml
 
 # Create storage directories with proper permissions
-#./create-pv-dirs.sh
+./create-pv-dirs.sh
 
 # Apply configurations
 kubectl apply -f elastic-config.yaml
@@ -29,4 +29,4 @@ kubectl wait --for=condition=ready elasticsearch elasticsearch-cluster -n elasti
 kubectl apply -f elasticsearch-ingress.yaml
 kubectl apply -f kibana-ingress.yaml
 
-echo "Deployment completed successfully!"
+echo "Deployment completed successfully!" 
