@@ -1,91 +1,49 @@
-# Nginx Deployment with Ingress
+# Kubernetes Nginx Deployment Repository
 
-This guide explains the deployment of an **nginx** server in a Kubernetes cluster with access via an **Ingress** resource at the path `/web` on the host `baba.local`. It also includes steps for using a ConfigMap to customize the content served by nginx.
+This repository contains configurations for deploying an **nginx** server in a Kubernetes cluster with support for both TLS-secured and non-TLS configurations. It is organized into two folders for clarity and flexibility:
+
+## Folder Structure
+
+- **`no-tls/`**:
+  Contains YAML files for deploying nginx without TLS. This includes:
+  - Deployment and Service configurations.
+  - Ingress resource for plain HTTP traffic.
+  - ConfigMap for custom content served by nginx.
+
+- **`tls/`**:
+  Contains YAML files for deploying nginx with TLS. This includes:
+  - Deployment and Service configurations.
+  - Ingress resource for HTTPS traffic.
+  - TLS secrets and certificates for securing the connection.
 
 ## Prerequisites
+
 - A functioning **Kubernetes cluster**.
-- **kube-vip** configured to provide a virtual IP for your cluster.
+- **kube-vip** configured to provide a virtual IP for the cluster.
 - A properly installed and configured **Ingress Controller** (e.g., NGINX Ingress Controller).
+- For the `tls/` setup:
+  - Valid TLS certificates (self-signed or issued by a CA).
+  - A Secret resource containing the certificate and key.
 
-## Overview
-- **Deployment**: An nginx server is deployed with one replica.
-- **Service**: A ClusterIP service exposes the nginx deployment internally.
-- **ConfigMap**: Provides the content to be served by nginx.
-- **Ingress**: Configured to route HTTP traffic for `http://baba.local/web` to the nginx service.
-- **IngressClass**: Ensures the Ingress resource is associated with the correct Ingress Controller.
+## Deployment Guide
 
----
-
-## Files Included
-
-### 1. `nginx-deployment.yaml`
-Defines the nginx deployment and service, with a volume mount to include content from a ConfigMap.
-
-### 2. `nginx-configmap.yaml`
-Contains the HTML content to be served by nginx.
-
-### 3. `nginx-ingress.yaml`
-Configures the Ingress resource to expose the nginx service at `http://baba.local/web`.
-
----
-
-## Deployment Steps
-
-1. **Create ConfigMap**:
-   Define a ConfigMap with the content to be served by nginx. For example:
+### 1. Non-TLS Configuration
+1. Navigate to the `no-tls/` folder:
    ```bash
-   kubectl apply -f nginx-configmap.yaml
+   cd no-tls
    ```
+2. Follow the instructions in the `README.md` within the `no-tls/` folder to deploy nginx.
 
-2. **Apply Deployment and Service**:
-   Deploy nginx with a volume mount that uses the ConfigMap for serving content.
+### 2. TLS Configuration
+1. Navigate to the `tls/` folder:
    ```bash
-   kubectl apply -f nginx-deployment.yaml
+   cd tls
    ```
-
-3. **Verify Deployment and Service**:
-   Check that the nginx pods and service are running:
-   ```bash
-   kubectl get pods
-   kubectl get svc
-   ```
-
-4. **Apply Ingress Resource**:
-   Create the Ingress resource to expose nginx via the `/web` path on the host `baba.local`:
-   ```bash
-   kubectl apply -f nginx-ingress.yaml
-   ```
-
-5. **Verify Ingress**:
-   Ensure the Ingress resource is correctly applied:
-   ```bash
-   kubectl get ingress
-   ```
-
-6. **Update Local `/etc/hosts`**:
-   Add the following line to your `/etc/hosts` file:
-   ```
-   <kube-vip-ip>  baba.local
-   ```
-   Replace `<kube-vip-ip>` with your kube-vip virtual IP address.
-
-7. **Test Access**:
-   Open a browser or use `curl` to test:
-   ```bash
-   curl http://baba.local/web
-   ```
-
----
+2. Follow the instructions in the `README.md` within the `tls/` folder to deploy nginx with TLS.
 
 ## Notes
-- Ensure your Kubernetes cluster has a properly configured **Ingress Controller** (e.g., NGINX Ingress Controller).
-- Verify that the ConfigMap is correctly mounted in the nginx pod and serving the intended content.
-- Check logs of the Ingress Controller for debugging if necessary:
-  ```bash
-  kubectl logs <ingress-controller-pod> -n ingress-nginx
-  ```
-- The Ingress resource uses the `nginx` IngressClass. Modify `ingressClassName` if your environment uses a different class.
 
-For further customization or troubleshooting, feel free to modify the included YAML files!
-
+- Ensure you update your `/etc/hosts` file to map the virtual IP to the appropriate hostnames.
+- Monitor your Kubernetes cluster for any issues by checking pod logs and ingress events.
+- If using `tls/`, ensure your certificates are valid and correctly referenced in the Secret resource.
 
