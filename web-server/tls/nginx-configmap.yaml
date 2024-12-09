@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-html
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>SSL-Ekola!</title>
+    </head>
+    <body>
+        <h1>SSL-Ekola!</h1>
+    </body>
+    </html>
+

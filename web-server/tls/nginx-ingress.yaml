@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: nginx-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: "/"
 spec:
   ingressClassName: nginx
   tls:
@@ -14,11 +14,11 @@ spec:
   - host: baba.local
     http:
       paths:
-      - path: /
+      - path: /web
         pathType: Prefix
         backend:
           service:
             name: nginx-service
             port:
-              number: 443
+              number: 80
 

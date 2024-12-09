@@ -1,6 +1,4 @@
 # Exclude TLS files
 *.crt
 *.key
-scripts/*.key
-scripts/*.crt
 
