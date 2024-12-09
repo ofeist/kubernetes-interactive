@@ -10,10 +10,10 @@ spec:
     name: elasticsearch-cluster
   http:
     tls:
-      selfSignedCertificate:
-        disabled: true
+      certificate:
+        secretName: kibana-tls
   config:
-    server.publicBaseUrl: "http://baba.local/kibana"
+    server.publicBaseUrl: "https://baba.local/kibana"
     server.basePath: "/kibana"
     server.rewriteBasePath: true
     server.host: "0.0.0.0"

@@ -4,17 +4,23 @@ metadata:
   name: kibana-ingress
   namespace: elastic-system
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /kibana/$2
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
-  ingressClassName: nginx
+  ingressClassName: nginx 
   rules:
   - host: baba.local
     http:
       paths:
-      - path: /kibana(/|$)(.*)
+      - path: /kibana/?(.*)
         pathType: ImplementationSpecific
         backend:
           service:
             name: kibana-kb-http
             port:
               number: 5601
+  tls:
+  - hosts:
+    - baba.local
+    secretName: kibana-tls

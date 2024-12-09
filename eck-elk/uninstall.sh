@@ -27,6 +27,9 @@ echo "Removing ECK operator..."
 kubectl delete -f https://download.elastic.co/downloads/eck/2.15.0/operator.yaml --ignore-not-found=true
 kubectl delete -f https://download.elastic.co/downloads/eck/2.15.0/crds.yaml --ignore-not-found=true
 
+# Remove secret
+kibana delete secret -n elastic-system kibana-tl
+
 # Remove namespace
 echo "Removing elastic-system namespace..."
 kubectl delete namespace elastic-system --ignore-not-found=true
