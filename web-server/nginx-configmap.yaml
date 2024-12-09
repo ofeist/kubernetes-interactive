@@ -1,0 +1,17 @@
+# nginx-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-html
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Ekola</title>
+    </head>
+    <body>
+        <h1>Ekola!</h1>
+    </body>
+    </html>
+
